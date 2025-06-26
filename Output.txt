@@ -1,0 +1,12 @@
+Supreproject branch -> commit 
+
+Biosign dev Core dev origin/dev
+
+dev musi ukazovat na origin/dev, inak je problem
+
+
+Superproject	Super Branch	Submodule	Sub branch		Commit			Date
+
+Biosign		dev		Core		dev origin/dev		
+				Api		dev origin/dev
+			
