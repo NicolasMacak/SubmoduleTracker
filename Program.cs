@@ -11,14 +11,28 @@ Console.WriteLine("Hello, World!");
 // fetch
 // poslednu verziu submodulu na dev/test a skontroluje, ci na nu ukazuju vsetky superprojekty
 
-string repoPath = @"C:\NON_SYSTEM\Projects\ActivityRegistrator.BE";
-List<string> observedBranches = new() { "adas",  };
+string repoPath = @"C:\NON_SYSTEM\Superproject-A";
 
+string devBranch = "dev";
+string testBranch = "test";
 
 // Ako sa to bude spravat ked nie vsetky commity su pushnute na remove?
 
+//git submodule update --init --recursive
+
 using (var repo= new Repository(repoPath))
 {
+    // super project
+    string superprojectName = repoPath.Split(@"\").Last();
+        // Relevant branches
+
+
+            // Submodules
+            // Branch 
+            // Target commit 
+            // Date
+
+
 
 }
 
