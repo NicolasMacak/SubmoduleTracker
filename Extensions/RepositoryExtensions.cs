@@ -19,6 +19,7 @@ public static class RepositoryExtensions
             .Where(x => relevantBranches.Contains(x.FriendlyName.Split("/").Last()));
     }
 
+    [Obsolete("Needed?")]
     public static List<SlimRepository> GetRelevantSubmodules(this Repository repo, string[] relevantBranches)
     {
         var submodules = new List<SlimRepository>();
