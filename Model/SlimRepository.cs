@@ -12,14 +12,10 @@ public class SlimRepository
     public readonly List<Branch> RelevantBranches;
 
 
-    public SlimRepository(string repoPath, string[] relevantBranches)
+    public SlimRepository(string repoPath)
     {
         Name = repoPath.Split(@"\").Last();
         RepositoryPath = repoPath;
         Repository fullRepository = new (repoPath);
-
-        RelevantBranches = fullRepository
-            .GetRelevantLocalBranches(relevantBranches)
-            .ToList();
     }
 }

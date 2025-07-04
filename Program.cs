@@ -1,8 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System.Diagnostics;
-using LibGit2Sharp;
 using SubmoduleTracker.CLI;
 using SubmoduleTracker.Core;
+using SubmoduleTracker.Extensions;
 using SubmoduleTracker.Model;
 
 /*
@@ -21,9 +20,9 @@ Submodule D: 56ae
 
 
 string repoPath = @"C:\NON_SYSTEM\Superproject-A";
-string[] relevantBranchesNames = ["dev", "test"];
 
-SuperProject superProject = new SuperProject(repoPath, relevantBranchesNames);
+SuperProject superProject = new (repoPath);
+
 
 //later superProject.Path
 await GitCLI.Checkout(@"C:\NON_SYSTEM\Superproject-A", BranchNames.TEST);
@@ -31,6 +30,20 @@ superProject.AddSubmoduleCommitMapForBranch(BranchNames.TEST);
 
 await GitCLI.Checkout(@"C:\NON_SYSTEM\Superproject-A", BranchNames.DEV);
 superProject.AddSubmoduleCommitMapForBranch(BranchNames.DEV);
+
+foreach(string submodule in superProject.SubmodulesNames)
+{
+    // new class submodule manager
+        // uchovava dictionary SubmoduleCommitMap a ma funkciu v ktorej setko fetchne
+    // zisti head pre kazdu branch
+}
+
+
+
+
+// porovnat to kam ukazuju submoduly
+// s tym aky head maju submoduly
+// dev.api == api.dev.head
 
 // After merge check
 // submodul ukazuje spravne? commit na ktory ukazuje sa nachadza v KOLEKCII COMMITOV ORIGIN BRANCHE

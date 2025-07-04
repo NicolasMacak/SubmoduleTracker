@@ -8,13 +8,15 @@ public sealed class SuperProject : SlimRepository
 
     public BranchSubmoduleMap SubmoduleMap { get; } = new();
 
+    public HashSet<string> SubmodulesNames { get; } = new();
+
     // Dictionary<branch <submodule, commit>>
 
     // kam ukazuje local branch? easy
     // Kam ukazuje remote branch? musim byt na head commit tej ktorej branche
 
-    public SuperProject(string repoPath, string[] relevantBranches)
-        : base(repoPath, relevantBranches)
+    public SuperProject(string repoPath)
+        : base(repoPath)
     {
     }
 
@@ -26,6 +28,7 @@ public sealed class SuperProject : SlimRepository
 
         foreach (Submodule? submodule in fullRepository.Submodules)
         {
+            SubmodulesNames.Add(submodule.Name);
             commitMap.Add(submodule.Name, submodule.IndexCommitId.ToString());
         }
 

@@ -1,6 +1,11 @@
 ﻿namespace SubmoduleTracker.CLI;
 public static class GitCLI
-{
+{ 
+    public static async Task Fetch(string path, string branch)
+    {
+        await GitProcessExecutor.ExecuteVoidCommand(path, "fetch --all");
+    }
+
     public static async Task Checkout(string path, string branch)
     {
         await GitProcessExecutor.ExecuteVoidCommand(path, $"checkout {branch}");
