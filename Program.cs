@@ -1,7 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using SubmoduleTracker.CLI;
 using SubmoduleTracker.Core;
-using SubmoduleTracker.Extensions;
+using SubmoduleTracker.Managers;
 using SubmoduleTracker.Model;
 
 /*
@@ -18,27 +17,19 @@ Submodule C: 4d55
 Submodule D: 56ae
 */
 
-
 string repoPath = @"C:\NON_SYSTEM\Superproject-A";
 
-SuperProject superProject = new (repoPath);
+List<string> relevantBranches = new() { BranchNames.TEST, BranchNames.DEV };
 
+SuperprojectsManager superprojectsManager = new( superProjectsPaths: new List<string> { repoPath }, relevantBranches: relevantBranches);
 
-//later superProject.Path
-await GitCLI.Checkout(@"C:\NON_SYSTEM\Superproject-A", BranchNames.TEST);
-superProject.AddSubmoduleCommitMapForBranch(BranchNames.TEST);
+/// po vykonani tohto na ake commity v submoduloch ukazuju relevantne branche v super projekte
+var aaa = await superprojectsManager.GetSuperProjectPopulatedWithBranchesSubmodules("Superproject-A");
 
-await GitCLI.Checkout(@"C:\NON_SYSTEM\Superproject-A", BranchNames.DEV);
-superProject.AddSubmoduleCommitMapForBranch(BranchNames.DEV);
+var submoduleManager = new SubmodulesManager(superprojectsManager.AllSubmodulesWithPaths);
 
-foreach(string submodule in superProject.SubmodulesNames)
-{
-    // new class submodule manager
-        // uchovava dictionary SubmoduleCommitMap a ma funkciu v ktorej setko fetchne
-    // zisti head pre kazdu branch
-}
-
-
+// po vykonani tohto viem kam smeruju heady submodulov
+await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
 
 
 // porovnat to kam ukazuju submoduly

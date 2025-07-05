@@ -7,7 +7,7 @@ namespace SubmoduleTracker.Model;
 public class SlimRepository
 {
     public readonly string Name;
-    protected readonly string RepositoryPath;
+    public readonly string RepositoryPath;
     [Obsolete("needed? Uz mam pointery na submoduly")]
     public readonly List<Branch> RelevantBranches;
 

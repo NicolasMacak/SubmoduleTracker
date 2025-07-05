@@ -1,5 +1,5 @@
 ﻿using LibGit2Sharp;
-using SubmoduleTracker.Extensions;
+using SubmoduleTracker.CLI;
 
 namespace SubmoduleTracker.Model;
 public sealed class SuperProject : SlimRepository
@@ -8,7 +8,7 @@ public sealed class SuperProject : SlimRepository
 
     public BranchSubmoduleMap SubmoduleMap { get; } = new();
 
-    public HashSet<string> SubmodulesNames { get; } = new();
+    public List<string> SubmodulesNames { get; } = new();
 
     // Dictionary<branch <submodule, commit>>
 
@@ -18,17 +18,31 @@ public sealed class SuperProject : SlimRepository
     public SuperProject(string repoPath)
         : base(repoPath)
     {
+        var fullRepo = new Repository(repoPath);
+
+        foreach(var submodule in fullRepo.Submodules)
+        {
+            SubmodulesNames.Add(submodule.Name);
+        }
     }
 
-    public void AddSubmoduleCommitMapForBranch(string branch)
+    public async Task PopulateSubmoduleReferencesForBranches(IEnumerable<string> branches)
     {
-        Repository fullRepository = new(RepositoryPath);
+        foreach (string branch in branches)
+        {
+            await GitCLI.Checkout(RepositoryPath, branch);
+            SaveSubmoduleRefernceForBranch(branch);
+        }
+    }
+
+    private void SaveSubmoduleRefernceForBranch(string branch)
+    {
+        Repository repositoryData = new(RepositoryPath);
 
         SubmoduleCommitMap commitMap = new ();
 
-        foreach (Submodule? submodule in fullRepository.Submodules)
+        foreach (Submodule? submodule in repositoryData.Submodules)
         {
-            SubmodulesNames.Add(submodule.Name);
             commitMap.Add(submodule.Name, submodule.IndexCommitId.ToString());
         }
 

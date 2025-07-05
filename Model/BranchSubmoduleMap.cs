@@ -8,9 +8,4 @@ public sealed class BranchSubmoduleMap : Dictionary<string, SubmoduleCommitMap>
     {
         return this.TryGetValue(branchName, out var commit) ? commit : null;
     }
-    [Obsolete]
-    public IEnumerable<string> GetAllSubmodules()
-    {
-        return this.First().Value.Select(x => x.Value);
-    }
-}
+  }
