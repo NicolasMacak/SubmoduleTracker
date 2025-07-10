@@ -4,21 +4,15 @@ using SubmoduleTracker.CLI;
 namespace SubmoduleTracker.Model;
 public sealed class SuperProject : SlimRepository
 {
-    //public readonly List<SlimRepository> Submodules;
-
-    public BranchSubmoduleMap SubmoduleMap { get; } = new();
-
+    /// <summary>
+    /// Submodules names
+    /// </summary>
     public List<string> SubmodulesNames { get; } = new();
-
-    // Dictionary<branch <submodule, commit>>
-
-    // kam ukazuje local branch? easy
-    // Kam ukazuje remote branch? musim byt na head commit tej ktorej branche
 
     public SuperProject(string repoPath)
         : base(repoPath)
     {
-        var fullRepo = new Repository(repoPath);
+        Repository fullRepo = new (repoPath);
 
         foreach(var submodule in fullRepo.Submodules)
         {
@@ -26,26 +20,29 @@ public sealed class SuperProject : SlimRepository
         }
     }
 
-    public async Task PopulateSubmoduleReferencesForBranches(IEnumerable<string> branches)
+    /// <summary>
+    /// Gets where submodule pointings of superProject for DEV and TEST
+    /// </summary>
+    public async Task<BranchSubmoduleMap> GetSubmodulePointings(IEnumerable<string> branches)
     {
+        BranchSubmoduleMap submodulePoingns = new();
+
         foreach (string branch in branches)
         {
-            await GitCLI.Checkout(RepositoryPath, branch);
-            SaveSubmoduleRefernceForBranch(branch);
-        }
-    }
+            await GitCLI.Checkout(RepositoryPath, branch); // done so we can check where submodules points on this branch
 
-    private void SaveSubmoduleRefernceForBranch(string branch)
-    {
-        Repository repositoryData = new(RepositoryPath);
+            Repository superProjectGitRepository = new(RepositoryPath);
 
-        SubmoduleCommitMap commitMap = new ();
+            SubmoduleCommitMap commitMap = new();
 
-        foreach (Submodule? submodule in repositoryData.Submodules)
-        {
-            commitMap.Add(submodule.Name, submodule.IndexCommitId.ToString());
+            foreach (Submodule? submodule in superProjectGitRepository.Submodules)
+            {
+                commitMap.Add(submodule.Name, submodule.IndexCommitId.ToString());
+            }
+
+            submodulePoingns.Add(branch, commitMap);
         }
 
-        SubmoduleMap.Add(branch, commitMap);
+        return submodulePoingns;
     }
 }

@@ -24,9 +24,11 @@ List<string> relevantBranches = new() { BranchNames.TEST, BranchNames.DEV };
 SuperprojectsManager superprojectsManager = new( superProjectsPaths: new List<string> { repoPath }, relevantBranches: relevantBranches);
 
 /// po vykonani tohto na ake commity v submoduloch ukazuju relevantne branche v super projekte
-var aaa = await superprojectsManager.GetSuperProjectPopulatedWithBranchesSubmodules("Superproject-A");
+var superProjectA = await superprojectsManager.GetSubmodulePointingsOfSuperProject("Superproject-A");
 
-var submoduleManager = new SubmodulesManager(superprojectsManager.AllSubmodulesWithPaths);
+var submodulesWorkdirs = superprojectsManager.GetSubmodulesWorkdirectories();
+
+var submoduleManager = new SubmodulesManager(submodulesWorkdirs);
 
 // po vykonani tohto viem kam smeruju heady submodulov
 await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
