@@ -51,11 +51,12 @@ public sealed class SuperprojectsManager
     /// <summary>
     /// Returns SubmoduleMappings for superproject
     /// </summary>
-    public async Task<BranchSubmoduleMap> GetSubmodulePointingsOfSuperProject(string superProjecstName)
+    public async Task<SuperProject> GetSubmodulesIndexCommitsForSuperproject(string superProjecstName)
     {
         SuperProject requestedSuperProject = SuperProjects[superProjecstName];
+        await requestedSuperProject.FetchLatestSubmodulesIndexCommits(_relevantBranches); 
 
-        return await requestedSuperProject.GetSubmodulePointings(_relevantBranches);
+        return requestedSuperProject;
     }
 
     public async Task<List<SuperProject>> GetFullSuperProjectList()

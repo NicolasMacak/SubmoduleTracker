@@ -24,15 +24,34 @@ List<string> relevantBranches = new() { BranchNames.TEST, BranchNames.DEV };
 SuperprojectsManager superprojectsManager = new( superProjectsPaths: new List<string> { repoPath }, relevantBranches: relevantBranches);
 
 /// po vykonani tohto na ake commity v submoduloch ukazuju relevantne branche v super projekte
-var superProjectA = await superprojectsManager.GetSubmodulePointingsOfSuperProject("Superproject-A");
+SuperProject superproject = await superprojectsManager.GetSubmodulesIndexCommitsForSuperproject("Superproject-A");
 
-var submodulesWorkdirs = superprojectsManager.GetSubmodulesWorkdirectories();
+Dictionary<string, string> allSubmodulesWorkids = superprojectsManager.GetSubmodulesWorkdirectories();
 
-var submoduleManager = new SubmodulesManager(submodulesWorkdirs);
+SubmodulesManager submoduleManager = new SubmodulesManager(allSubmodulesWorkids);
 
 // po vykonani tohto viem kam smeruju heady submodulov
-await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
+Dictionary<string, Dictionary<string, string>> headsOfSubmodulesForBranches = await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
 
+Console.WriteLine("Superprojects \t Branch \t Submodule \t Index commit \t Head commit");
+
+Console.WriteLine("Superproject A");
+
+Console.WriteLine($"\t {BranchNames.TEST}");
+
+
+var superprojectPointings = superproject.SubmoduleCommitIndexesForBranches[BranchNames.TEST];
+var headCommits = headsOfSubmodulesForBranches[BranchNames.TEST];
+
+foreach(string submoduleName in superproject.SubmodulesNames)
+{
+    string submoduleIndexCommit = superprojectPointings[submoduleName];
+    string submoduleHeadCommit = headCommits[submoduleName];
+
+    Console.WriteLine($"\t \t {submoduleName} \t {submoduleIndexCommit} \t {submoduleHeadCommit}"); // Submodule name / Index commit / Head commit
+}
+
+Console.WriteLine("Badam bi mbada bum");
 
 // porovnat to kam ukazuju submoduly
 // s tym aky head maju submoduly

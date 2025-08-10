@@ -1,6 +1,5 @@
 ﻿using LibGit2Sharp;
 using SubmoduleTracker.CLI;
-using SubmoduleTracker.Model;
 
 namespace SubmoduleTracker.Managers;
 
@@ -9,32 +8,41 @@ namespace SubmoduleTracker.Managers;
 /// </summary>
 public sealed class SubmodulesManager
 {
-    BranchSubmoduleMap BranchAndHeadCommitsOnSubmodules = new();
-
-    private readonly Dictionary<string, string> _submodulesWithPaths;
+    private readonly Dictionary<string, string> _allSubmodulesWorkdirs;
 
     public SubmodulesManager(Dictionary<string, string> submodulesWithPaths)
     {
-        _submodulesWithPaths = submodulesWithPaths;
+        _allSubmodulesWorkdirs = submodulesWithPaths;
     }
 
-
     /// <summary>
-    /// Zisit kam smeruju HEADy pre jednotlive branche vsetkych submodulov
+    /// Get HEAD commit indexes for submodules on every branch
     /// </summary>
-    public async Task GetHeadsOfAllSubmodules(List<string> branchNames)
+    /// 
+    /// <remarks>
+    /// branch - branch for which we want to find out submodule head commits id <br></br>
+    /// headCommitId - HEAD commit of submodule for provided branch
+    /// </remarks>
+    /// 
+    /// <returns>
+    /// Dictionary[string, Dictionary[string, string]] <br></br>
+    /// Dictionary[branch, Dictionary[submodule, HeadCommitId]]
+    /// </returns>
+    public async Task<Dictionary<string, Dictionary<string, string>>> GetHeadsOfAllSubmodules(List<string> branchNames)
     {
+        Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
+
         foreach(string branchName in branchNames)
         {
-            SubmoduleCommitMap commitMap = new ();
+            Dictionary<string, string> commitMap = new ();
 
-            foreach (KeyValuePair<string, string> submoduleWithPath in _submodulesWithPaths)
+            foreach (KeyValuePair<string, string> submoduleWithPath in _allSubmodulesWorkdirs)
             {
-                await GitCLI.Fetch(submoduleWithPath.Value);
+                await GitCLI.Fetch(submoduleWithPath.Value); // fetch actual remote state for submodule in question
 
                 Repository submoduleRepository = new Repository(submoduleWithPath.Value);
 
-                Branch? branch = submoduleRepository.Branches.FirstOrDefault(x => x.IsRemote && x.FriendlyName.EndsWith(branchName));
+                Branch? branch = submoduleRepository.Branches.FirstOrDefault(x => x.IsRemote && x.FriendlyName.EndsWith(branchName)); // find 
                 if(branch == null)
                 {
                     Console.WriteLine($"{branch} was not found in {submoduleWithPath.Key}");
@@ -43,7 +51,9 @@ public sealed class SubmodulesManager
                 commitMap.Add(submoduleWithPath.Key, branch!.Reference.TargetIdentifier);
             }
 
-            BranchAndHeadCommitsOnSubmodules.Add(branchName, commitMap);
+            SubmoduleHeadCommitsForBranches.Add(branchName, commitMap);
         }
+
+        return SubmoduleHeadCommitsForBranches;
     }
 }
