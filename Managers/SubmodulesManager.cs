@@ -40,7 +40,7 @@ public sealed class SubmodulesManager
             {
                 await GitCLI.Fetch(submoduleWithPath.Value); // fetch actual remote state for submodule in question
 
-                Repository submoduleRepository = new Repository(submoduleWithPath.Value);
+                Repository submoduleRepository = new(submoduleWithPath.Value);
 
                 Branch? branch = submoduleRepository.Branches.FirstOrDefault(x => x.IsRemote && x.FriendlyName.EndsWith(branchName)); // find 
                 if(branch == null)
@@ -48,7 +48,7 @@ public sealed class SubmodulesManager
                     Console.WriteLine($"{branch} was not found in {submoduleWithPath.Key}");
                 }
 
-                commitMap.Add(submoduleWithPath.Key, branch!.Reference.TargetIdentifier);
+                commitMap.Add(submoduleWithPath.Key, branch!.Reference.TargetIdentifier[..20]);
             }
 
             SubmoduleHeadCommitsForBranches.Add(branchName, commitMap);
