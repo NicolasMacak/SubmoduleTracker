@@ -48,13 +48,8 @@ public sealed class SuperProject
 
             Repository superProjectGitRepository = new(RepositoryPath); // Load superproject where files were alteredy by checkout
 
-            //Dictionary<string, string> commitMap = new();
-            //foreach (Submodule? submodule in superProjectGitRepository.Submodules) // todo. This can probably be constructed by LINQ
-            //{
-            //    commitMap.Add(submodule.Name, submodule.IndexCommitId.ToString());
-            //}
-
-            Dictionary<string, string> submoduleCommitIndexes = superProjectGitRepository.Submodules.ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()); // Information where submodules points to
+            // Information where submodules points to
+            Dictionary<string, string> submoduleCommitIndexes = superProjectGitRepository.Submodules.ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
 
             SubmoduleCommitIndexesForBranches.Add(branch, submoduleCommitIndexes);
         }

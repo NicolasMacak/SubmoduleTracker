@@ -1,5 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using SubmoduleTracker.ConsoleOutput;
 using SubmoduleTracker.Core;
+using SubmoduleTracker.Dto;
 using SubmoduleTracker.Managers;
 using SubmoduleTracker.Model;
 
@@ -19,6 +21,8 @@ Submodule D: 56ae
 
 string repoPath = @"C:\NON_SYSTEM\Superproject-A";
 
+const string SuperProjectName = "Superproject-A";
+
 List<string> relevantBranches = new() { BranchNames.TEST, BranchNames.DEV };
 
 SuperprojectsManager superprojectsManager = new( superProjectsPaths: new List<string> { repoPath }, relevantBranches: relevantBranches);
@@ -33,25 +37,19 @@ SubmodulesManager submoduleManager = new SubmodulesManager(allSubmodulesWorkids)
 // po vykonani tohto viem kam smeruju heady submodulov
 Dictionary<string, Dictionary<string, string>> headsOfSubmodulesForBranches = await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
 
-Console.WriteLine("Superprojects \t Branch \t Submodule \t Index commit \t Head commit");
-
-Console.WriteLine("Superproject A");
-
-Console.WriteLine($"\t {BranchNames.TEST}");
-
-
-var superprojectPointings = superproject.SubmoduleCommitIndexesForBranches[BranchNames.TEST];
-var headCommits = headsOfSubmodulesForBranches[BranchNames.TEST];
-
-foreach(string submoduleName in superproject.SubmodulesNames)
+PrintableSuperprojectDto printableSuperprojectDto = new()
 {
-    string submoduleIndexCommit = superprojectPointings[submoduleName];
-    string submoduleHeadCommit = headCommits[submoduleName];
+    Title = SuperProjectName,
+    RevelantBranches = relevantBranches,
+    Submodules = superproject.SubmodulesNames,
+    SubmoduleCommitIndexes = superproject.SubmoduleCommitIndexesForBranches,
+    SubmodulesHeadCommits = headsOfSubmodulesForBranches,
+};
 
-    Console.WriteLine($"\t \t {submoduleName} \t {submoduleIndexCommit} \t {submoduleHeadCommit}"); // Submodule name / Index commit / Head commit
-}
+SubmoduleMergeReport.GenerateOutput(printableSuperprojectDto);
 
-Console.WriteLine("Badam bi mbada bum");
+
+return 0;
 
 // porovnat to kam ukazuju submoduly
 // s tym aky head maju submoduly
