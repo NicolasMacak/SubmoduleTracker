@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace SubmoduleTracker.CLI;
+namespace SubmoduleTracker.GitInteraction.CLI;
 public static class GitProcessExecutor
 {
     private static Process? GetCommandProcess(string path, string command)

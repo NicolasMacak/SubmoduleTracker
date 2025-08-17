@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.CLI;
+﻿namespace SubmoduleTracker.GitInteraction.CLI;
 public static class GitCLI
 { 
     public static async Task Fetch(string path)

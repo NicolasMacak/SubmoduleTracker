@@ -1,13 +1,12 @@
-﻿using SubmoduleTracker.Dto;
-
+﻿using SubmoduleTracker.SubmoduleIndexValidation.Dto;
 using static SubmoduleTracker.Core.TableConstants;
 
-namespace SubmoduleTracker.ConsoleOutput;
+namespace SubmoduleTracker.SubmoduleIndexValidation;
 
 /// <summary>
 /// Designed to print output of a specific kidn
 /// </summary>
-public static class SubmoduleMergeReport
+public static class CommitsIndexValidationTable
 {
     private const string Delimeter = " | ";
 
@@ -20,6 +19,9 @@ public static class SubmoduleMergeReport
         PrintTableBody(printableSuperproject, columns);
     }
 
+    /// <summary>
+    /// Prints table that informs if submodules in superproject points to the headcommits in submodules
+    /// </summary>
     private static void PrintTableBody(PrintableSuperprojectDto printableSuperprojectDto, Dictionary<string, TableColumn> columns)
     {
         // Superproject title
@@ -39,7 +41,6 @@ public static class SubmoduleMergeReport
                 Console.Write(columns[Column.Submodule].GetPrintableValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimeter.Length * 2) + Delimeter);
 
                 // Index commit
-
                 Console.ForegroundColor = superprojectIndexes[submoduleName] == submoduleHeadCommits[submoduleName] ? // Does submodule points correctly?
                     ConsoleColor.Green
                     : ConsoleColor.Red;
@@ -54,6 +55,12 @@ public static class SubmoduleMergeReport
         }
     }
 
+    /// <summary>
+    /// Columns adjusted for printing table where columns have dynamic width
+    /// </summary>
+    /// <remarks>
+    /// Non-commit columns have dynamic width
+    /// </remarks>
     private static Dictionary<string, TableColumn> GetColumns(PrintableSuperprojectDto printableSuperprojectDto)
     {
         // Ordered
@@ -109,10 +116,5 @@ public static class SubmoduleMergeReport
             columns[Column.IndexCommit].GetPrintableHeader() + Delimeter + 
             columns[Column.HeadCommit].GetPrintableHeader() + Delimeter + Environment.NewLine
         );
-    }
-
-    private static bool DoesSubmodulePointsCorrectly(string indexCommit, string headCommit)
-    {
-        return indexCommit == headCommit;
     }
 }

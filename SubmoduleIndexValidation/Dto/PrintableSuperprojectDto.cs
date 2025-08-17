@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Dto;
+﻿namespace SubmoduleTracker.SubmoduleIndexValidation.Dto;
 public sealed class PrintableSuperprojectDto
 {
     public string Title { get; set; }

@@ -1,64 +1,39 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using SubmoduleTracker.ConsoleOutput;
-using SubmoduleTracker.Core;
-using SubmoduleTracker.Dto;
-using SubmoduleTracker.Managers;
-using SubmoduleTracker.Model;
+using SubmoduleTracker.SubmoduleIndexValidation;
+using SubmoduleTracker.GitInteraction.Model;
+using SubmoduleTracker.SubmoduleIndexValidation.Dto;
 
+// Config file
 /*
 
-Superproject 
-dev
-Superproject: : 606e
-Submodule C: cec5d
-Submodule D: 56ae
+Superprojects
 
-test
-Superproject: : f058e
-Submodule C: 4d55
-Submodule D: 56ae
-*/
+budu mat full path, ale ich meno bude inou farbou. No submodules check
+ak budu priecinky zmazane, vypisu sa cervenou
+
+tracked branches. Pridat/Ignore/Delete
+
+Settings
+
+ */
 
 string repoPath = @"C:\NON_SYSTEM\Superproject-A";
 
 const string SuperProjectName = "Superproject-A";
 
-List<string> relevantBranches = new() { BranchNames.TEST, BranchNames.DEV };
+List<string> relevantBranches = new() { "test", "dev" };
 
-SuperprojectsManager superprojectsManager = new( superProjectsPaths: new List<string> { repoPath }, relevantBranches: relevantBranches);
-
-/// po vykonani tohto na ake commity v submoduloch ukazuju relevantne branche v super projekte
-SuperProject superproject = await superprojectsManager.GetSubmodulesIndexCommitsForSuperproject("Superproject-A");
-
-Dictionary<string, string> allSubmodulesWorkids = superprojectsManager.GetSubmodulesWorkdirectories();
-
-SubmodulesManager submoduleManager = new SubmodulesManager(allSubmodulesWorkids);
-
-// po vykonani tohto viem kam smeruju heady submodulov
-Dictionary<string, Dictionary<string, string>> headsOfSubmodulesForBranches = await submoduleManager.GetHeadsOfAllSubmodules(relevantBranches);
+SuperProject superProject = new(repoPath);
 
 PrintableSuperprojectDto printableSuperprojectDto = new()
 {
-    Title = SuperProjectName,
+    Title = superProject.Name,
     RevelantBranches = relevantBranches,
-    Submodules = superproject.SubmodulesNames,
-    SubmoduleCommitIndexes = superproject.SubmoduleCommitIndexesForBranches,
-    SubmodulesHeadCommits = headsOfSubmodulesForBranches,
+    Submodules = superProject .SubmodulesNames,
+    SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
+    SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
 };
 
-SubmoduleMergeReport.GenerateOutput(printableSuperprojectDto);
-
+CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);
 
 return 0;
-
-// porovnat to kam ukazuju submoduly
-// s tym aky head maju submoduly
-// dev.api == api.dev.head
-
-// After merge check
-// submodul ukazuje spravne? commit na ktory ukazuje sa nachadza v KOLEKCII COMMITOV ORIGIN BRANCHE
-
-// Check zarovnania submodelu NA REMOTE BRANCHAS. skuska spravnosti. zaujima ma cloud stav
-
-// fetch
-// poslednu verziu submodulu na dev/test a skontroluje, ci na nu ukazuju vsetky superprojekty

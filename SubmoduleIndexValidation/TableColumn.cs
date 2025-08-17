@@ -1,6 +1,6 @@
 ﻿using SubmoduleTracker.Core;
 
-namespace SubmoduleTracker.ConsoleOutput;
+namespace SubmoduleTracker.SubmoduleIndexValidation;
 public sealed class TableColumn
 {
     public string Name { get; }
@@ -13,6 +13,11 @@ public sealed class TableColumn
         Width = width;
     }
 
+    /// <summary>
+    /// Returns minimal length for every value of the row to fit int
+    /// </summary>
+    /// <param name="columnName"></param>
+    /// <param name="longestValueLength">Column needs to be as long, as it's longest(string length wise) value</param>
     public static int CalculateColumnWidth(string columnName, int longestValueLength)
     {
         int min = Math.Min(longestValueLength, TableConstants.MaxColumnWidth); // as less as required
@@ -25,9 +30,9 @@ public sealed class TableColumn
         return Name.PadRight(Width);
     }
 
-    public string GetPrintableValue(string value, int offset)
+    public string GetPrintableValue(string value, int leftOffest)
     {
-        return $"{new string(' ', offset)}{value.PadRight(Width)}"
+        return $"{new string(' ', leftOffest)}{value.PadRight(Width)}"
         ;
     }
 }
