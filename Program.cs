@@ -2,6 +2,7 @@
 using SubmoduleTracker.SubmoduleIndexValidation;
 using SubmoduleTracker.GitInteraction.Model;
 using SubmoduleTracker.SubmoduleIndexValidation.Dto;
+using SubmoduleTracker.HomeScreen;
 
 // Config file
 /*
@@ -17,23 +18,7 @@ Settings
 
  */
 
-string repoPath = @"C:\NON_SYSTEM\Superproject-A";
-
-const string SuperProjectName = "Superproject-A";
-
-List<string> relevantBranches = new() { "test", "dev" };
-
-SuperProject superProject = new(repoPath);
-
-PrintableSuperprojectDto printableSuperprojectDto = new()
-{
-    Title = superProject.Name,
-    RevelantBranches = relevantBranches,
-    Submodules = superProject .SubmodulesNames,
-    SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
-    SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
-};
-
-CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);
+HomeScreenService babka = new HomeScreenService();
+babka.GetUserConfiguration();
 
 return 0;
