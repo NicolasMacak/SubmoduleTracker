@@ -10,9 +10,13 @@ public static class UserSettingsScreen
     // C:\Users\macak\AppData\Roaming
     private const string ConfigFileName = "SubmoduleTrackerConfig.txt";
 
-    public static void Main(UserConfig userConfig)
+    public static void Main(UserConfig userConfig, string? errorMessage = null)
     {
-        Console.Clear();
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
+        }
+
         PrintUserConfig(userConfig);
 
         int menuOptionsCount = PrintMenuOptionsAndGetTheirCount();
@@ -30,7 +34,7 @@ public static class UserSettingsScreen
                 TryAddingNewSuperproject(userConfig);
                 break;
 
-            case 2: Console.WriteLine(); break;
+            case 2: DeleteSuperproject(userConfig); break;
             default: Console.WriteLine("No such option!"); break;
         }
     }
@@ -83,13 +87,12 @@ public static class UserSettingsScreen
     /// <param name="errorMessage">Contains error message from last attempt</param>
     private static void TryAddingNewSuperproject(UserConfig userConfig, string? errorMessage = null)
     {
-        Console.Clear();
         if (!string.IsNullOrEmpty(errorMessage)) {
             CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
         }
 
         Console.WriteLine("Zadajte absolutnu cestu ku git repozitaru");
-        Console.WriteLine("Pre krok spat zadajte empty string");
+        Console.WriteLine("Pre krok spat zadajte empty string" + Environment.NewLine);
 
         string? superprojectWorkdir = Console.ReadLine();
 
@@ -144,9 +147,44 @@ public static class UserSettingsScreen
 
         return null;
     }
-    private static void DeleteSuperproject()
-    {
 
+    /// <summary>
+    /// Remove superproject from config
+    /// </summary>
+    private static void DeleteSuperproject(UserConfig userConfig, string? errorMessage = null)
+    {
+        if (!string.IsNullOrEmpty(errorMessage))
+        {
+            CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
+        }
+
+        Console.WriteLine(Environment.NewLine + "Choose superproject to delete" + Environment.NewLine);
+        Console.WriteLine("Enter empty string for step back" + Environment.NewLine);
+
+        // Print deletion options
+        for(int i = 0; i < userConfig.SuperProjects.Count; i++)
+        {
+            Console.WriteLine($"{i}. {userConfig.SuperProjects[i].WorkingDirectory}");
+        }
+
+        string? choice = Console.ReadLine();
+
+        // step back
+        if (string.IsNullOrEmpty(choice))
+        {
+            Main(userConfig);
+        }
+
+        int? option = ConsoleValidation.ReturnValidatedNumberOption(choice, userConfig.SuperProjects.Count - 1, 0);
+
+        if (!option.HasValue)
+        {
+            DeleteSuperproject(userConfig, $"Invalid input. Valid options are from {0} to {userConfig.SuperProjects.Count - 1}");
+        }
+
+        userConfig.SuperProjects.RemoveAt(option!.Value);
+
+        SaveOptions(userConfig);
     }
 
     /// <summary>
@@ -156,6 +194,8 @@ public static class UserSettingsScreen
     {
         string stringyUserConfig = JsonSerializer.Serialize(userConfig);
         File.WriteAllText(GetConfigFilePath(), stringyUserConfig);
+
+        Console.Clear(); // We clear console only when operation ends in success
         Main(userConfig); 
     }
 
@@ -163,7 +203,18 @@ public static class UserSettingsScreen
     {
         foreach(SuperProjectConfig superproject in userConfig.SuperProjects)
         {
-            Console.WriteLine(superproject.WorkingDirectory);
+            // We separate path by folders
+            // last element is the name of the superproject(Which we want to highlight)
+            string[] pathParts = superproject.WorkingDirectory.Split(@"\"); 
+
+            // We deconstruct the path to separate if to parts that we want highlithed and parts that we dont
+            IEnumerable<string> unghighlitherParts = pathParts.Take(pathParts.Length - 1);
+            string unghighlightedString = string.Join(@"/", unghighlitherParts); 
+            Console.Write(unghighlightedString + @"/");
+
+            // Superproject name is highlithed
+            string superProjectName = pathParts[pathParts.Length - 1];
+            CustomConsole.WriteHighlighted(superProjectName + Environment.NewLine);
         }
 
         Console.WriteLine();

@@ -31,18 +31,6 @@
         <mxCell id="iCKe8L9vZJJtGCBKQtnD-5" value="Merge&amp;nbsp;" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="415" y="410" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="xgLWFEn2N7wyUjUheWtz-1" value="Adding new Superproject" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="-705" y="350" width="160" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="xgLWFEn2N7wyUjUheWtz-2" value="Wrong path" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="-670" y="380" width="90" height="30" as="geometry" />
-        </mxCell>
-        <mxCell id="xgLWFEn2N7wyUjUheWtz-3" value="Ensure path to .git.&amp;nbsp;&lt;br&gt;Z tej path robim submodule workdir.&lt;br&gt;Nemoze byt taka, ze new repo ju zje, ale pouzit ju nesmiem.&lt;div&gt;&lt;br/&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
-          <mxGeometry x="-755" y="422" width="340" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="xgLWFEn2N7wyUjUheWtz-4" value="&lt;div&gt;TOTO NEFUNGUJE&lt;/div&gt;userConfig.SuperProjects.Any(x =&amp;gt; x.WorkingDirectory == superprojectWorkdir)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
-          <mxGeometry x="-770" y="517" width="450" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="9OnaElkXCphRrL8_LYWj-2" value="Pointing report" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" vertex="1" parent="1">
           <mxGeometry x="-1520" y="120" width="370" height="60" as="geometry" />
         </mxCell>
