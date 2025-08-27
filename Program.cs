@@ -18,7 +18,6 @@ Settings
 
  */
 
-HomeScreenService babka = new HomeScreenService();
-babka.GetUserConfiguration();
+HomeScreenService.ShowHomeScreen();
 
 return 0;

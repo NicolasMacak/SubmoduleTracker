@@ -3,7 +3,7 @@ public static class ConsoleValidation
 {
     public static int? ReturnValidatedNumberOption(string? stringNumberOption, int choicesCount)
     {
-        if(!string.IsNullOrEmpty(stringNumberOption)){ // empty input
+        if(string.IsNullOrEmpty(stringNumberOption)){ // empty input
             return null;
         }
 
@@ -11,11 +11,6 @@ public static class ConsoleValidation
             return null;
         }
 
-        if(choicesCount < 1 && parsedNumberOption > choicesCount) // Cant be less than 1 or grater than choices count
-        {
-            return null;
-        }
-
-        return choicesCount;
+        return parsedNumberOption;
     }
 }

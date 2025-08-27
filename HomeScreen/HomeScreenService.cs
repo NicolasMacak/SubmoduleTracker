@@ -18,15 +18,12 @@ listing to bude urco. a mejby farby.
 co krok, to save
 
 */
-public sealed class HomeScreenService
+public static class HomeScreenService
 {
-    private const string ConfigFileName = "SubmoduleTrackerConfig";
-    string configFilePath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ConfigFileName}";
-
-    public void ShowHomeScreen()
+    public static void ShowHomeScreen()
     {
         // get config file
-        UserConfig config = GetUserConfiguration();
+        UserConfig config = UserSettingsScreen.GetUserConfiguration();
 
         // Superprojects
         UserSettingsScreen.Main(config);
@@ -34,25 +31,13 @@ public sealed class HomeScreenService
         // Submodules
     }
 
-    public void ShowMainOptions()
+    public static void ShowMainOptions()
     {
         Console.WriteLine("1. Zmenit nastavenia");
         Console.WriteLine("2. Porovnat submoduly");
     }
 
-    public UserConfig GetUserConfiguration()
-    {
-        if (File.Exists(configFilePath))
-        {
-            return new UserConfig();
-        }
-        else
-        {
-            return new UserConfig();
-        }
-    }
-
-    public async void GenerateReport(string superProjectPath)
+    public static async void GenerateReport(string superProjectPath)
     {
         SuperProject superProject = new(superProjectPath);
 
