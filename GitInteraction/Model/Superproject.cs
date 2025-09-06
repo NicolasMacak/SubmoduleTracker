@@ -6,13 +6,13 @@ namespace SubmoduleTracker.GitInteraction.Model;
 public sealed class SuperProject
 {
     public readonly string Name;
-    public readonly string RepositoryPath;
+    public readonly string WorkingDirectory;
     public List<string> SubmodulesNames { get; } = new();
 
     public SuperProject(string repoPath)
     {
         Name = repoPath.Split(@"\").Last();
-        RepositoryPath = repoPath;
+        WorkingDirectory = repoPath;
 
         Repository fullRepo = new(repoPath);
         foreach (var submodule in fullRepo.Submodules)
@@ -35,19 +35,21 @@ public sealed class SuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
 
-    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches)
+    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodueles)
     {
         Dictionary<string, Dictionary<string, string>> result = new();
 
-
         foreach (string branch in branches)
         {
-            await GitCLI.Checkout(RepositoryPath, branch); // done so we can check where submodules points on this branch
+            await GitCLI.Switch(WorkingDirectory, branch); // done so we can check where submodules points on this branch
 
-            Repository superProjectGitRepository = new(RepositoryPath); // Load superproject where files were alteredy by checkout
+            Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
 
             // Information where submodules points to
-            Dictionary<string, string> submoduleCommitIndexes = superProjectGitRepository.Submodules.ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
+            Dictionary<string, string> submoduleCommitIndexes 
+                = superProjectGitRepository.Submodules
+                .Where(x => relevantSubmodueles.Contains(x.Name))
+                .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
 
             result.Add(branch, submoduleCommitIndexes);
         }
@@ -68,19 +70,19 @@ public sealed class SuperProject
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, HeadCommitId]]
     /// </returns>
-    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleHeadCommitRefs(List<string> branchNames)
+    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
 
-        foreach (string branchName in branchNames)
+        foreach (string branchName in relevantBranches)
         {
             Dictionary<string, string> commitMap = new();
 
-            foreach (string submoduleName in SubmodulesNames)
+            foreach (string submoduleName in relevantSubmodules)
             {
-                string submoduleWorkdir = $"{RepositoryPath}/{submoduleName}";
+                string submoduleWorkdir = $"{WorkingDirectory}/{submoduleName}";
 
-                await GitCLI.Fetch(submoduleWorkdir); // fetch actual remote state for submodule in question
+                await GitCLI.FetchAndPull(submoduleWorkdir); // fetch actual remote state for submodule in question
 
                 Repository submoduleRepository = new(submoduleWorkdir);
 
@@ -90,7 +92,7 @@ public sealed class SuperProject
                     Console.WriteLine($"{branch} was not found in {submoduleWorkdir}");
                 }
 
-                commitMap.Add(submoduleName, branch!.Reference.TargetIdentifier[..20]);
+                commitMap.Add(submoduleName, branch!.Reference.TargetIdentifier[..20]); // [..20] - first 20 chars
             }
 
             SubmoduleHeadCommitsForBranches.Add(branchName, commitMap);

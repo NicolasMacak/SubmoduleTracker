@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using SubmoduleTracker.ConsoleTools;
 
 namespace SubmoduleTracker.GitInteraction.CLI;
 public static class GitProcessExecutor
@@ -25,10 +26,23 @@ public static class GitProcessExecutor
         }
 
         string output = await process.StandardOutput.ReadToEndAsync();
-        string error = await process.StandardError.ReadToEndAsync(); // todo osetrit
-        process.WaitForExit();
 
-        return output.ReplaceLineEndings(string.Empty);
+        try
+        {
+            await process.WaitForExitAsync();
+            return output.ReplaceLineEndings(string.Empty);
+        }
+        catch (Exception ex)
+        {
+            string error = await process.StandardError.ReadToEndAsync();
+            PrintError(path, command, error, ex.Message);
+            throw;
+            //string error = await process.StandardError.ReadToEndAsync();
+            //if (!string.IsNullOrEmpty(error))
+            //{
+            //    PrintError(path, command, error);
+            //}
+        }
     }
 
     public static async Task ExecuteVoidCommand(string path, string command)
@@ -39,7 +53,23 @@ public static class GitProcessExecutor
             throw new InvalidOperationException("Failed to start git command process.");
         }
 
-        string error = await process.StandardError.ReadToEndAsync();
-        process.WaitForExit();
+        try
+        {
+            await process.WaitForExitAsync();
+        }
+        catch (Exception ex)
+        {
+            string error = await process.StandardError.ReadToEndAsync();
+            PrintError(path, command, error, ex.Message);
+            throw;
+        }
+    }
+
+    private static void PrintError(string path, string command, string error, string exception)
+    {
+        CustomConsole.WriteErrorLine($"Directory: {path}");
+        CustomConsole.WriteErrorLine($"Command: {command}");
+        CustomConsole.WriteErrorLine($"Error message: {error}");
+        CustomConsole.WriteErrorLine($"Exception: {exception}");
     }
 }

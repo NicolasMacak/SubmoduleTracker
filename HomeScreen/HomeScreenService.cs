@@ -49,8 +49,8 @@ public static class HomeScreenService
             Title = superProject.Name,
             RevelantBranches = relevantBranches,
             Submodules = superProject.SubmodulesNames,
-            SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
-            SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
+            SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, superProject.SubmodulesNames),
+            SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches, superProject.SubmodulesNames),
         };
 
         CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);

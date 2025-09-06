@@ -3,6 +3,8 @@ using SubmoduleTracker.SubmoduleIndexValidation;
 using SubmoduleTracker.GitInteraction.Model;
 using SubmoduleTracker.SubmoduleIndexValidation.Dto;
 using SubmoduleTracker.HomeScreen;
+using SubmoduleTracker.UserSettings;
+using SubmoduleTracker.SubmoduleAlignment;
 
 // Config file
 /*
@@ -18,6 +20,11 @@ Settings
 
  */
 
-HomeScreenService.ShowHomeScreen();
+// HomeScreenService.ShowHomeScreen();
+
+SubmoduleTracker.UserSettings.Model.UserConfig userConfig = UserSettingsScreen.GetUserConfiguration();
+
+SubmoduleAlignment.Index(userConfig);
+
 
 return 0;

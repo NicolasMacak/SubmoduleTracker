@@ -25,7 +25,8 @@ public static class UserSettingsScreen
         int? validatedChoice = ConsoleValidation.ReturnValidatedNumberOption(choice, menuOptionsCount);
         if (!validatedChoice.HasValue)
         {
-            Console.WriteLine($"Invalid input. Must be number from 1 to {menuOptionsCount}");
+            Console.Clear();
+            Main(userConfig, $"Invalid input. Must be number from 1 to {menuOptionsCount}");
         }
 
         switch (validatedChoice!.Value) {
@@ -99,6 +100,7 @@ public static class UserSettingsScreen
         // Step back if user enters nothing
         if (string.IsNullOrEmpty(superprojectWorkdir))
         {
+            Console.Clear();
             Main(userConfig);
         }
 

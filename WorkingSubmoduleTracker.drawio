@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="4228" dy="1039" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3976" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -31,26 +31,103 @@
         <mxCell id="iCKe8L9vZJJtGCBKQtnD-5" value="Merge&amp;nbsp;" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="415" y="410" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-2" value="Pointing report" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" vertex="1" parent="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-2" value="Pointing report" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
           <mxGeometry x="-1520" y="120" width="370" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-3" value="Zarovnanie submodulu" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" vertex="1" parent="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-3" value="Zarovnanie submodulu" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
           <mxGeometry x="-2360" y="140" width="370" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-4" value="Settings screen" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" vertex="1" parent="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-4" value="Settings screen" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
           <mxGeometry x="-640" y="140" width="370" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-5" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-5" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-860" y="80" width="10" height="920" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-6" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-1710" y="100" width="10" height="920" as="geometry" />
+        <mxCell id="9OnaElkXCphRrL8_LYWj-6" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-1710" y="80" width="10" height="920" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-7" value="" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-7" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry y="60" width="10" height="920" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-8" value="I" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="-1620" y="220" width="90" height="40" as="geometry" />
+        <mxCell id="9OnaElkXCphRrL8_LYWj-8" value="Takes a LIST of Superprojects." style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="-1670" y="270" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="9OnaElkXCphRrL8_LYWj-9" value="Can add" style="whiteSpace=wrap;html=1;fontSize=20;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="-240" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9OnaElkXCphRrL8_LYWj-10" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Can Delete&lt;/font&gt;" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="-370" y="220" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-2" value="Cyan user input" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="-799.9999999999995" y="330.0000000000002" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-3" value="Pekne naformatovany layout" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="-799.9999999999995" y="440.0000000000002" width="90" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-4" value="Superprojec LIST" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-730" y="500" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-6" value="Viac miesta?" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-730" y="530" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-8" value="Print options" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-730" y="570" width="110" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-9" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Subor so submodulmi.&amp;nbsp;&lt;br&gt;Prepisatelny?&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2420" y="260" width="230" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-12" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Algorytmus&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2365" y="580.0000000000001" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="zN_APJOsYA4pf0mJ2beM-13" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-2085" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-21" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="zN_APJOsYA4pf0mJ2beM-13" target="zN_APJOsYA4pf0mJ2beM-16" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-13" value="" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-2330" y="660" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-14" value="Ukazuje superprojekt na HEAD?" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2405" y="630" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-16" value="" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="-2330" y="770" width="50" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-20" value="ÁNO" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2210" y="680" width="50" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-22" value="Nie" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2340" y="720" width="40" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-23" value="" style="ellipse;whiteSpace=wrap;html=1;fillColor=#000000;" parent="1" vertex="1">
+          <mxGeometry x="-2085" y="665" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-24" value="Set to HEAD" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2430" y="770" width="90" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-25" value="Pre každú revelant branch&lt;br&gt;Pre submodule v každom projekte" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="-2510" y="520" width="330" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-27" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Submodule update&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2520" y="840.0000000000001" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-29" value="Location: Superproject&lt;br&gt;CD SubmoduleX&lt;br&gt;git fetch&lt;br&gt;git pull&lt;br&gt;git commit -am &quot;Submodule forward&quot;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2535" y="890" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="zN_APJOsYA4pf0mJ2beM-31" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Commitnut IBA Submodule. NIe vsetko&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2245" y="820.0000000000001" width="370" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="H2F9SjrpHdT_mPWx4sjv-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Be ready for conflict&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
+          <mxGeometry x="-1975" y="460.0000000000001" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="H2F9SjrpHdT_mPWx4sjv-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ready for branchToAlign&amp;nbsp;&lt;br&gt;not existing locally&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
+          <mxGeometry x="-2040" y="520" width="250" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-2" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Let branches be separate vstup&amp;nbsp;&lt;br&gt;do merge method&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
+          <mxGeometry x="-2215" y="890" width="310" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
