@@ -37,7 +37,7 @@ public static class HomeScreenService
         Console.WriteLine("2. Porovnat submoduly");
     }
 
-    public static async void GenerateReport(string superProjectPath)
+    public static void GenerateReport(string superProjectPath)
     {
         SuperProject superProject = new(superProjectPath);
 
@@ -49,8 +49,8 @@ public static class HomeScreenService
             Title = superProject.Name,
             RevelantBranches = relevantBranches,
             Submodules = superProject.SubmodulesNames,
-            SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, superProject.SubmodulesNames),
-            SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches, superProject.SubmodulesNames),
+            SubmoduleCommitIndexes = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, superProject.SubmodulesNames),
+            SubmodulesHeadCommits = superProject.GetSubmoduleHeadCommitRefs(relevantBranches, superProject.SubmodulesNames),
         };
 
         CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);
@@ -70,8 +70,8 @@ public static class HomeScreenService
 //        Title = superProject.Name,
 //        RevelantBranches = relevantBranches,
 //        Submodules = superProject.SubmodulesNames,
-//        SubmoduleCommitIndexes = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
-//        SubmodulesHeadCommits = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
+//        SubmoduleCommitIndexes = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
+//        SubmodulesHeadCommits = superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
 //    };
 
 //CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);

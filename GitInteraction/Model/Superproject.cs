@@ -35,13 +35,13 @@ public sealed class SuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
 
-    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodueles)
+    public Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodueles)
     {
         Dictionary<string, Dictionary<string, string>> result = new();
 
         foreach (string branch in branches)
         {
-            await GitCLI.Switch(WorkingDirectory, branch); // done so we can check where submodules points on this branch
+            GitFacade.Switch(WorkingDirectory, branch); // done so we can check where submodules points on this branch
 
             Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
 
@@ -70,7 +70,7 @@ public sealed class SuperProject
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, HeadCommitId]]
     /// </returns>
-    public async Task<Dictionary<string, Dictionary<string, string>>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
+    public Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
 
@@ -82,7 +82,7 @@ public sealed class SuperProject
             {
                 string submoduleWorkdir = $"{WorkingDirectory}/{submoduleName}";
 
-                await GitCLI.FetchAndPull(submoduleWorkdir); // fetch actual remote state for submodule in question
+                GitFacade.FetchAndPull(submoduleWorkdir); // fetch actual remote state for submodule in question
 
                 Repository submoduleRepository = new(submoduleWorkdir);
 

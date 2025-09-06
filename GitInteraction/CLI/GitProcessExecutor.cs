@@ -17,7 +17,7 @@ public static class GitProcessExecutor
         return Process.Start(psi);
     }
 
-    public static async Task<string> ExecuteResponseCommand(string path, string command)
+    public static string ExecuteResponseCommand(string path, string command)
     {
         Process? process = GetCommandProcess(path, command);
         if (process == null)
@@ -25,27 +25,28 @@ public static class GitProcessExecutor
             throw new InvalidOperationException("Failed to start git command process.");
         }
 
-        string output = await process.StandardOutput.ReadToEndAsync();
+        Console.WriteLine($"{path} >> {command}");
 
-        try
-        {
-            await process.WaitForExitAsync();
-            return output.ReplaceLineEndings(string.Empty);
-        }
-        catch (Exception ex)
-        {
-            string error = await process.StandardError.ReadToEndAsync();
-            PrintError(path, command, error, ex.Message);
-            throw;
-            //string error = await process.StandardError.ReadToEndAsync();
-            //if (!string.IsNullOrEmpty(error))
-            //{
-            //    PrintError(path, command, error);
-            //}
-        }
+        //process.Start();
+        string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        return output.ReplaceLineEndings(string.Empty);
+
+        //try
+        //{
+        //    process.WaitForExitAsync();
+        //    return output.ReplaceLineEndings(string.Empty);
+        //}
+        //catch (Exception ex)
+        //{
+        //    string error = process.StandardError.ReadToEndAsync();
+        //    PrintError(path, command, error, ex.Message);
+        //    throw;
+        //}
     }
 
-    public static async Task ExecuteVoidCommand(string path, string command)
+    public static void ExecuteVoidCommand(string path, string command)
     {
         Process? process = GetCommandProcess(path, command);
         if (process == null)
@@ -53,17 +54,29 @@ public static class GitProcessExecutor
             throw new InvalidOperationException("Failed to start git command process.");
         }
 
-        try
-        {
-            await process.WaitForExitAsync();
-        }
-        catch (Exception ex)
-        {
-            string error = await process.StandardError.ReadToEndAsync();
-            PrintError(path, command, error, ex.Message);
-            throw;
-        }
+        Console.WriteLine($"{path} >> {command}");
+
+        //process.Start();
+        //string output = process.StandardOutput.ReadToEnd();
+        process.WaitForExit();
+
+        //if (process.ExitCode != 0)
+        //{
+        //    string error = process.StandardError.ReadToEnd();
+        //    PrintError(path, command, error, $"Exit code: {process.ExitCode}");
+        //    throw new InvalidOperationException($"Git command failed: {error}");
+        //}
     }
+        //try
+        //{
+        //    process.WaitForExitAsync();
+        //}
+        //catch (Exception ex)
+        //{
+        //    string error = process.StandardError.ReadToEndAsync();
+        //    PrintError(path, command, error, ex.Message);
+        //    throw;
+        //}
 
     private static void PrintError(string path, string command, string error, string exception)
     {

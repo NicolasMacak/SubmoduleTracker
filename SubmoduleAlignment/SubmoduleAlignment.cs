@@ -7,7 +7,7 @@ using SubmoduleTracker.UserSettings.Model;
 namespace SubmoduleTracker.SubmoduleAlignment;
 public static class SubmoduleAlignment
 {
-    public static async void Index(UserConfig userConfig)
+    public static void Index(UserConfig userConfig)
     {
         List<SuperProject> allSuperprojcts = GetAllSuperprojects(userConfig.SuperProjects);
 
@@ -16,10 +16,10 @@ public static class SubmoduleAlignment
         List<SuperProject> relevantSuperprojects = allSuperprojcts.Where(x => x.SubmodulesNames.Contains(selectedSubmodule)).ToList();
 
         PrintTable();
-        List<AligningSuperproject> superprojectsToAlign = await GetSuperProjectsToAlign(selectedSubmodule, relevantSuperprojects);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(selectedSubmodule, relevantSuperprojects);
 
         // Begin alignemnt process
-        await AlignSuperprojects(selectedSubmodule, superprojectsToAlign);
+        AlignSuperprojects(selectedSubmodule, superprojectsToAlign);
 
         // Zarovnat v Superprojektoch x, y, z?
 
@@ -84,7 +84,7 @@ public static class SubmoduleAlignment
         // HEAD
     }
 
-    private static async Task<List<AligningSuperproject>> GetSuperProjectsToAlign(string selectedSubmodule, List<SuperProject> relevantSuperprojects)
+    private static List<AligningSuperproject> GetSuperProjectsToAlign(string selectedSubmodule, List<SuperProject> relevantSuperprojects)
     {
         List<AligningSuperproject> superProjectsToAlign = new();
 
@@ -94,8 +94,8 @@ public static class SubmoduleAlignment
         {
             // Data on which we make comparison
             // Information where submodule of this superprojects points on provided branches
-            Dictionary<string, Dictionary<string, string>> pointings = await superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, new List<string> { selectedSubmodule });
-            Dictionary<string, Dictionary<string, string>> heads = await superProject.GetSubmoduleHeadCommitRefs(relevantBranches, new List<string> { selectedSubmodule });
+            Dictionary<string, Dictionary<string, string>> pointings = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, new List<string> { selectedSubmodule });
+            Dictionary<string, Dictionary<string, string>> heads = superProject.GetSubmoduleHeadCommitRefs(relevantBranches, new List<string> { selectedSubmodule });
 
             List<string> branchesToAlign = new();
 
@@ -121,65 +121,32 @@ public static class SubmoduleAlignment
         return superProjectsToAlign;
     }
     
-    private async static Task AlignSuperprojects(string submoduleToAlign, List<AligningSuperproject> superprojectsToAlign)
+    private static void AlignSuperprojects(string submoduleToAlign, List<AligningSuperproject> superprojectsToAlign)
     {
         foreach (AligningSuperproject superproject in superprojectsToAlign)
         {
-            string submodulePath = superproject.Workdir + @$"\{submoduleToAlign}";
+            string submoduleWorkdir = superproject.Workdir + @$"\{submoduleToAlign}";
 
             foreach (string branchToAlign in superproject.branchesToAlign)
             {
-                // SUPERPROJECT
-                // SAVE CHANGES and POP LATER
+               
+                // checkout branch in superproject
+                GitFacade.Switch(superproject.Workdir, branchToAlign);
+                GitFacade.FetchAndPull(superproject.Workdir);
 
-                // SUPERPROJECT? 
-                    // SOME CURRENT BRANCH: return to that branch and pop
-                    // NO CURRENT BRANCH: leave it in the stash
+                // checkout and pull submodule branch
+                GitFacade.Switch(submoduleWorkdir, branchToAlign); // checkout
+                GitFacade.FetchAndPull(submoduleWorkdir); // fetch and pull
 
-                // COMMAND: SAVING THE STATE
-                // stash
-                bool superprojectStashRequired = await GitCLI.AreChangesInWorkdir(submodulePath);
-                bool submoduleStashRequired = await GitCLI.AreChangesInWorkdir(submodulePath);
+                // Forward submodule in superproject
+                GitFacade.AddAndCommit(superproject.Workdir, submoduleToAlign);
 
-                if (superprojectStashRequired)
+                if(/*SAFE MODE DISABLED*/true)
                 {
-                    await GitCLI.StashChanges(superproject.Workdir);
+                    GitFacade.Push(superproject.Workdir);
                 }
-
-                if (submoduleStashRequired)
-                {
-                    await GitCLI.StashChanges(submodulePath);
-                }
-
-                // remember branch
-                string superprojectBranchToReturnTo = string.Empty;
-
-                // COMMAND: CHECKOUT AND PULL
-
-                // superproject
-                await GitCLI.Switch(superproject.Workdir, branchToAlign); // checkout
-                await GitCLI.FetchAndPull(superproject.Workdir); // Fetch and pull
-
-                // submodule
-                await GitCLI.Switch(submodulePath, branchToAlign); // checkout
-                await GitCLI.FetchAndPull(submodulePath); // fetch and pull
-
-                // COMMAND: COMMIT
             }
-            // 
         }
-
-        // Stash changes
-        // git status -s ? not string,empty? stash 
-        // 
-        // Remember the branch you are on
-
-        // checkout the branch. Superproject/submodule
-        // Submodule: Fetch and pull in submodule
-        // super: add submodule. commit
-
-        // return on brach
-        // stash pop
     }
 
     private record AligningSuperproject(string Workdir, List<string> branchesToAlign);

@@ -6,25 +6,8 @@ using SubmoduleTracker.HomeScreen;
 using SubmoduleTracker.UserSettings;
 using SubmoduleTracker.SubmoduleAlignment;
 
-// Config file
-/*
-
-Superprojects
-
-budu mat full path, ale ich meno bude inou farbou. No submodules check
-ak budu priecinky zmazane, vypisu sa cervenou
-
-tracked branches. Pridat/Ignore/Delete
-
-Settings
-
- */
-
-// HomeScreenService.ShowHomeScreen();
-
 SubmoduleTracker.UserSettings.Model.UserConfig userConfig = UserSettingsScreen.GetUserConfiguration();
 
 SubmoduleAlignment.Index(userConfig);
-
 
 return 0;
