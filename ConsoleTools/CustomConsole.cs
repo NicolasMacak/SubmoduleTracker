@@ -24,7 +24,7 @@ public static class CustomConsole
     {
         Console.ForegroundColor = color;
         Console.Write(text);
-        Console.ForegroundColor = color;
+        Console.ForegroundColor = ConsoleColor.White;
     }
 
     /// <summary>

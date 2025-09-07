@@ -24,12 +24,12 @@ public static class CommitsIndexValidationTable
     private static void PrintTableBody(PrintableSuperprojectDto printableSuperprojectDto, Dictionary<string, TableColumn> columns)
     {
         // Superproject title
-        Console.WriteLine(columns[Column.SuperProject].GetPrintableValue(printableSuperprojectDto.Title, 0));
+        Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(printableSuperprojectDto.Title, 0));
 
         foreach (string branch in printableSuperprojectDto.RevelantBranches)
         {
             // Branch title
-            Console.WriteLine(columns[Column.Branch].GetPrintableValue(branch, columns[Column.SuperProject].Width + Delimiter.Length));
+            Console.WriteLine(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, columns[Column.SuperProject].Width + Delimiter.Length));
 
             foreach (string submoduleName in printableSuperprojectDto.Submodules)
             {
@@ -37,7 +37,7 @@ public static class CommitsIndexValidationTable
                 Dictionary<string, string> submoduleHeadCommits = printableSuperprojectDto.SubmodulesHeadCommits[branch];
 
                 // Submodule 
-                Console.Write(columns[Column.Submodule].GetPrintableValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
+                Console.Write(columns[Column.Submodule].GetColumnWidthAdjustedValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
 
                 // Index commit
                 // Does submodule points correctly?

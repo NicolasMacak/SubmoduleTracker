@@ -35,9 +35,16 @@ public sealed class TableColumn
         return Name.PadRight(Width);
     }
 
-    public string GetPrintableValue(string value, int leftOffest)
+    /// <summary>
+    /// Returns value + " " up to the end of the column width. Offset is possibility
+    /// </summary>
+    /// <param name="value">Value to print</param>
+    /// <param name="leftOffest"></param>
+    /// <remarks>
+    /// Formula: " " * offset + value + " " * (Width - value.length)
+    /// </remarks>
+    public string GetColumnWidthAdjustedValue(string value, int leftOffest)
     {
-        return $"{new string(' ', leftOffest)}{value.PadRight(Width)}"
-        ;
+        return $"{new string(' ', leftOffest)}{value.PadRight(Width)}";
     }
 }

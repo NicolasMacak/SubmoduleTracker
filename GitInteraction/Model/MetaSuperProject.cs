@@ -33,7 +33,8 @@ public sealed class MetaSuperProject
     /// <summary>
     /// Get commit ids to which submodules points to for provided branches (DEV, TEST)
     /// </summary>
-    /// 
+    /// <param name="branches">branches to get results for</param>
+    /// <param name="relevantSubmodueles">subomdules to get results for</param>
     /// <remarks>
     /// branch - branch for which we want to find out submodule commit indexes <br></br>
     /// indexCommitId - commit to which submodule points to

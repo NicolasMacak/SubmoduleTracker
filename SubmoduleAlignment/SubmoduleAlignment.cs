@@ -1,5 +1,4 @@
-﻿using System.Xml.Serialization;
-using SubmoduleTracker.ConsoleTools;
+﻿using SubmoduleTracker.ConsoleTools;
 using SubmoduleTracker.GitInteraction.CLI;
 using SubmoduleTracker.GitInteraction.Model;
 using SubmoduleTracker.UserSettings.Model;
@@ -11,33 +10,27 @@ public static class SubmoduleAlignment
     {
         List<MetaSuperProject> allSuperprojcts = GetAllSuperprojects(userConfig.SuperProjects);
 
-        List<string> relevantBranches = new() { "dev", /*"test"*/ };
+        List<string> relevantBranches = new() { "dev", "test" };
 
         // Superprojects that contain submodule(selected by user in this method)
         string selectedSubmodule = LetUserSelectSubmodule(allSuperprojcts);
 
-        // user si vyberie
-        // pre vsetky superprojekty sa dotiahnut data do. BABKA Super
-        // pouzite v print table
-        // pouzite v get superprojects to alignt
+        List<RobustSuperProject> relevantRobustSuperProjects = allSuperprojcts
+            .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
+            .Select(x => new RobustSuperProject(
+                    name: x.Name,
+                    workingDirectory: x.WorkingDirectory,
+                    submoduleNames: x.SubmodulesNames,
+                    indexCommitRefs: x.GetSubmoduleIndexCommitsRefs(relevantBranches, new List<string> { selectedSubmodule }),
+                    headCommitRefs: x.GetSubmoduleHeadCommitRefs(relevantBranches, new List<string> { selectedSubmodule })
+                ))
+            .ToList();
 
-        // BABKA super obsahuje vsetky data potrebne v print table aj getSuperProjectsToAlign
-
-
-        List<MetaSuperProject> relevantSuperprojects = allSuperprojcts.Where(x => x.SubmodulesNames.Contains(selectedSubmodule)).ToList();
-
-
-        //PrintTable(allSuperprojcts, relevantBranches);
-        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(selectedSubmodule, relevantSuperprojects, relevantBranches);
+        SubmoduleAlignmentInfoTable.PrintTable(selectedSubmodule, relevantRobustSuperProjects, relevantBranches);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(selectedSubmodule, relevantRobustSuperProjects, relevantBranches);
 
         // Begin alignemnt process
         AlignSuperprojects(selectedSubmodule, superprojectsToAlign);
-
-        // Zarovnat v Superprojektoch x, y, z?
-
-        // Safe mode
-
-        // Handholding
     }
 
     private static List<MetaSuperProject> GetAllSuperprojects(List<SuperProjectConfig> superProjectConfigs)
@@ -87,43 +80,19 @@ public static class SubmoduleAlignment
 
         return allSubmodules.ElementAt(maybeNumberChoice!.Value);
     }
-
-    private static void PrintTable(List<MetaSuperProject> allSuperprojects)
-    {
-        // Aligning Submodule : Name
-        // Head
-
-        // Superprojects
-
-        // SuperprojectName
-            // dev:
-
-
-        // relevant branch
-        // superproject
-        // index
-        // HEAD
-    }
-
-    // workdir, indexes, heads
-
-    private static List<AligningSuperproject> GetSuperProjectsToAlign(string selectedSubmodule, List<MetaSuperProject> relevantSuperprojects, List<string> relevantBranches)
+    
+    private static List<AligningSuperproject> GetSuperProjectsToAlign(string selectedSubmodule, List<RobustSuperProject> relevantSuperprojects, List<string> relevantBranches)
     {
         List<AligningSuperproject> superProjectsToAlign = new();
 
-        foreach (MetaSuperProject superProject in relevantSuperprojects)
+        foreach (RobustSuperProject superProject in relevantSuperprojects)
         {
-            // Data on which we make comparison
-            // Information where submodule of this superprojects points on provided branches
-            Dictionary<string, Dictionary<string, string>> pointings = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, new List<string> { selectedSubmodule });
-            Dictionary<string, Dictionary<string, string>> heads = superProject.GetSubmoduleHeadCommitRefs(relevantBranches, new List<string> { selectedSubmodule });
-
             List<string> branchesToAlign = new();
 
             foreach(string branch in relevantBranches)
             {
-                string indexCommit = pointings[branch].First().Value; // where submodule points on in this branch
-                string headCommit = heads[branch].First().Value; // HEAD commit on this branch
+                string indexCommit = superProject.IndexCommitRefs[branch].First().Value; // where submodule points on in this branch
+                string headCommit = superProject.HeadCommitRefs[branch].First().Value; // HEAD commit on this branch
 
                 // Does submodule in superproject points to the HEAD commit?
                 if(indexCommit != headCommit)

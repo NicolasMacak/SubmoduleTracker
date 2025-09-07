@@ -1,4 +1,5 @@
-﻿using SubmoduleTracker.GitInteraction.Model;
+﻿using SubmoduleTracker.ConsoleTools;
+using SubmoduleTracker.GitInteraction.Model;
 using SubmoduleTracker.SubmoduleIndexValidation.Dto;
 using SubmoduleTracker.TablePrinting;
 using static SubmoduleTracker.TablePrinting.TableConstants;
@@ -7,49 +8,53 @@ using static SubmoduleTracker.TablePrinting.TableConstants;
 namespace SubmoduleTracker.SubmoduleAlignment;
 public static class SubmoduleAlignmentInfoTable
 {
-    public static void PrintTable(string aligningSubmoduleName, List<MetaSuperProject> allSuperprojects, List<string> relevantBranches)
+    public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
     {
         Dictionary<string, TableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
 
+        Console.WriteLine(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine);
+
         PrintTableHeader(columns);
+
+        PrintTableBody(aligningSubmoduleName, allSuperprojects, relevantBranches, columns);
     }
 
     public static void PrintTableHeader(Dictionary<string, TableColumn> columns)
     {
         Console.WriteLine(
-            columns[Column.SuperProject].GetPrintableValue(Column.SuperProject, 0) + Delimiter +
-            columns[Column.Branch].GetPrintableValue(Column.Branch, 0) + Delimiter +
-            columns[Column.IndexCommit].GetPrintableValue(Column.IndexCommit, 0) + Delimiter +
-            columns[Column.HeadCommit].GetPrintableValue(Column.HeadCommit, 0) + Delimiter
+            columns[Column.SuperProject].GetColumnWidthAdjustedValue(Column.SuperProject, 0) + Delimiter +
+            columns[Column.Branch].GetColumnWidthAdjustedValue(Column.Branch, 0) + Delimiter +
+            columns[Column.IndexCommit].GetColumnWidthAdjustedValue(Column.IndexCommit, 0) + Delimiter +
+            columns[Column.HeadCommit].GetColumnWidthAdjustedValue(Column.HeadCommit, 0) + Delimiter
         );
     }
 
-    public static void PrintTableBody(string aligningSubmoduleName, List<MetaSuperProject> allSuperprojects, List<string> relevantBranches, Dictionary<string, TableColumn> columns)
+    public static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<string> relevantBranches, Dictionary<string, TableColumn> columns)
     {
-        foreach (MetaSuperProject superProject in allSuperprojects)
+        foreach (RobustSuperProject superProject in relevantSuperProjects)
         {
-            //Dictionary<string, Dictionary<string, string>> pointings = data;
-            //Dictionary<string, Dictionary<string, string>> heads = data;
+            Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(superProject.Name, 0));
 
             foreach (string branch in relevantBranches)
             {
-                Console.WriteLine(columns[Column.SuperProject].GetPrintableValue(superProject.Name, 0));
-                // submodule might not be present
+                int offsetForThisColumn = columns[Column.SuperProject].Width;
+                string indexCommit = superProject.IndexCommitRefs[branch].First().Value; // where submodule points on in this branch
+                string headCommit = superProject.HeadCommitRefs[branch].First().Value; // HEAD commit on this branch
 
-                if (!superProject.SubmodulesNames.Contains(aligningSubmoduleName))
-                {
-                    Console.WriteLine("-");
-                    continue;
-                }
+                // Outputs bellow is one row. We put offset only into the first
+                Console.Write(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, offsetForThisColumn + Delimiter.Length) + Delimiter);
 
-                Console.Write(columns[Column.Branch].GetPrintableValue(branch, columns[Column.SuperProject].Width) + Delimiter);
+                ConsoleColor color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
+                string indexCommitFormatted = columns[Column.IndexCommit].GetColumnWidthAdjustedValue(indexCommit, 0); // formatted value
+                CustomConsole.WriteColored(indexCommitFormatted, color);
+                Console.Write(Delimiter); // appending delimeter in normal color
+
+                Console.Write(columns[Column.HeadCommit].GetColumnWidthAdjustedValue(headCommit, 0) + Delimiter + Environment.NewLine);
             }
         }
-
-
     }
 
-    private static Dictionary<string, TableColumn> GetColumns(List<MetaSuperProject> allSuperprojects, List<string> relevantBranches)
+    private static Dictionary<string, TableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
     {
         return new Dictionary<string, TableColumn>()
         {
@@ -67,7 +72,7 @@ public static class SubmoduleAlignmentInfoTable
 
             // branch
             {
-                TableConstants.Column.SuperProject,
+                TableConstants.Column.Branch,
                 new TableColumn(
                         string.Empty, // Later removed
                         TableColumn.CalculateColumnWidth(
