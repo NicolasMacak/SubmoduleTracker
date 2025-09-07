@@ -1,15 +1,19 @@
-﻿using SubmoduleTracker.Core;
+﻿namespace SubmoduleTracker.TablePrinting;
 
-namespace SubmoduleTracker.SubmoduleIndexValidation;
+/// <summary>
+/// Allows nicely formatted table.
+/// </summary>
+// nech sa stara iba o width. hodnoty budu podsuvane inde
 public sealed class TableColumn
 {
+    [Obsolete("Pan Macak, dajte toto pls het")]
     public string Name { get; }
 
     public int Width { get; }
 
     public TableColumn(string name, int width)
     {
-        Name = name;
+        Name = name; // dat het
         Width = width;
     }
 
@@ -25,6 +29,7 @@ public sealed class TableColumn
         return Math.Max(min, columnName.Length); // but more than length of the column name
     }
 
+    [Obsolete("staci GetPrintableValue")]
     public string GetPrintableHeader()
     {
         return Name.PadRight(Width);

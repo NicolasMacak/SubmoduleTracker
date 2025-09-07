@@ -1,5 +1,6 @@
 ﻿using SubmoduleTracker.SubmoduleIndexValidation.Dto;
-using static SubmoduleTracker.Core.TableConstants;
+using SubmoduleTracker.TablePrinting;
+using static SubmoduleTracker.TablePrinting.TableConstants;
 
 namespace SubmoduleTracker.SubmoduleIndexValidation;
 
@@ -8,8 +9,6 @@ namespace SubmoduleTracker.SubmoduleIndexValidation;
 /// </summary>
 public static class CommitsIndexValidationTable
 {
-    private const string Delimeter = " | ";
-
     public static void GenerateOutput(PrintableSuperprojectDto printableSuperproject)
     {
         Dictionary<string, TableColumn> columns = GetColumns(printableSuperproject);
@@ -30,7 +29,7 @@ public static class CommitsIndexValidationTable
         foreach (string branch in printableSuperprojectDto.RevelantBranches)
         {
             // Branch title
-            Console.WriteLine(columns[Column.Branch].GetPrintableValue(branch, columns[Column.SuperProject].Width + Delimeter.Length));
+            Console.WriteLine(columns[Column.Branch].GetPrintableValue(branch, columns[Column.SuperProject].Width + Delimiter.Length));
 
             foreach (string submoduleName in printableSuperprojectDto.Submodules)
             {
@@ -38,19 +37,21 @@ public static class CommitsIndexValidationTable
                 Dictionary<string, string> submoduleHeadCommits = printableSuperprojectDto.SubmodulesHeadCommits[branch];
 
                 // Submodule 
-                Console.Write(columns[Column.Submodule].GetPrintableValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimeter.Length * 2) + Delimeter);
+                Console.Write(columns[Column.Submodule].GetPrintableValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
 
                 // Index commit
-                Console.ForegroundColor = superprojectIndexes[submoduleName] == submoduleHeadCommits[submoduleName] ? // Does submodule points correctly?
-                    ConsoleColor.Green
-                    : ConsoleColor.Red;
+                // Does submodule points correctly?
+                Console.ForegroundColor
+                    = superprojectIndexes[submoduleName] == submoduleHeadCommits[submoduleName]
+                        ? ConsoleColor.Green 
+                        : ConsoleColor.Red;
 
                 Console.Write(superprojectIndexes[submoduleName]);
 
                 Console.ForegroundColor = ConsoleColor.White;
 
                 // Head commit
-                Console.WriteLine(Delimeter + submoduleHeadCommits[submoduleName]);
+                Console.WriteLine(Delimiter + submoduleHeadCommits[submoduleName]);
             }
         }
     }
@@ -110,11 +111,11 @@ public static class CommitsIndexValidationTable
     private static void PrintTableHeader(Dictionary<string, TableColumn> columns) {
 
         Console.WriteLine(
-            columns[Column.SuperProject].GetPrintableHeader() + Delimeter + 
-            columns[Column.Branch].GetPrintableHeader() + Delimeter + 
-            columns[Column.Submodule].GetPrintableHeader() + Delimeter + 
-            columns[Column.IndexCommit].GetPrintableHeader() + Delimeter + 
-            columns[Column.HeadCommit].GetPrintableHeader() + Delimeter + Environment.NewLine
+            columns[Column.SuperProject].GetPrintableHeader() + Delimiter + 
+            columns[Column.Branch].GetPrintableHeader() + Delimiter + 
+            columns[Column.Submodule].GetPrintableHeader() + Delimiter  + 
+            columns[Column.IndexCommit].GetPrintableHeader() + Delimiter  + 
+            columns[Column.HeadCommit].GetPrintableHeader() + Delimiter  + Environment.NewLine
         );
     }
 }

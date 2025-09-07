@@ -39,7 +39,7 @@ public static class HomeScreenService
 
     public static void GenerateReport(string superProjectPath)
     {
-        SuperProject superProject = new(superProjectPath);
+        MetaSuperProject superProject = new(superProjectPath);
 
         // Zatial budu iba hlavne branche iba v options.
         List<string> relevantBranches = new() { "test", "dev" };

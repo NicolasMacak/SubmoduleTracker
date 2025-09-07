@@ -3,13 +3,22 @@ using SubmoduleTracker.GitInteraction.CLI;
 
 namespace SubmoduleTracker.GitInteraction.Model;
 
-public sealed class SuperProject
+/// <summary>
+/// Has metadata to obtain informations
+/// </summary>
+/// <remarks>
+/// Executing methods listed bellow is very time expensive. So this model has only means to it.
+/// <see cref="RobustSuperProject"/> is created when those data are needed. <br></br>
+/// - <see cref="GetSubmoduleIndexCommitsRefs(IEnumerable{string}, List{string})"/> <br></br>
+/// - <see cref="GetSubmoduleHeadCommitRefs(List{string}, List{string})"/> 
+/// </remarks>
+public sealed class MetaSuperProject
 {
     public readonly string Name;
     public readonly string WorkingDirectory;
-    public List<string> SubmodulesNames { get; } = new();
+    public List<string> SubmodulesNames { get; } = new(); // todo. Get can be removed
 
-    public SuperProject(string repoPath)
+    public MetaSuperProject(string repoPath)
     {
         Name = repoPath.Split(@"\").Last();
         WorkingDirectory = repoPath;

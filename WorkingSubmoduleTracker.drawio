@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="5466" dy="1244" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4272" dy="1037" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -118,7 +118,7 @@
           <mxGeometry x="-2535" y="890" width="220" height="90" as="geometry" />
         </mxCell>
         <mxCell id="zN_APJOsYA4pf0mJ2beM-31" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Commitnut IBA Submodule. NIe vsetko&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
-          <mxGeometry x="-2080" y="1060" width="370" height="40" as="geometry" />
+          <mxGeometry x="-2090" y="1050" width="370" height="40" as="geometry" />
         </mxCell>
         <mxCell id="H2F9SjrpHdT_mPWx4sjv-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Be ready for conflict&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
           <mxGeometry x="-1975" y="460.0000000000001" width="200" height="40" as="geometry" />
@@ -126,26 +126,53 @@
         <mxCell id="H2F9SjrpHdT_mPWx4sjv-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ready for branchToAlign&amp;nbsp;&lt;br&gt;not existing locally&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
           <mxGeometry x="-2040" y="520" width="250" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-2" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Let branches be separate vstup&amp;nbsp;&lt;br&gt;do merge method&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2670" y="1010" width="310" height="60" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-2" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Let branches be separate vstup&amp;nbsp;&lt;br&gt;do merge method&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
+          <mxGeometry x="-2090" y="1110" width="310" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-4" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Throwing&amp;nbsp; errors&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2670" y="1170" width="170" height="40" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-4" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Throwing&amp;nbsp; errors&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2440" y="1240" width="170" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-5" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Logging&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2670" y="1230" width="90" height="40" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-5" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Logging&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2440" y="1300" width="90" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-6" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Musi byt async? &lt;br&gt;Ak to nebude dobre fungovat, nie&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2670" y="1290" width="320" height="60" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-6" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Musi byt async? &lt;br&gt;Ak to nebude dobre fungovat, nie&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2440" y="1360" width="320" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Ak je submodule already stagged, nic sa nestane.&lt;br&gt;Superproject akoze ukazuje dobre?&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2740" y="1380" width="460" height="60" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Ak je submodule already stagged, nic sa nestane.&lt;br&gt;Superproject akoze ukazuje dobre?&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2440" y="1460" width="460" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-8" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Happy path&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" vertex="1" parent="1">
-          <mxGeometry x="-2080" y="990" width="130" height="40" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-8" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Happy path&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
+          <mxGeometry x="-2090" y="990" width="130" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="UUlGnFPibLMLo2vJmDTm-9" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Vhodne miesto pre state restore&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2665" y="1490" width="310" height="40" as="geometry" />
+        <mxCell id="UUlGnFPibLMLo2vJmDTm-9" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Vhodne miesto pre state restore&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2435" y="1560" width="310" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="eh24DqS274aS48rtO0Fc-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;TableColumn&lt;br&gt;Remove Name&lt;br&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Add offset?&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-1595" y="385" width="160" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-2" value="AligningSuperproject" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-2205" y="1920" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-3" value="workdir" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="4lQAqQhR7zhloYmdwoUT-2">
+          <mxGeometry y="30" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-4" value="LIst&amp;lt;branch&amp;gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="4lQAqQhR7zhloYmdwoUT-2">
+          <mxGeometry y="60" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="4lQAqQhR7zhloYmdwoUT-6" target="4lQAqQhR7zhloYmdwoUT-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-6" value="GetSuperProjectsToAlign" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1860" y="1860" width="170" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-8" value="WorkingDirectory&lt;br&gt;pointings&lt;br&gt;heads" style="whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="-1965" y="1875" width="120" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="1" source="4lQAqQhR7zhloYmdwoUT-9" target="4lQAqQhR7zhloYmdwoUT-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="4lQAqQhR7zhloYmdwoUT-9" value="PrintTable" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1815" y="1720" width="80" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

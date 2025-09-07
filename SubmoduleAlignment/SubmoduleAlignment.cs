@@ -9,14 +9,26 @@ public static class SubmoduleAlignment
 {
     public static void Index(UserConfig userConfig)
     {
-        List<SuperProject> allSuperprojcts = GetAllSuperprojects(userConfig.SuperProjects);
+        List<MetaSuperProject> allSuperprojcts = GetAllSuperprojects(userConfig.SuperProjects);
+
+        List<string> relevantBranches = new() { "dev", /*"test"*/ };
 
         // Superprojects that contain submodule(selected by user in this method)
         string selectedSubmodule = LetUserSelectSubmodule(allSuperprojcts);
-        List<SuperProject> relevantSuperprojects = allSuperprojcts.Where(x => x.SubmodulesNames.Contains(selectedSubmodule)).ToList();
 
-        PrintTable();
-        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(selectedSubmodule, relevantSuperprojects);
+        // user si vyberie
+        // pre vsetky superprojekty sa dotiahnut data do. BABKA Super
+        // pouzite v print table
+        // pouzite v get superprojects to alignt
+
+        // BABKA super obsahuje vsetky data potrebne v print table aj getSuperProjectsToAlign
+
+
+        List<MetaSuperProject> relevantSuperprojects = allSuperprojcts.Where(x => x.SubmodulesNames.Contains(selectedSubmodule)).ToList();
+
+
+        //PrintTable(allSuperprojcts, relevantBranches);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(selectedSubmodule, relevantSuperprojects, relevantBranches);
 
         // Begin alignemnt process
         AlignSuperprojects(selectedSubmodule, superprojectsToAlign);
@@ -28,13 +40,13 @@ public static class SubmoduleAlignment
         // Handholding
     }
 
-    private static List<SuperProject> GetAllSuperprojects(List<SuperProjectConfig> superProjectConfigs)
+    private static List<MetaSuperProject> GetAllSuperprojects(List<SuperProjectConfig> superProjectConfigs)
     {
-        List<SuperProject> allSuperprojects = new();
+        List<MetaSuperProject> allSuperprojects = new();
 
         foreach(SuperProjectConfig superProjectConfig in superProjectConfigs)
         {
-            SuperProject superproject = new(superProjectConfig.WorkingDirectory);
+            MetaSuperProject superproject = new(superProjectConfig.WorkingDirectory);
             allSuperprojects.Add(superproject);
         }
 
@@ -45,7 +57,7 @@ public static class SubmoduleAlignment
     /// Submodules from all superprojects are listed. User picks one. Superprojets that contain this submodule are returned
     /// </summary>
     /// <returns>Superprojects that contain submodule selected by user</returns>
-    private static string LetUserSelectSubmodule(List<SuperProject> allSuperprojects, string? errorMessage = null)
+    private static string LetUserSelectSubmodule(List<MetaSuperProject> allSuperprojects, string? errorMessage = null)
     {
         if (errorMessage != null)
         {
@@ -76,21 +88,30 @@ public static class SubmoduleAlignment
         return allSubmodules.ElementAt(maybeNumberChoice!.Value);
     }
 
-    private static void PrintTable()
+    private static void PrintTable(List<MetaSuperProject> allSuperprojects)
     {
+        // Aligning Submodule : Name
+        // Head
+
+        // Superprojects
+
+        // SuperprojectName
+            // dev:
+
+
         // relevant branch
         // superproject
         // index
         // HEAD
     }
 
-    private static List<AligningSuperproject> GetSuperProjectsToAlign(string selectedSubmodule, List<SuperProject> relevantSuperprojects)
+    // workdir, indexes, heads
+
+    private static List<AligningSuperproject> GetSuperProjectsToAlign(string selectedSubmodule, List<MetaSuperProject> relevantSuperprojects, List<string> relevantBranches)
     {
         List<AligningSuperproject> superProjectsToAlign = new();
 
-        List<string> relevantBranches = new () { "dev", /*"test"*/ };
-
-        foreach (SuperProject superProject in relevantSuperprojects)
+        foreach (MetaSuperProject superProject in relevantSuperprojects)
         {
             // Data on which we make comparison
             // Information where submodule of this superprojects points on provided branches
