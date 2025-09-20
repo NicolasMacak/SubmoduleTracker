@@ -1,12 +1,15 @@
 ﻿using SubmoduleTracker.ConsoleTools;
 using SubmoduleTracker.GitInteraction.Model;
-using SubmoduleTracker.SubmoduleIndexValidation.Dto;
 using SubmoduleTracker.TablePrinting;
 using static SubmoduleTracker.TablePrinting.TableConstants;
 
 
 namespace SubmoduleTracker.SubmoduleAlignment;
-public static class SubmoduleAlignmentInfoTable
+
+/// <summary>
+/// Prints table 
+/// </summary>
+public static class SubmoduleAlignmentTable
 {
     public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
     {
@@ -52,6 +55,8 @@ public static class SubmoduleAlignmentInfoTable
                 Console.Write(columns[Column.HeadCommit].GetColumnWidthAdjustedValue(headCommit, 0) + Delimiter + Environment.NewLine);
             }
         }
+
+        Console.WriteLine();
     }
 
     private static Dictionary<string, TableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)

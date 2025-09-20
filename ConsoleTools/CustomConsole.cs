@@ -39,4 +39,23 @@ public static class CustomConsole
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
+    public static int? ReadAndValidateNumberInput()
+    {
+        throw new NotImplementedException();
+    }
+
+    public static bool AskYesOrNoQuestion(string question)
+    {
+        Console.WriteLine(question);
+        Console.WriteLine("Napiste \"yes\" pre pokracovanie");
+
+        string? read = Console.ReadLine();
+
+        if (!string.IsNullOrEmpty(read) && read == "yes")
+        {
+            return true;
+        }
+
+        return false;
+    }
 }

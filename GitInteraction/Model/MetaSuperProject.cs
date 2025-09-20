@@ -34,7 +34,7 @@ public sealed class MetaSuperProject
     /// Get commit ids to which submodules points to for provided branches (DEV, TEST)
     /// </summary>
     /// <param name="branches">branches to get results for</param>
-    /// <param name="relevantSubmodueles">subomdules to get results for</param>
+    /// <param name="relevantSubmodules">subomdules to get results for</param>
     /// <remarks>
     /// branch - branch for which we want to find out submodule commit indexes <br></br>
     /// indexCommitId - commit to which submodule points to
@@ -45,7 +45,7 @@ public sealed class MetaSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
 
-    public Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodueles)
+    public Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> result = new();
 
@@ -58,7 +58,7 @@ public sealed class MetaSuperProject
             // Information where submodules points to
             Dictionary<string, string> submoduleCommitIndexes 
                 = superProjectGitRepository.Submodules
-                .Where(x => relevantSubmodueles.Contains(x.Name))
+                .Where(x => relevantSubmodules.Contains(x.Name))
                 .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
 
             result.Add(branch, submoduleCommitIndexes);

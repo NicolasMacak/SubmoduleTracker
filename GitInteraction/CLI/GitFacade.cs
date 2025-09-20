@@ -28,8 +28,8 @@ public static class GitFacade
             return;
         }
 
-        GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
         GitProcessExecutor.ExecuteVoidCommand(path, $"switch {branch}");
+        GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
     }
 
     public static string GetCurrentBranch(string path)
