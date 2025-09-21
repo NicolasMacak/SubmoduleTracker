@@ -1,8 +1,6 @@
 ﻿using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.SubmoduleIndexValidation;
 using SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
-using SubmoduleTracker.Domain.UserSettings;
-using SubmoduleTracker.Domain.UserSettings.Model;
 
 namespace SubmoduleTracker.Domain.HomeScreen;
 
@@ -18,15 +16,14 @@ listing to bude urco. a mejby farby.
 co krok, to save
 
 */
-public static class ShowHomeScreenActionsWorkflow
+public class ShowHomeScreenActionsWorkflow
 {
-    public static void ShowHomeScreen()
+    public void ShowHomeScreen()
     {
         // get config file
-        UserConfig config = ManageUserSettingsWorkflow.GetUserConfiguration();
 
         // Superprojects
-        ManageUserSettingsWorkflow.Start(config);
+        //ManageUserSettingsWorkflow.Run();
 
         // Submodules
     }
@@ -56,22 +53,3 @@ public static class ShowHomeScreenActionsWorkflow
         CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);
     }
 }
-
-//string repoPath = @"C:\NON_SYSTEM\Superproject-A";
-
-//    const string SuperProjectName = "Superproject-A";
-
-//    List<string> relevantBranches = new() { "test", "dev" };
-
-//    SuperProject superProject = new(repoPath);
-
-//    PrintableSuperprojectDto printableSuperprojectDto = new()
-//    {
-//        Title = superProject.Name,
-//        RevelantBranches = relevantBranches,
-//        Submodules = superProject.SubmodulesNames,
-//        SubmoduleCommitIndexes = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches),
-//        SubmodulesHeadCommits = superProject.GetSubmoduleHeadCommitRefs(relevantBranches),
-//    };
-
-//CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);

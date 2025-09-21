@@ -1,23 +1,27 @@
-﻿using System.Text.Json;
-using LibGit2Sharp;
-using SubmoduleTracker.Core.ConsoleTools;
-using SubmoduleTracker.Domain.UserSettings.Model;
+﻿using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.Result;
+using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.UserSettings;
 
 public class ManageUserSettingsWorkflow
 {
-    // C:\Users\macak\AppData\Roaming
-    private const string ConfigFileName = "SubmoduleTrackerConfig.txt";
+    private readonly UserConfigFacade _userConfigFacade;
 
-    public static void Start(UserConfig userConfig, string? errorMessage = null)
+    public ManageUserSettingsWorkflow(UserConfigFacade userConfigFacade)
+    {
+        _userConfigFacade = userConfigFacade;
+    }
+
+    public void Run(string? errorMessage = null)
     {
         if (!string.IsNullOrEmpty(errorMessage))
         {
             CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
         }
 
-        PrintUserConfig(userConfig);
+        PrintUserConfig();
 
         int menuOptionsCount = PrintMenuOptionsAndGetTheirCount();
         string? choice = Console.ReadLine();
@@ -26,59 +30,17 @@ public class ManageUserSettingsWorkflow
         if (!validatedChoice.HasValue)
         {
             Console.Clear();
-            Start(userConfig, $"Invalid input. Must be number from 1 to {menuOptionsCount}");
+            Run($"Invalid input. Must be number from 1 to {menuOptionsCount}");
         }
 
         switch (validatedChoice!.Value) {
             case 1:
                 // Add Superproject to the userConfig and save
-                TryAddingNewSuperproject(userConfig);
+                TryAddingNewSuperproject();
                 break;
 
-            case 2: DeleteSuperproject(userConfig); break;
+            case 2: DeleteSuperproject(); break;
             default: Console.WriteLine("No such option!"); break;
-        }
-    }
-
-    [Obsolete]
-    public static UserConfig GetUserConfiguration()
-    {
-        string configFilePath = GetConfigFilePath();
-
-        // File exits. Deserialize and return
-        if (File.Exists(configFilePath))
-        {
-            try
-            {
-                string serializedUserConfig = File.ReadAllText(configFilePath);
-
-                // user cleared the config. we return empty one
-                if (string.IsNullOrEmpty(serializedUserConfig))
-                {
-                    return new UserConfig();
-                }
-
-                UserConfig? deserializedUserConfig = JsonSerializer.Deserialize<UserConfig>(serializedUserConfig);
-
-                if (deserializedUserConfig == null)
-                {
-                    throw new ArgumentNullException(nameof(deserializedUserConfig));
-                }
-
-                return deserializedUserConfig;
-            }
-            catch (Exception)
-            {
-                Console.WriteLine("Error deserializing the userconfig");
-                Console.WriteLine("You can start over by deleting or clear the file");
-                Console.WriteLine($"You can find him at {configFilePath}");
-                throw;
-            }
-        }
-        // Config has not been saved. Return empty User Config
-        else
-        {
-            return new UserConfig();
         }
     }
 
@@ -87,7 +49,7 @@ public class ManageUserSettingsWorkflow
     /// </summary>
     /// <param name="userConfig"></param>
     /// <param name="errorMessage">Contains error message from last attempt</param>
-    private static void TryAddingNewSuperproject(UserConfig userConfig, string? errorMessage = null)
+    private void TryAddingNewSuperproject(string? errorMessage = null)
     {
         if (!string.IsNullOrEmpty(errorMessage)) {
             CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
@@ -102,60 +64,25 @@ public class ManageUserSettingsWorkflow
         if (string.IsNullOrEmpty(superprojectWorkdir))
         {
             Console.Clear();
-            Start(userConfig);
+            Run();
         }
 
         // user input is handled here
+        OperationResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
 
-        string? validSuperprojectPath = TryGetValidWorkingDirectory(superprojectWorkdir!);
-
-        if (validSuperprojectPath == null)
+        if (result.ResultCode != ResultCode.Success)
         {
-            // invalid path
-            TryAddingNewSuperproject(userConfig, "Na zadanej ceste sa nenachadza git repozitar");
+            CustomConsole.WriteErrorLine(result.ErrorMessage + Environment.NewLine);
         }
 
-        // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
-        if (userConfig.SuperProjects.Any(x => x.WorkingDirectory.Replace(@"\", string.Empty) == superprojectWorkdir!.Replace(@"\", string.Empty)))
-        {
-            // Such superproject already added
-            TryAddingNewSuperproject(userConfig, $"Superproject on path {superprojectWorkdir} already added");
-        }
-
-        userConfig.SuperProjects.Add(new SuperProjectConfig(superprojectWorkdir!));
-
-        SaveOptions(userConfig);
-    }
-
-    /// <summary>
-    /// Validates directory entered by user
-    /// </summary>
-    /// <returns>Returns cleaned working directory if success, null otherwise </returns>
-    [Obsolete]
-    private static string? TryGetValidWorkingDirectory(string superprojectWorkdir)
-    {
-        try
-        {
-            Repository superProjectGitRepository = new(superprojectWorkdir); 
-            return superProjectGitRepository.Info.WorkingDirectory; // workdir in Repository object is trimmed of bs chars
-        }
-        catch (LibGit2SharpException)
-        {
-            return null; // repository not found on path
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Neznáma chyba. Kontaktujte Joška Vajdu.");
-            Console.WriteLine(ex.Message);
-        }
-
-        return null;
+        Console.Clear();
+        Run();
     }
 
     /// <summary>
     /// Remove superproject from config
     /// </summary>
-    private static void DeleteSuperproject(UserConfig userConfig, string? errorMessage = null)
+    private void DeleteSuperproject(string? errorMessage = null)
     {
         if (!string.IsNullOrEmpty(errorMessage))
         {
@@ -165,47 +92,44 @@ public class ManageUserSettingsWorkflow
         Console.WriteLine(Environment.NewLine + "Choose superproject to delete" + Environment.NewLine);
         Console.WriteLine("Enter empty string for step back" + Environment.NewLine);
 
+        List<ConfigSuperProject> superProjects = _userConfigFacade.ConfigSuperProjects;
+
         // Print deletion options
-        for(int i = 0; i < userConfig.SuperProjects.Count; i++)
+        for(int i = 0; i < superProjects.Count; i++)
         {
-            Console.WriteLine($"{i}. {userConfig.SuperProjects[i].WorkingDirectory}");
+            Console.WriteLine($"{i}. {superProjects[i].WorkingDirectory}");
         }
 
-        string? choice = Console.ReadLine();
+        string? choice = Console.ReadLine(); // Todo. Improve input
 
         // step back
         if (string.IsNullOrEmpty(choice))
         {
-            Start(userConfig);
+            Console.Clear();
+            Run();
         }
 
-        int? option = ConsoleValidation.ReturnValidatedNumberOption(choice, userConfig.SuperProjects.Count - 1, 0);
+        int? indexToDeleteAt = ConsoleValidation.ReturnValidatedNumberOption(choice, superProjects.Count - 1, 0);
 
-        if (!option.HasValue)
+        if (indexToDeleteAt.HasValue)
         {
-            DeleteSuperproject(userConfig, $"Invalid input. Valid options are from {0} to {userConfig.SuperProjects.Count - 1}");
+            DeleteSuperproject($"Invalid input. Valid options are from {0} to {superProjects.Count - 1}");
         }
 
-        userConfig.SuperProjects.RemoveAt(option!.Value);
+        OperationResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
 
-        SaveOptions(userConfig);
+        if (result.ResultCode != ResultCode.Success)
+        {
+            DeleteSuperproject(result.ErrorMessage);
+        }
+
+        Console.Clear();
+        Run();
     }
 
-    /// <summary>
-    /// Serialize and and save new version of <see cref="UserConfig"/>
-    /// </summary>
-    private static void SaveOptions(UserConfig userConfig)
+    private void PrintUserConfig()
     {
-        string stringyUserConfig = JsonSerializer.Serialize(userConfig);
-        File.WriteAllText(GetConfigFilePath(), stringyUserConfig);
-
-        Console.Clear(); // We clear console only when operation ends in success
-        Start(userConfig); 
-    }
-
-    private static void PrintUserConfig(UserConfig userConfig)
-    {
-        foreach(SuperProjectConfig superproject in userConfig.SuperProjects)
+        foreach(ConfigSuperProject superproject in _userConfigFacade.ConfigSuperProjects)
         {
             // We separate path by folders
             // last element is the name of the superproject(Which we want to highlight)
@@ -239,10 +163,5 @@ public class ManageUserSettingsWorkflow
         }
 
         return menuOptions.Count;
-    }
-
-    private static string GetConfigFilePath()
-    {
-        return $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{ConfigFileName}";
     }
 }

@@ -2,13 +2,21 @@
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.UserSettings.Model;
+using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.SubmoduleAlignment;
 public class AlignSubmodulesWorkflow
 {
-    public static void Start(UserConfig userConfig)
+    private readonly UserConfigFacade _userConfigFacade;
+
+    public AlignSubmodulesWorkflow(UserConfigFacade userConfigFacade)
     {
-        List<MetaSuperProject> allSuperprojects = GetAllSuperprojects(userConfig.SuperProjects);
+        _userConfigFacade = userConfigFacade;
+    }
+
+    public void Run()
+    {
+        List<MetaSuperProject> allSuperprojects = _userConfigFacade.MetaSupeprojects;
 
         List<string> relevantBranches = new() { "dev", "test" };
 
@@ -85,20 +93,6 @@ public class AlignSubmodulesWorkflow
                 }
             }
         }
-    }
-
-
-    private static List<MetaSuperProject> GetAllSuperprojects(List<SuperProjectConfig> superProjectConfigs)
-    {
-        List<MetaSuperProject> allSuperprojects = new();
-
-        foreach(SuperProjectConfig superProjectConfig in superProjectConfigs)
-        {
-            MetaSuperProject superproject = new(superProjectConfig.WorkingDirectory);
-            allSuperprojects.Add(superproject);
-        }
-
-        return allSuperprojects;
     }
 
     /// <summary>

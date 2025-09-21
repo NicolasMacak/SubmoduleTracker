@@ -1,7 +1,9 @@
-﻿namespace SubmoduleTracker.Domain.UserSettings.Model;
+﻿using SubmoduleTracker.Core.GitInteraction.Model;
+
+namespace SubmoduleTracker.Domain.UserSettings.Model;
 public sealed class UserConfig
 {
-    public List<SuperProjectConfig> SuperProjects { get; set; } = new ();
+    public List<ConfigSuperProject> SuperProjects { get; set; } = new ();
 
     public bool PushingToRemote => false;
 
@@ -13,5 +15,3 @@ public sealed class UserConfig
     }
 }
 
-
-public record SuperProjectConfig(string WorkingDirectory);

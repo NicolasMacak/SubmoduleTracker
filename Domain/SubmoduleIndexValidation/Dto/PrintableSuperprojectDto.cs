@@ -1,4 +1,6 @@
 ﻿namespace SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
+
+[Obsolete("Use robust superproject")]
 public sealed class PrintableSuperprojectDto
 {
     public string Title { get; set; }

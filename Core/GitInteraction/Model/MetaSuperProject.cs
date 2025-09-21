@@ -7,11 +7,15 @@ namespace SubmoduleTracker.Core.GitInteraction.Model;
 /// Has metadata to obtain informations
 /// </summary>
 /// <remarks>
-/// Executing methods listed bellow is very time expensive. So this model has only means to it.
-/// <see cref="RobustSuperProject"/> is created when those data are needed. <br></br>
-/// - <see cref="GetSubmoduleIndexCommitsRefs(IEnumerable{string}, List{string})"/> <br></br>
-/// - <see cref="GetSubmoduleHeadCommitRefs(List{string}, List{string})"/> 
+/// Doesn't hold any git data information(time expensive), only has the means to obtain them.
+/// We would need to load data for all relevant branches and all submodules. <br></br>
+/// <see cref="ToRobustSuperproject"/> will create with object with relevant data when they are needed
 /// </remarks>
+
+// ConfigSuperProject - workdir
+// MetaSuperProject - + Submodules
+// RobustSuperProject - + Commit pointings
+
 public sealed class MetaSuperProject
 {
     public readonly string Name;
@@ -44,7 +48,7 @@ public sealed class MetaSuperProject
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
-
+    
     public Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> result = new();
@@ -110,4 +114,9 @@ public sealed class MetaSuperProject
 
         return SubmoduleHeadCommitsForBranches;
     }        
+
+    public RobustSuperProject ToRobustSuperproject()
+    {
+        throw new NotImplementedException();
+    }
 }

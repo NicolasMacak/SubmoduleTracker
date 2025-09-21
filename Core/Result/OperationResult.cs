@@ -3,18 +3,25 @@ public sealed class OperationResult
 {
     public ResultCode ResultCode { get; set; }
 
-    public string ErrorMessage { get; set; } 
+    public string ErrorMessage { get; set; }
 
-    public OperationResult()
+    private OperationResult() {}
+
+    public static OperationResult WithSuccess()
     {
-        ResultCode = ResultCode.Success;
-        ErrorMessage = string.Empty;
+        return new OperationResult
+        {
+            ResultCode = ResultCode.Success,
+            ErrorMessage = string.Empty
+        };
     }
 
-    public OperationResult(string errorMessage)
+    public static OperationResult WithFailure(string errorMessage)
     {
-        ResultCode = ResultCode.Failed;
-        ErrorMessage = errorMessage;
+        return new OperationResult
+        {
+            ResultCode = ResultCode.Failed,
+            ErrorMessage = errorMessage
+        };
     }
-
 }

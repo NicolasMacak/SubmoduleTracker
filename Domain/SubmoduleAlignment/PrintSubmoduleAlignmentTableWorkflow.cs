@@ -32,7 +32,7 @@ public static class PrintSubmoduleAlignmentTableWorkflow
         );
     }
 
-    public static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<string> relevantBranches, Dictionary<string, TableColumn> columns)
+    private static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<string> relevantBranches, Dictionary<string, TableColumn> columns)
     {
         foreach (RobustSuperProject superProject in relevantSuperProjects)
         {

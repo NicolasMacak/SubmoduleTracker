@@ -26,7 +26,6 @@ public static class GitProcessExecutor
 
         Console.WriteLine($"{path} >> {command}");
 
-        //process.Start();
         string output = process.StandardOutput.ReadToEnd();
         process.WaitForExit();
 

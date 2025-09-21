@@ -1,9 +1,13 @@
 ﻿using System.Text.Json;
 using LibGit2Sharp;
+using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.UserSettings.Model;
 
 namespace SubmoduleTracker.Domain.UserSettings.Services;
+
+// File location
+// C:\Users\macak\AppData\Roaming
 public sealed class UserConfigFacade
 {
     private UserConfig UserConfig;
@@ -11,7 +15,12 @@ public sealed class UserConfigFacade
     private const string ConfigFileName = "SubmoduleTrackerConfig.txt";
     private readonly string ConfigFilePath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{ConfigFileName}";
 
-    public List<SuperProjectConfig> SuperProjectsConfig => UserConfig.SuperProjects;
+    public List<ConfigSuperProject> ConfigSuperProjects => UserConfig.SuperProjects;
+
+    public List<MetaSuperProject> MetaSupeprojects => UserConfig.SuperProjects
+        .Select(x => new MetaSuperProject(x.WorkingDirectory))
+        .ToList();
+
     public bool PushingToRemote => UserConfig.PushingToRemote;
 
     public UserConfigFacade()
@@ -26,19 +35,50 @@ public sealed class UserConfigFacade
         if (validSuperprojectPath == null)
         {
             // invalid path
-            return new OperationResult("Na zadanej ceste sa nenachadza git repozitar");
+            return OperationResult.WithFailure("Na zadanej ceste sa nenachadza git repozitar");
         }
 
         // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
         if (UserConfig.ContainsSuperproject(superProjectWorkdir))
         {
-            return new OperationResult("Superprojekt uz je pridany");
+            return OperationResult.WithFailure("Superprojekt uz je pridany");
         }
 
-        UserConfig.SuperProjects.Add(new SuperProjectConfig(superProjectWorkdir));
+        UserConfig.SuperProjects.Add(new ConfigSuperProject(superProjectWorkdir));
 
-        SaveOptions(userConfig);
+        return SaveOptions()
+            ? OperationResult.WithSuccess()
+            : OperationResult.WithFailure("Was not able to save the User Config");
     }
+
+    public OperationResult DeleteSuperProject(int superProjectIndex)
+    {
+        UserConfig.SuperProjects.RemoveAt(superProjectIndex);
+
+        return SaveOptions()
+            ? OperationResult.WithSuccess()
+            : OperationResult.WithFailure("Was not able to save the User Config");
+    }
+
+    /// <summary>
+    /// Serialize and and save new version of <see cref="UserConfig"/>
+    /// </summary>
+    private bool SaveOptions()
+    {
+        string stringyUserConfig = JsonSerializer.Serialize(UserConfig);
+
+        try
+        {
+            File.WriteAllText(ConfigFilePath, stringyUserConfig);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.ToString());
+            return false;
+        }
+    }
+
 
     /// <summary>
     /// Validates directory entered by user
@@ -104,10 +144,4 @@ public sealed class UserConfigFacade
         }
     }
 
-
-
-    private void SaveUserConfigToFile()
-    {
-
-    }
 }
