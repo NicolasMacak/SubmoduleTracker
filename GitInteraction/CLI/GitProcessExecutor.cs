@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using SubmoduleTracker.ConsoleTools;
 using SubmoduleTracker.GitInteraction.CommandExceptions;
 
 namespace SubmoduleTracker.GitInteraction.CLI;

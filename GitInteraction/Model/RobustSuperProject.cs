@@ -46,9 +46,11 @@ public sealed class RobustSuperProject
     /// We can use <see cref="IndexCommitRefs"/> and <see cref="HeadCommitRefs"/> interchangably.
     /// Collections has identical structure. [same, [same, different]]
     /// </remarks>
-    private IEnumerable<string> GetAvailableBranches()
+    private IList<string> GetAvailableBranches()
     {
-        return IndexCommitRefs.Keys; // Keys of this dictionary is List of branches
+        return IndexCommitRefs
+            .Keys
+            .ToList(); // Keys of this dictionary is List of branches
     }
 
     /// <summary>
@@ -58,47 +60,31 @@ public sealed class RobustSuperProject
     /// We can use <see cref="IndexCommitRefs"/> and <see cref="HeadCommitRefs"/> interchangably.
     /// Collections has identical structure. [same, [same, different]]
     /// </remarks>
-    private IEnumerable<string> GetAvailableSubmodules()
+    private IList<string> GetAvailableSubmodules()
     {
         return IndexCommitRefs
             .First() // Keypair[branch,[submodule, commit]]
             .Value // Keypair[submodule, commit]
-            .Select(x => x.Key); // Keys are submoduels names
+            .Select(x => x.Key) // Keys are submoduels names
+            .ToList(); 
     }
 
     /// <summary>
-    /// Returns 
+    /// Returns dictionary stating which submodules are missaligned on which branch 
     /// </summary>
-    /// <returns></returns>
-    /// <remarks>
-    /// Dictionary[branch, submodule]
-    /// </remarks>
-    public Dictionary<string, string> GetDisalignemnts(List<string>? relevantBranches = null, List<string>? relevantSubmodules = null)
+    /// <returns>Dictionary[branch, submodule]. Empty when there are not dissalignments </returns>
+    public Dictionary<string, string> GetDisalignemnts()
     {
         // [branch, submodule]
         Dictionary<string, string> dissalignments = new();
 
-        IEnumerable<string> branchesToIterate = relevantBranches == null
-            ? GetAvailableBranches()
-            : GetAvailableBranches().Where(relevantBranches.Contains);
+        IList<string> branchesToIterate = GetAvailableBranches();
+        if (branchesToIterate.Count > 0)
+        {
+            return dissalignments;
+        }
 
-
-        IEnumerable<string> submodulesToIterate = relevantBranches == null
-            ? GetAvailableSubmodules()
-            : GetAvailableSubmodules().Where(relevantSubmodules!.Contains);
-
-        //IEnumerable<string> branchesToIterate = relevantBranches != null
-        //    ? branchesToIterate = relevantBranches.Where(IndexCommitRefs.ContainsKey) // only existing branches
-        //    : IndexCommitRefs.Keys; // all branches
-
-        //IEnumerable<string> allSubmodulesInSuperproject = IndexCommitRefs
-        //    .First() // Definitely exits. Otherwise superprojct doens't have submodules
-        //    .Value // Dictionary[submodule, headCommitId]
-        //    .Select(x => x.Key);
-
-        //List<string> submoduelsToIterate = relevantSubmoduels != null
-        //    ? allSubmodulesInSuperproject.Where(x => relevantSubmoduels!.Contains(x)).ToList()
-        //    : allSubmodulesInSuperproject.ToList();
+        IList<string> submodulesToIterate = GetAvailableSubmodules();
 
         foreach (string branch in branchesToIterate)
         {
