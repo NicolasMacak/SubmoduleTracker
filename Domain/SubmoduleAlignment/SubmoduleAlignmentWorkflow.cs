@@ -1,15 +1,14 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Domain.UserSettings.Model;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.SubmoduleAlignment;
-public class AlignSubmodulesWorkflow
+public class SubmoduleAlignmentWorkflow
 {
     private readonly UserConfigFacade _userConfigFacade;
 
-    public AlignSubmodulesWorkflow(UserConfigFacade userConfigFacade)
+    public SubmoduleAlignmentWorkflow(UserConfigFacade userConfigFacade)
     {
         _userConfigFacade = userConfigFacade;
     }
@@ -17,23 +16,17 @@ public class AlignSubmodulesWorkflow
     public void Run()
     {
         List<MetaSuperProject> allSuperprojects = _userConfigFacade.MetaSupeprojects;
-
-        List<string> relevantBranches = new() { "dev", "test" };
+        List<string> relevantBranches = _userConfigFacade.RelevantBranches;
 
         // Superprojects that contain submodule(selected by user in this method)
         string selectedSubmodule = LetUserSelectSubmodule(allSuperprojects);
 
         // superprojects that contain relevant submodule
-        List<RobustSuperProject> relevantRobustSuperProjects = allSuperprojects
+        List<RobustSuperProject> relevantRobustSuperProjects =allSuperprojects
             .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
-            .Select(x => new RobustSuperProject(
-                    name: x.Name,
-                    workingDirectory: x.WorkingDirectory,
-                    indexCommitRefs: x.GetSubmoduleIndexCommitsRefs(relevantBranches, relevantSubmodules: [selectedSubmodule]),
-                    headCommitRefs: x.GetSubmoduleHeadCommitRefs(relevantBranches, relevantSubmodules: [selectedSubmodule])
-                ))
+            .Select(x => x.ToRobustSuperproject(relevantBranches))
             .ToList();
-
+ 
         PrintSubmoduleAlignmentTableWorkflow.Run(selectedSubmodule, relevantRobustSuperProjects, relevantBranches);
 
         if (!ShouldAlignmentContinue(relevantRobustSuperProjects))
@@ -56,10 +49,11 @@ public class AlignSubmodulesWorkflow
         // Nothing to align
         if(!relevantRobustSuperProjects.Any(x => x.GetDisalignemnts().Count > 0))
         {
+            CustomConsole.WriteColored("Nothing to Align! Stopping execution.", ConsoleColor.DarkGreen);
             return false;
         }
 
-        return CustomConsole.AskYesOrNoQuestion("Cervene submoduly budu zarovnane. Pokracovat?");
+        return CustomConsole.AskYesOrNoQuestion("Tieto branche budu zarovnane ESTE DOKODIT. Pokracovat?");
     }
 
     /// <summary>
@@ -75,7 +69,6 @@ public class AlignSubmodulesWorkflow
 
             foreach (string branchToAlign in superproject.branchesToAlign)
             {
-
                 // checkout branch in superproject
                 GitFacade.Switch(superproject.Workdir, branchToAlign);
                 GitFacade.FetchAndPull(superproject.Workdir);

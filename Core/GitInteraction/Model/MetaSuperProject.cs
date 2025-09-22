@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 
 namespace SubmoduleTracker.Core.GitInteraction.Model;
@@ -49,13 +50,13 @@ public sealed class MetaSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
     
-    public Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodules)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> result = new();
 
-        foreach (string branch in branches)
+        foreach (string branchName in branches)
         {
-            GitFacade.Switch(WorkingDirectory, branch); // done so we can check where submodules points on this branch
+            GitFacade.Switch(WorkingDirectory, branchName); // done so we can check where submodules points on this branch
 
             Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
 
@@ -65,7 +66,7 @@ public sealed class MetaSuperProject
                 .Where(x => relevantSubmodules.Contains(x.Name))
                 .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
 
-            result.Add(branch, submoduleCommitIndexes);
+            result.Add(branchName, submoduleCommitIndexes);
         }
 
         return result;
@@ -84,7 +85,7 @@ public sealed class MetaSuperProject
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, HeadCommitId]]
     /// </returns>
-    public Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
 
@@ -94,8 +95,9 @@ public sealed class MetaSuperProject
 
             foreach (string submoduleName in relevantSubmodules)
             {
-                string submoduleWorkdir = $"{WorkingDirectory}/{submoduleName}";
+                string submoduleWorkdir = $@"{WorkingDirectory}\{submoduleName}";
 
+                GitFacade.Switch(submoduleWorkdir, branchName); // done so we can check where submodules points on this branch
                 GitFacade.FetchAndPull(submoduleWorkdir); // fetch actual remote state for submodule in question
 
                 Repository submoduleRepository = new(submoduleWorkdir);
@@ -115,8 +117,15 @@ public sealed class MetaSuperProject
         return SubmoduleHeadCommitsForBranches;
     }        
 
-    public RobustSuperProject ToRobustSuperproject()
+    public RobustSuperProject ToRobustSuperproject(List<string> relevantBranches, List<string>? relevantSubmodules = null)
     {
-        throw new NotImplementedException();
+        CustomConsole.WriteLineColored($"Superproject: {Name} >> Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);
+        return new RobustSuperProject(
+            name: Name,
+            workingDirectory: WorkingDirectory,
+            submodulesNames: SubmodulesNames,
+            indexCommitRefs: GetSubmoduleIndexCommitsRefs(relevantBranches, relevantSubmodules ?? SubmodulesNames),
+            headCommitRefs: GetSubmoduleHeadCommitRefs(relevantBranches, relevantSubmodules ?? SubmodulesNames)
+        );
     }
 }

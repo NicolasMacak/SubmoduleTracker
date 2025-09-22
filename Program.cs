@@ -2,9 +2,12 @@
 using Microsoft.Extensions.Hosting;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.SubmoduleAlignment;
+using SubmoduleTracker.Domain.SubmoduleIndexValidation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
+/*
+ */
 class Program
 {
     public static int Main(string[] args)
@@ -14,17 +17,23 @@ class Program
             {
                 services.AddSingleton<UserConfigFacade>();
 
+                // Home screen
                 services.AddSingleton<ShowHomeScreenActionsWorkflow>();
 
+                // Settings
                 services.AddTransient<ManageUserSettingsWorkflow>();
                 services.AddTransient<UserConfigFacade>();
 
-                services.AddTransient<AlignSubmodulesWorkflow>();
+                // AlignmentControl
+                services.AddTransient<AlignmentValidationWorkflow>();
+
+                // Aligning
+                services.AddTransient<SubmoduleAlignmentWorkflow>();
             });
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<ManageUserSettingsWorkflow>();
+        var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
 
         aaa.Run();
 

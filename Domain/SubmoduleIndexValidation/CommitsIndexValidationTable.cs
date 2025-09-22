@@ -1,5 +1,6 @@
-﻿using SubmoduleTracker.Core.TablePrinting;
-using SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
+﻿using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.TablePrinting;
 using static SubmoduleTracker.Core.TablePrinting.TableConstants;
 
 namespace SubmoduleTracker.Domain.SubmoduleIndexValidation;
@@ -9,32 +10,36 @@ namespace SubmoduleTracker.Domain.SubmoduleIndexValidation;
 /// </summary>
 public static class CommitsIndexValidationTable
 {
-    public static void GenerateOutput(PrintableSuperprojectDto printableSuperproject)
+    public static void GenerateOutput(RobustSuperProject superProject)
     {
-        Dictionary<string, TableColumn> columns = GetColumns(printableSuperproject);
+        Console.WriteLine();
+        CustomConsole.WriteLineColored($"{superProject.Name}", ConsoleColor.DarkCyan);
+
+        Dictionary<string, TableColumn> columns = GetColumns(superProject);
 
         PrintTableHeader(columns);
 
-        PrintTableBody(printableSuperproject, columns);
+        PrintTableBody(superProject, columns);
     }
 
     /// <summary>
     /// Prints table that informs if submodules in superproject points to the headcommits in submodules
     /// </summary>
-    private static void PrintTableBody(PrintableSuperprojectDto printableSuperprojectDto, Dictionary<string, TableColumn> columns)
+    private static void PrintTableBody(RobustSuperProject superProject, Dictionary<string, TableColumn> columns)
     {
-        // Superproject title
-        Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(printableSuperprojectDto.Title, 0));
 
-        foreach (string branch in printableSuperprojectDto.RevelantBranches)
+        // Superproject title
+        Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(superProject.Name, 0));
+
+        foreach (string branch in superProject.GetAvailableBranches())
         {
             // Branch title
             Console.WriteLine(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, columns[Column.SuperProject].Width + Delimiter.Length));
 
-            foreach (string submoduleName in printableSuperprojectDto.Submodules)
+            foreach (string submoduleName in superProject.SubmodulesNames)
             {
-                Dictionary<string, string> superprojectIndexes = printableSuperprojectDto.SubmoduleCommitIndexes[branch];
-                Dictionary<string, string> submoduleHeadCommits = printableSuperprojectDto.SubmodulesHeadCommits[branch];
+                Dictionary<string, string> superprojectIndexes = superProject.IndexCommitRefs[branch];
+                Dictionary<string, string> submoduleHeadCommits = superProject.HeadCommitRefs[branch];
 
                 // Submodule 
                 Console.Write(columns[Column.Submodule].GetColumnWidthAdjustedValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
@@ -62,7 +67,7 @@ public static class CommitsIndexValidationTable
     /// <remarks>
     /// Non-commit columns have dynamic width
     /// </remarks>
-    private static Dictionary<string, TableColumn> GetColumns(PrintableSuperprojectDto printableSuperprojectDto)
+    private static Dictionary<string, TableColumn> GetColumns(RobustSuperProject printableSuperprojectDto)
     {
         // Ordered
         return new()
@@ -73,7 +78,7 @@ public static class CommitsIndexValidationTable
                 new TableColumn(Column.SuperProject,
                     TableColumn.CalculateColumnWidth(
                         columnName: Column.SuperProject,
-                        longestValueLength: printableSuperprojectDto.Title.Length))
+                        longestValueLength: printableSuperprojectDto.Name.Length))
             },
 
             // Branch
@@ -82,7 +87,7 @@ public static class CommitsIndexValidationTable
                 new TableColumn(Column.Branch,
                 TableColumn.CalculateColumnWidth(
                         columnName: Column.Branch,
-                        longestValueLength: printableSuperprojectDto.RevelantBranches.MaxBy(x => x.Length)!.Length))
+                        longestValueLength: printableSuperprojectDto.GetAvailableBranches().MaxBy(x => x.Length)!.Length))
             },
 
             // Submodule
@@ -91,7 +96,7 @@ public static class CommitsIndexValidationTable
                 new TableColumn(Column.Submodule,
                     TableColumn.CalculateColumnWidth(
                         columnName: Column.Submodule,
-                        longestValueLength: printableSuperprojectDto.Submodules.MaxBy(x => x.Length)!.Length))
+                        longestValueLength: printableSuperprojectDto.SubmodulesNames.MaxBy(x => x.Length)!.Length))
             },
 
             // Index commit
@@ -109,13 +114,15 @@ public static class CommitsIndexValidationTable
     }
 
     private static void PrintTableHeader(Dictionary<string, TableColumn> columns) {
+        Console.WriteLine();
 
-        Console.WriteLine(
+        CustomConsole.WriteLineColored(
             columns[Column.SuperProject].GetPrintableHeader() + Delimiter + 
             columns[Column.Branch].GetPrintableHeader() + Delimiter + 
             columns[Column.Submodule].GetPrintableHeader() + Delimiter  + 
             columns[Column.IndexCommit].GetPrintableHeader() + Delimiter  + 
-            columns[Column.HeadCommit].GetPrintableHeader() + Delimiter  + Environment.NewLine
+            columns[Column.HeadCommit].GetPrintableHeader() + Delimiter  + Environment.NewLine,
+            ConsoleColor.DarkCyan
         );
     }
 }

@@ -1,6 +1,8 @@
 ﻿using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.SubmoduleIndexValidation;
 using SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
+using SubmoduleTracker.Domain.UserSettings.Model;
+using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.HomeScreen;
 
@@ -18,6 +20,13 @@ co krok, to save
 */
 public class ShowHomeScreenActionsWorkflow
 {
+    private readonly UserConfigFacade _userConfigfacade;
+
+    public ShowHomeScreenActionsWorkflow(UserConfigFacade  userConfig)
+    {
+        _userConfigfacade = userConfig;
+    }
+
     public void ShowHomeScreen()
     {
         // get config file
@@ -34,22 +43,7 @@ public class ShowHomeScreenActionsWorkflow
         Console.WriteLine("2. Porovnat submoduly");
     }
 
-    public static void GenerateReport(string superProjectPath)
+    public void GenerateReport(string superProjectPath)
     {
-        MetaSuperProject superProject = new(superProjectPath);
-
-        // Zatial budu iba hlavne branche iba v options.
-        List<string> relevantBranches = new() { "test", "dev" };
-
-        PrintableSuperprojectDto printableSuperprojectDto = new()
-        {
-            Title = superProject.Name,
-            RevelantBranches = relevantBranches,
-            Submodules = superProject.SubmodulesNames,
-            SubmoduleCommitIndexes = superProject.GetSubmoduleIndexCommitsRefs(relevantBranches, superProject.SubmodulesNames),
-            SubmodulesHeadCommits = superProject.GetSubmoduleHeadCommitRefs(relevantBranches, superProject.SubmodulesNames),
-        };
-
-        CommitsIndexValidationTable.GenerateOutput(printableSuperprojectDto);
     }
 }

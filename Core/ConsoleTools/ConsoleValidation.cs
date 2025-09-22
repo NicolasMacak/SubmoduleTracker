@@ -8,7 +8,6 @@ public static class ConsoleValidation
     /// <param name="upperBoundary">number cant be lower than this</param>
     /// <param name="lowerBoundary">number cant be greater than this</param>
     /// <returns>Returns integer when value is valid, null otherwise</returns>
-    [Obsolete("Use ReadAndValidateInput instead")]
     public static int? ReturnValidatedNumberOption(string? stringNumberOption, int upperBoundary, int? lowerBoundary = null)
     {
         if(string.IsNullOrEmpty(stringNumberOption)){ // empty input

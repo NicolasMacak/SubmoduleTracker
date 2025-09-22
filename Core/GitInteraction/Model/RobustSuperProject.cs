@@ -8,6 +8,7 @@ public sealed class RobustSuperProject
 {
     public readonly string Name;
     public readonly string WorkingDirectory;
+    public List<string> SubmodulesNames; // exactly as it sounds
 
     /// <summary>
     /// Holds information where which commits submodules of this superprojects points to on relevant branches <br></br>
@@ -17,6 +18,7 @@ public sealed class RobustSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </remarks>
     public Dictionary<string, Dictionary<string, string>> IndexCommitRefs;
+
 
     /// <summary>
     /// Holds information where which commits submodules of this superprojects points to on relevant branches <br></br>
@@ -29,12 +31,14 @@ public sealed class RobustSuperProject
     public RobustSuperProject(
         string name,
         string workingDirectory,
+        List<string> submodulesNames,
         Dictionary<string, Dictionary<string, string>> indexCommitRefs,
         Dictionary<string, Dictionary<string, string>> headCommitRefs
         )
     {
         Name = name;
         WorkingDirectory = workingDirectory;
+        SubmodulesNames = submodulesNames;
         IndexCommitRefs = indexCommitRefs;
         HeadCommitRefs = headCommitRefs;
     }
@@ -46,7 +50,7 @@ public sealed class RobustSuperProject
     /// We can use <see cref="IndexCommitRefs"/> and <see cref="HeadCommitRefs"/> interchangably.
     /// Collections has identical structure. [same, [same, different]]
     /// </remarks>
-    private IList<string> GetAvailableBranches()
+    public IList<string> GetAvailableBranches()
     {
         return IndexCommitRefs
             .Keys
@@ -79,7 +83,7 @@ public sealed class RobustSuperProject
         Dictionary<string, string> dissalignments = new();
 
         IList<string> branchesToIterate = GetAvailableBranches();
-        if (branchesToIterate.Count > 0)
+        if (branchesToIterate.Count == 0)
         {
             return dissalignments;
         }

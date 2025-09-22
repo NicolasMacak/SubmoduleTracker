@@ -10,22 +10,26 @@ namespace SubmoduleTracker.Domain.UserSettings.Services;
 // C:\Users\macak\AppData\Roaming
 public sealed class UserConfigFacade
 {
-    private UserConfig UserConfig;
+    private UserConfig _userConfig;
 
     private const string ConfigFileName = "SubmoduleTrackerConfig.txt";
     private readonly string ConfigFilePath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{ConfigFileName}";
 
-    public List<ConfigSuperProject> ConfigSuperProjects => UserConfig.SuperProjects;
+    public List<ConfigSuperProject> ConfigSuperProjects => _userConfig.SuperProjects;
 
-    public List<MetaSuperProject> MetaSupeprojects => UserConfig.SuperProjects
-        .Select(x => new MetaSuperProject(x.WorkingDirectory))
-        .ToList();
+    public readonly List<MetaSuperProject> MetaSupeprojects;
 
-    public bool PushingToRemote => UserConfig.PushingToRemote;
+    public List<string> RelevantBranches => _userConfig.RelevantBranches;
+
+    public bool PushingToRemote => _userConfig.PushingToRemote;
 
     public UserConfigFacade()
     {
-        UserConfig = LoadUserConfig();
+        _userConfig = LoadUserConfig();
+
+        MetaSupeprojects = _userConfig.SuperProjects
+            .Select(x => new MetaSuperProject(x.WorkingDirectory))
+            .ToList();
     }
 
     public OperationResult AddSuperproject(string superProjectWorkdir) 
@@ -39,12 +43,12 @@ public sealed class UserConfigFacade
         }
 
         // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
-        if (UserConfig.ContainsSuperproject(superProjectWorkdir))
+        if (_userConfig.ContainsSuperproject(superProjectWorkdir))
         {
             return OperationResult.WithFailure("Superprojekt uz je pridany");
         }
 
-        UserConfig.SuperProjects.Add(new ConfigSuperProject(superProjectWorkdir));
+        _userConfig.SuperProjects.Add(new ConfigSuperProject() { WorkingDirectory = validSuperprojectPath });
 
         return SaveOptions()
             ? OperationResult.WithSuccess()
@@ -53,7 +57,7 @@ public sealed class UserConfigFacade
 
     public OperationResult DeleteSuperProject(int superProjectIndex)
     {
-        UserConfig.SuperProjects.RemoveAt(superProjectIndex);
+        _userConfig.SuperProjects.RemoveAt(superProjectIndex);
 
         return SaveOptions()
             ? OperationResult.WithSuccess()
@@ -61,11 +65,11 @@ public sealed class UserConfigFacade
     }
 
     /// <summary>
-    /// Serialize and and save new version of <see cref="UserConfig"/>
+    /// Serialize and and save new version of <see cref="_userConfig"/>
     /// </summary>
     private bool SaveOptions()
     {
-        string stringyUserConfig = JsonSerializer.Serialize(UserConfig);
+        string stringyUserConfig = JsonSerializer.Serialize(_userConfig);
 
         try
         {

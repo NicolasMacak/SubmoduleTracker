@@ -27,6 +27,13 @@ public static class CustomConsole
         Console.ForegroundColor = ConsoleColor.White;
     }
 
+    public static void WriteLineColored(string text, ConsoleColor color)
+    {
+        Console.ForegroundColor = color;
+        Console.WriteLine(text);
+        Console.ForegroundColor = ConsoleColor.White;
+    }
+
     /// <summary>
     /// Writes text in provided color. No new line
     /// </summary>
@@ -39,10 +46,54 @@ public static class CustomConsole
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
-    public static int? ReadAndValidateNumberInput()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="upperBoundary"></param>
+    /// <param name="lowerBoundary"></param>
+    /// <returns>
+    /// </returns>
+    public static int? ReadAndValidateNumberInput(int upperBoundary, int? lowerBoundary = null)
     {
-        throw new NotImplementedException();
+        string? maybeNumberChoice = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(maybeNumberChoice))
+        { // empty input
+            return null;
+        }
+
+        if (!int.TryParse(maybeNumberChoice , out int parsedNumberOption))
+        { // not a number
+            return null;
+        }
+
+        // cant be lower than lowBoundary
+        if (lowerBoundary.HasValue && parsedNumberOption < lowerBoundary.Value)
+        {
+            return null;
+        }
+
+        // cant be greater than upper boundary
+        if (parsedNumberOption > upperBoundary)
+        {
+            return null;
+        }
+
+        return parsedNumberOption;
+
     }
+
+    public static string ReadStringInput()
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
+
+        Console.Write(">> ");
+        string? answer = Console.ReadLine();
+        Console.ForegroundColor= ConsoleColor.White;
+
+        return string.IsNullOrEmpty(answer) ? null : answer;
+    }
+
 
     public static bool AskYesOrNoQuestion(string question)
     {
