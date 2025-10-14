@@ -68,7 +68,7 @@ public class ManageUserSettingsWorkflow
         }
 
         // user input is handled here
-        OperationResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
+        VoidResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
 
         if (result.ResultCode != ResultCode.Success)
         {
@@ -109,14 +109,14 @@ public class ManageUserSettingsWorkflow
             Run();
         }
 
-        int? indexToDeleteAt = ConsoleValidation.ReturnValidatedNumberOption(choice, superProjects.Count - 1, 0);
+        int? indexToDeleteAt = ConsoleValidation.ReturnValidatedNumberOption(choice, superProjects.Count, 0);
 
-        if (indexToDeleteAt.HasValue)
+        if (!indexToDeleteAt.HasValue)
         {
             DeleteSuperproject($"Invalid input. Valid options are from {0} to {superProjects.Count - 1}");
         }
 
-        OperationResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
+        VoidResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
 
         if (result.ResultCode != ResultCode.Success)
         {

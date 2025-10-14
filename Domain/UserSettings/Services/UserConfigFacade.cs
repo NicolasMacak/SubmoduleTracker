@@ -32,36 +32,36 @@ public sealed class UserConfigFacade
             .ToList();
     }
 
-    public OperationResult AddSuperproject(string superProjectWorkdir) 
+    public VoidResult AddSuperproject(string superProjectWorkdir) 
     {
-        string? validSuperprojectPath = TryGetValidWorkingDirectory(superProjectWorkdir);
+        string? validSuperprojectPath = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
 
         if (validSuperprojectPath == null)
         {
             // invalid path
-            return OperationResult.WithFailure("Na zadanej ceste sa nenachadza git repozitar");
+            return VoidResult.WithFailure("Na zadanej ceste sa nenachadza git repozitar");
         }
 
         // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
         if (_userConfig.ContainsSuperproject(superProjectWorkdir))
         {
-            return OperationResult.WithFailure("Superprojekt uz je pridany");
+            return VoidResult.WithFailure("Superprojekt uz je pridany");
         }
 
         _userConfig.SuperProjects.Add(new ConfigSuperProject() { WorkingDirectory = validSuperprojectPath });
 
         return SaveOptions()
-            ? OperationResult.WithSuccess()
-            : OperationResult.WithFailure("Was not able to save the User Config");
+            ? VoidResult.WithSuccess()
+            : VoidResult.WithFailure("Was not able to save the User Config");
     }
 
-    public OperationResult DeleteSuperProject(int superProjectIndex)
+    public VoidResult DeleteSuperProject(int superProjectIndex)
     {
         _userConfig.SuperProjects.RemoveAt(superProjectIndex);
 
         return SaveOptions()
-            ? OperationResult.WithSuccess()
-            : OperationResult.WithFailure("Was not able to save the User Config");
+            ? VoidResult.WithSuccess()
+            : VoidResult.WithFailure("Was not able to save the User Config");
     }
 
     /// <summary>
@@ -85,15 +85,23 @@ public sealed class UserConfigFacade
 
 
     /// <summary>
-    /// Validates directory entered by user
+    /// Validates whether is valid Git repository and return path
     /// </summary>
-    /// <returns>Returns cleaned working directory if success, null otherwise </returns>
-    private static string? TryGetValidWorkingDirectory(string superprojectWorkdir)
+    /// <returns>Returns working directory if there is a Git repository at path, null otherwise </returns>
+    private static string? TryGetGitRepositoryWorkingDirectory(string superprojectWorkdir)
     {
         try
         {
             Repository superProjectGitRepository = new(superprojectWorkdir);
-            return superProjectGitRepository.Info.WorkingDirectory; // workdir in Repository object is trimmed of bs chars
+            // workdir in Repository object is trimmed of excessive chars
+            string clearedWorkingDirectory = superProjectGitRepository.Info.WorkingDirectory;
+
+            if(clearedWorkingDirectory.EndsWith('\\'))
+            {
+                clearedWorkingDirectory = clearedWorkingDirectory.Substring(0, clearedWorkingDirectory.Length - 1);
+            }
+
+            return clearedWorkingDirectory;
         }
         catch (LibGit2SharpException)
         {

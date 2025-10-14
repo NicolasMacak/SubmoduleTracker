@@ -1,4 +1,6 @@
-﻿namespace SubmoduleTracker.Core.ConsoleTools;
+﻿using SubmoduleTracker.Core.Result;
+
+namespace SubmoduleTracker.Core.ConsoleTools;
 public static class CustomConsole
 {
     public static void ClearAndWriteLine(string? text)
@@ -53,34 +55,41 @@ public static class CustomConsole
     /// <param name="lowerBoundary"></param>
     /// <returns>
     /// </returns>
-    public static int? ReadAndValidateNumberInput(int upperBoundary, int? lowerBoundary = null)
+    [Obsolete]
+    public static ModelResult<int> BabkineBentley(List<string> options, string prompt)
     {
+        for (int i = 0; i < options.Count; i++)
+        {
+            Console.WriteLine($"{i}. {options[i]}");
+        }
+
+        WriteLineColored(prompt, ConsoleColor.White);
+
         string? maybeNumberChoice = Console.ReadLine();
 
         if (string.IsNullOrEmpty(maybeNumberChoice))
         { // empty input
-            return null;
+            return ModelResult<int>.WithFailure("Matky");
         }
 
-        if (!int.TryParse(maybeNumberChoice , out int parsedNumberOption))
+        if (!int.TryParse(maybeNumberChoice, out int parsedNumberOption))
         { // not a number
-            return null;
+            return ModelResult<int>.WithFailure("Not a nubmer");
         }
 
         // cant be lower than lowBoundary
-        if (lowerBoundary.HasValue && parsedNumberOption < lowerBoundary.Value)
-        {
-            return null;
-        }
+        //if (lowerBoundary.HasValue && parsedNumberOption < lowerBoundary.Value)
+        //{
+        //    return ModelResult<int>.WithFailure($"Vyberte cislo z rozsahu 0 - {upperBounday}");
+        //}
 
-        // cant be greater than upper boundary
-        if (parsedNumberOption > upperBoundary)
-        {
-            return null;
-        }
+        //// cant be greater than upper boundary
+        //if (parsedNumberOption > upperBoundary)
+        //{
+        //    return null;
+        //}
 
-        return parsedNumberOption;
-
+        throw new NotImplementedException();
     }
 
     public static string ReadStringInput()

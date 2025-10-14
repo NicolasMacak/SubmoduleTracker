@@ -120,9 +120,6 @@
         <mxCell id="zN_APJOsYA4pf0mJ2beM-31" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Commitnut IBA Submodule. NIe vsetko&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2090" y="1050" width="370" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="H2F9SjrpHdT_mPWx4sjv-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Be ready for conflict&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
-          <mxGeometry x="-1975" y="460.0000000000001" width="200" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="H2F9SjrpHdT_mPWx4sjv-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ready for branchToAlign&amp;nbsp;&lt;br&gt;not existing locally&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
           <mxGeometry x="-2040" y="520" width="250" height="60" as="geometry" />
         </mxCell>
@@ -133,16 +130,16 @@
           <mxGeometry x="-2090" y="1320" width="170" height="40" as="geometry" />
         </mxCell>
         <mxCell id="UUlGnFPibLMLo2vJmDTm-5" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Logging&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1930" width="90" height="40" as="geometry" />
+          <mxGeometry x="-2472.5" y="2210" width="90" height="40" as="geometry" />
         </mxCell>
         <mxCell id="UUlGnFPibLMLo2vJmDTm-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Ak je submodule already stagged, nic sa nestane.&lt;br&gt;Superproject akoze ukazuje dobre?&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1980" width="460" height="60" as="geometry" />
+          <mxGeometry x="-2472.5" y="2260" width="460" height="60" as="geometry" />
         </mxCell>
         <mxCell id="UUlGnFPibLMLo2vJmDTm-8" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Happy path&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2090" y="1000" width="130" height="40" as="geometry" />
         </mxCell>
         <mxCell id="UUlGnFPibLMLo2vJmDTm-9" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Vhodne miesto pre state restore&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="2050" width="310" height="40" as="geometry" />
+          <mxGeometry x="-2472.5" y="2330" width="310" height="40" as="geometry" />
         </mxCell>
         <mxCell id="eh24DqS274aS48rtO0Fc-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;TableColumn&lt;br&gt;Remove Name&lt;br&gt;&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;font-size: 20px;&quot;&gt;Add offset?&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
           <mxGeometry x="-1595" y="385" width="160" height="90" as="geometry" />
@@ -156,38 +153,65 @@
         <mxCell id="4lQAqQhR7zhloYmdwoUT-14" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Zastavit ked neni nic na zarovnanie&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2090" y="1270" width="340" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="MnXaabT1zFUZZ9p_nJrX-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;InjectUserConfig. UserConfigService&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1470" width="350" height="40" as="geometry" />
+        <mxCell id="MnXaabT1zFUZZ9p_nJrX-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;InjectUserConfig. UserConfigService&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
+          <mxGeometry x="-2095" y="1400" width="350" height="40" as="geometry" />
         </mxCell>
         <mxCell id="avcqMvhXffLZ1SfmkX83-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Working prototype&lt;/font&gt;" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="-2475" y="1390.0000000000002" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="avcqMvhXffLZ1SfmkX83-4" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Verbose&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="2100" width="100" height="40" as="geometry" />
+          <mxGeometry x="-2472.5" y="2380" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="dldcblbPw55_LTF9dgpm-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Exception ussage&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1880" width="180" height="40" as="geometry" />
+          <mxGeometry x="-2477.5" y="2070" width="180" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="dldcblbPw55_LTF9dgpm-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;MetaSuperProject.ToRubustSuperProject&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1760" width="390" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="dldcblbPw55_LTF9dgpm-3" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Spravit metodu na error messages. Odstranit errors z index metod&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
-          <mxGeometry x="-2475" y="1820" width="610" height="40" as="geometry" />
+        <mxCell id="dldcblbPw55_LTF9dgpm-3" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Pekne error messages&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2477.5" y="2130" width="220" height="40" as="geometry" />
         </mxCell>
         <mxCell id="dldcblbPw55_LTF9dgpm-4" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;User RobustSuperProjectsInstead&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-1220" y="530" width="330" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="fdr7LK5-8hzC0RJx-UG2-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;RemoteMode, Relevant branches print&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
+        <mxCell id="fdr7LK5-8hzC0RJx-UG2-1" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;RemoteMode, Relevant branches print&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
           <mxGeometry x="-820" y="450" width="370" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="fdr7LK5-8hzC0RJx-UG2-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Tieto branhce budu zarovnane&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2420" y="1590" width="290" height="40" as="geometry" />
+        <mxCell id="fdr7LK5-8hzC0RJx-UG2-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Tieto branhce budu zarovnane&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2030" y="2060" width="290" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="fdr7LK5-8hzC0RJx-UG2-3" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Textacie&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
-          <mxGeometry x="-2475" y="1540" width="100" height="40" as="geometry" />
+        <mxCell id="fdr7LK5-8hzC0RJx-UG2-3" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Textacie&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2085" y="2010" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="fdr7LK5-8hzC0RJx-UG2-4" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;For all superprojects&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" vertex="1" parent="1">
+        <mxCell id="fdr7LK5-8hzC0RJx-UG2-4" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;For all superprojects&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
           <mxGeometry x="-1615" y="665" width="200" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="KmtbBU7O1MVXMlfpvVJH-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Normalizacia cesty&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;" parent="1" vertex="1">
+          <mxGeometry x="-2460" y="1840" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="KmtbBU7O1MVXMlfpvVJH-3" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Color design&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#d6b656;fillColor=#fff2cc;" parent="1" vertex="1">
+          <mxGeometry x="-2477.5" y="2010" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="KmtbBU7O1MVXMlfpvVJH-5" value="&lt;span style=&quot;text-wrap-mode: wrap;&quot;&gt;ReturnValidatedNumberOption zvalidovat upperBoundarySystem&lt;br&gt;Refactoring. posunies moznosi vypisu sa a vrati sa ti moznost&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
+          <mxGeometry x="-810" y="915" width="370" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="KmtbBU7O1MVXMlfpvVJH-6" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Fix Superproject removal&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
+          <mxGeometry x="-810" y="820" width="250" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="OczMxfgcbA_oLDJbfJq5-1" value="Na konci vieme, ci sa udialy chyby, alebo nie.&lt;br&gt;Ak nastal konflit, ina chyba, nech si to user vyriesit.&amp;nbsp;&lt;br&gt;Zatial je to vsetko iba locally." style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2460" y="1630" width="300" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OczMxfgcbA_oLDJbfJq5-2" value="Push is always approved" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="-2460" y="1570" width="375" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="OczMxfgcbA_oLDJbfJq5-3" value="Spytame sa usera, ci potvrdzuje push na remote" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-2460" y="1680" width="280" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PXEhhc4ysPW4mtMNHCgg-1" value="Normalize path with Path.GetFullPath" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="-760" y="1020" width="300" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="PXEhhc4ysPW4mtMNHCgg-2" value="&lt;div&gt;&amp;nbsp; &amp;nbsp; private static void PushAlignedSuperprojects(List&amp;lt;AligningSuperproject&amp;gt; superprojectsToAlign)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+          <mxGeometry x="-2070" y="1590" width="540" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PXEhhc4ysPW4mtMNHCgg-3" value="Tu sme skoncili" style="whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="-2040" y="1550" width="152.5" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

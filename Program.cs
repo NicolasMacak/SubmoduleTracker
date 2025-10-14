@@ -33,7 +33,7 @@ class Program
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
+        var aaa = app.Services.GetRequiredService<SubmoduleAlignmentWorkflow>();
 
         aaa.Run();
 

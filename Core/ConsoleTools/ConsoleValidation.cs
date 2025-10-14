@@ -25,7 +25,7 @@ public static class ConsoleValidation
         }
 
         // cant be greater than upper boundary
-        if(parsedNumberOption > upperBoundary)
+        if(parsedNumberOption >= upperBoundary)
         {
             return null;
         }

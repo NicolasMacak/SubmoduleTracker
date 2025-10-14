@@ -1,24 +1,24 @@
 ﻿namespace SubmoduleTracker.Core.Result;
-public sealed class OperationResult
+public sealed class VoidResult
 {
     public ResultCode ResultCode { get; set; }
 
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
-    private OperationResult() {}
+    private VoidResult() {}
 
-    public static OperationResult WithSuccess()
+    public static VoidResult WithSuccess()
     {
-        return new OperationResult
+        return new VoidResult
         {
             ResultCode = ResultCode.Success,
             ErrorMessage = string.Empty
         };
     }
 
-    public static OperationResult WithFailure(string errorMessage)
+    public static VoidResult WithFailure(string errorMessage)
     {
-        return new OperationResult
+        return new VoidResult
         {
             ResultCode = ResultCode.Failed,
             ErrorMessage = errorMessage

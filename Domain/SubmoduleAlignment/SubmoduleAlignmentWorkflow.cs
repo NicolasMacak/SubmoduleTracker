@@ -1,5 +1,6 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
+using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
@@ -22,11 +23,11 @@ public class SubmoduleAlignmentWorkflow
         string selectedSubmodule = LetUserSelectSubmodule(allSuperprojects);
 
         // superprojects that contain relevant submodule
-        List<RobustSuperProject> relevantRobustSuperProjects =allSuperprojects
+        List<RobustSuperProject> relevantRobustSuperProjects = allSuperprojects
             .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
             .Select(x => x.ToRobustSuperproject(relevantBranches))
             .ToList();
- 
+
         PrintSubmoduleAlignmentTableWorkflow.Run(selectedSubmodule, relevantRobustSuperProjects, relevantBranches);
 
         if (!ShouldAlignmentContinue(relevantRobustSuperProjects))
@@ -37,7 +38,39 @@ public class SubmoduleAlignmentWorkflow
         List<AligningSuperproject> aligningSuperprojects = GetSuperProjectsToAlign(relevantRobustSuperProjects, relevantBranches);
 
         // Begin alignemnt process
-        AlignSuperprojects(selectedSubmodule, aligningSuperprojects);
+        if (!AlignSuperprojects(selectedSubmodule, aligningSuperprojects))
+        {
+            return;
+        }
+
+        PushToRemoteWithPermission(aligningSuperprojects);
+    }
+
+    private static void PushToRemoteWithPermission(List<AligningSuperproject> superprojectsToAlign)
+    {
+        foreach (AligningSuperproject superproject in superprojectsToAlign)
+        {
+            Console.WriteLine(superproject.Title);
+            foreach(string branch in superproject.branchesToAlign)
+            {
+                Console.WriteLine(branch);
+            }
+        }
+
+        bool approvedByUser = CustomConsole.AskYesOrNoQuestion("Branche v tychto superprojektoch budu pushnute na remote. Pokracovat?");
+
+        if(!approvedByUser)
+        {
+            Console.WriteLine("Proces zastaveny uzivatelom"); // todo farbicky
+            return;
+        }
+
+        PushAlignedSuperprojects(superprojectsToAlign);
+    }
+
+    private static void PushAlignedSuperprojects(List<AligningSuperproject> superprojectsToAlign)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -61,30 +94,41 @@ public class SubmoduleAlignmentWorkflow
     /// </summary>
     /// <param name="submoduleToForward">Submodule to align</param>
     /// <param name="superprojectsToAlign">Superprojects to be aligned</param>
-    private static void AlignSuperprojects(string submoduleToForward, List<AligningSuperproject> superprojectsToAlign)
+    /// <returns>True if Forwarding commit was created for every superproject to align, false otherwise</returns>
+    private static bool AlignSuperprojects(string submoduleToForward, List<AligningSuperproject> superprojectsToAlign)
     {
-        foreach (AligningSuperproject superproject in superprojectsToAlign)
+        try
         {
-            string submoduleWorkdir = superproject.Workdir + @$"\{submoduleToForward}";
-
-            foreach (string branchToAlign in superproject.branchesToAlign)
+            foreach (AligningSuperproject superproject in superprojectsToAlign)
             {
-                // checkout branch in superproject
-                GitFacade.Switch(superproject.Workdir, branchToAlign);
-                GitFacade.FetchAndPull(superproject.Workdir);
+                string submoduleWorkdir = superproject.Workdir + @$"\{submoduleToForward}";
 
-                // checkout and pull submodule branch
-                GitFacade.Switch(submoduleWorkdir, branchToAlign); // checkout
-                GitFacade.FetchAndPull(submoduleWorkdir); // fetch and pull
-
-                // Forward submodule in superproject
-                GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
-
-                if (/*SAFE MODE DISABLED*/true)
+                foreach (string branchToAlign in superproject.branchesToAlign)
                 {
-                    GitFacade.Push(superproject.Workdir);
+                    // checkout branch in superproject
+                    GitFacade.Switch(superproject.Workdir, branchToAlign);
+                    GitFacade.FetchAndPull(superproject.Workdir);
+
+                    // checkout and pull submodule branch
+                    GitFacade.Switch(submoduleWorkdir, branchToAlign); // checkout
+                    GitFacade.FetchAndPull(submoduleWorkdir); // fetch and pull
+
+                    // Forward submodule in superproject
+                    GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
+                    //if (/*SAFE MODE DISABLED*/true)
+                    //{
+                    //    GitFacade.Push(superproject.Workdir);
+                    //}
                 }
             }
+
+            return true;
+        }
+        catch (CommandExecutionException ex)
+        {
+            // print
+            CustomConsole.WriteErrorLine(ex.Message);
+            return false;
         }
     }
 
@@ -146,12 +190,12 @@ public class SubmoduleAlignmentWorkflow
             // if collection has items, alignment is neccessary
             if (branchesToAlign.Count > 0)
             {
-                superProjectsToAlign.Add(new AligningSuperproject(superProject.WorkingDirectory, branchesToAlign));
+                superProjectsToAlign.Add(new AligningSuperproject(superProject.Name, superProject.WorkingDirectory, branchesToAlign));
             }
         }
 
         return superProjectsToAlign;
     }
     
-    private record AligningSuperproject(string Workdir, List<string> branchesToAlign);
+    private record AligningSuperproject(string Title, string Workdir, List<string> branchesToAlign);
 }
