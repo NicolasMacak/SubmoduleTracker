@@ -54,20 +54,38 @@ public sealed class MetaSuperProject
     {
         Dictionary<string, Dictionary<string, string>> result = new();
 
-        foreach (string branchName in branches)
+        Repository mainRepo = new(WorkingDirectory);
+        foreach (Branch branch in mainRepo.Branches.Where(x => branches.Contains(x.FriendlyName)))
         {
-            GitFacade.Switch(WorkingDirectory, branchName); // done so we can check where submodules points on this branch
+            Dictionary<string, string> submodulesCommit = new();
 
-            Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
+            Commit head = branch.Tip;
 
-            // Information where submodules points to
-            Dictionary<string, string> submoduleCommitIndexes 
-                = superProjectGitRepository.Submodules
-                .Where(x => relevantSubmodules.Contains(x.Name))
-                .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
-
-            result.Add(branchName, submoduleCommitIndexes);
+            foreach (var entry in head.Tree)
+            {
+                if (entry.TargetType == TreeEntryTargetType.GitLink)
+                {
+                    submodulesCommit.Add(entry.Name, entry.Target.Id.ToString()[..20]);
+                    Console.WriteLine($"  Submodule: {entry.Name} -> Commit {entry.Target.Id}");
+                }
+            }
+            result.Add(branch.FriendlyName, submodulesCommit);
         }
+
+        //foreach (string branchName in branches)
+        //{
+        //    GitFacade.Switch(WorkingDirectory, branchName); // done so we can check where submodules points on this branch
+
+        //    Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
+
+        //    // Information where submodules points to
+        //    Dictionary<string, string> submoduleCommitIndexes 
+        //        = superProjectGitRepository.Submodules
+        //        .Where(x => relevantSubmodules.Contains(x.Name))
+        //        .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
+
+        //    result.Add(branchName, submoduleCommitIndexes);
+        //}
 
         return result;
     }
@@ -88,6 +106,14 @@ public sealed class MetaSuperProject
     private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
+
+        Repository mainRepo = new(WorkingDirectory);
+        foreach (Branch branch in mainRepo.Branches.Where(x => relevantBranches.Contains(x.FriendlyName)))
+        {
+            Commit head = branch.Tip;
+
+            var first20 = head.Sha[..20];
+        }
 
         foreach (string branchName in relevantBranches)
         {

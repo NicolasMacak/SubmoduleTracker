@@ -43,6 +43,7 @@ public class SubmoduleAlignmentWorkflow
             return;
         }
 
+        // Locally aligned. Last thing to do is push to remote
         PushToRemoteWithPermission(aligningSuperprojects);
     }
 
@@ -68,9 +69,16 @@ public class SubmoduleAlignmentWorkflow
         PushAlignedSuperprojects(superprojectsToAlign);
     }
 
+    /// <summary>
+    /// Push aligned superproject to remote
+    /// </summary>
     private static void PushAlignedSuperprojects(List<AligningSuperproject> superprojectsToAlign)
     {
-        throw new NotImplementedException();
+        foreach(var superproject in superprojectsToAlign)
+        {
+            // Push main repo
+            GitFacade.Push(superproject.Workdir);
+        }
     }
 
     /// <summary>
