@@ -31,29 +31,34 @@ class Program
 
                 // Playing
 
-                Repository repo = new("C:\\NON_SYSTEM\\Superproject-A");
+                //Repository repo = new("C:\\NON_SYSTEM\\Superproject-A");
 
-                foreach (var branch in repo.Branches)
-                {
-                    Console.WriteLine($"Branch: {branch.FriendlyName}");
+                //foreach (var branch in repo.Branches)
+                //{
+                //    Console.WriteLine($"Branch: {branch.FriendlyName}");
 
-                    // Get the commit tree for the branch
-                    var commit = branch.Tip;
-                    if (commit == null) continue;
+                //    // Get the commit tree for the branch
+                //    var commit = branch.Tip;
+                //    if (commit == null) continue;
 
-                    foreach (var entry in commit.Tree)
-                    {
-                        if (entry.TargetType == TreeEntryTargetType.GitLink)
-                        {
-                            Console.WriteLine($"  Submodule: {entry.Name} -> Commit {entry.Target.Id}");
-                        }
-                    }
-                }
+                //    foreach (var entry in commit.Tree)
+                //    {
+                //        if (entry.TargetType == TreeEntryTargetType.GitLink)
+                //        {
+                //            Console.WriteLine($"  Submodule: {entry.Name} -> Commit {entry.Target.Id}");
+                //        }
+                //    }
+                //}
+
+
+
+                //git fetch --all--recurse - submodules
+                //git submodule update--init--recursive
             });
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<SubmoduleAlignmentWorkflow>();
+        var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
 
         aaa.Run();
 

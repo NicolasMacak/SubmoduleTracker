@@ -7,6 +7,12 @@ public static class GitFacade
         GitProcessExecutor.ExecuteVoidCommand(path, "pull");
     }
 
+    public static void FetchAllInMainAndSubmodules(string path)
+    {
+        GitProcessExecutor.ExecuteVoidCommand(path, "fetch --all --recurse-submodules");
+        GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
+    }
+
     public static void AddAndCommit(string path, string submoduleName)
     {
         GitProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
