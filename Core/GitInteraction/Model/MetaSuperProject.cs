@@ -62,25 +62,9 @@ public sealed class MetaSuperProject
             Dictionary<string, string> submodulesPointings = headOfBranch.Tree
                 .Where(entry => entry.TargetType == TreeEntryTargetType.GitLink) // GitLink => Submodule
                 .ToDictionary(entry => entry.Name, entry => entry.Target.Id.ToString()[..20]); // [SubmoduleName, IndexCommit(First 20 chars)]
-
             
-            pointingsOfSubmodulesForBranches.Add(branch.FriendlyName, submodulesPointings );
+            pointingsOfSubmodulesForBranches.Add(branch.FriendlyName, submodulesPointings);
         }
-
-        //foreach (string branchName in branches)
-        //{
-        //    GitFacade.Switch(WorkingDirectory, branchName); // done so we can check where submodules points on this branch
-
-        //    Repository superProjectGitRepository = new(WorkingDirectory); // Load superproject where files were alteredy by checkout
-
-        //    // Information where submodules points to
-        //    Dictionary<string, string> submoduleCommitIndexes 
-        //        = superProjectGitRepository.Submodules
-        //        .Where(x => relevantSubmodules.Contains(x.Name))
-        //        .ToDictionary(x => x.Name, x => x.IndexCommitId.ToString()[..20]); // [..20] - first 20 chars
-
-        //    result.Add(branchName, submoduleCommitIndexes);
-        //}
 
         return pointingsOfSubmodulesForBranches;
     }
@@ -100,10 +84,7 @@ public sealed class MetaSuperProject
     /// </returns>
     private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
     {
-        Dictionary<string, Dictionary<string, string>> SubmoduleHeadCommitsForBranches = new();
-
-        // Dictionary[string, Dictionary[string, string]] < br ></ br > Can be Dictionary[string, KeyValuePair[string, string]] <br></br>
-        Dictionary<string, KeyValuePair<string, string>> Experimental = new();
+        Dictionary<string, Dictionary<string, string>> submoduleHeadCommitsForBranches = new();
 
         List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // ensures that later we consider only remote branches
 
@@ -111,43 +92,26 @@ public sealed class MetaSuperProject
         {
             Repository submoduleRepo = new($@"{WorkingDirectory}\{submoduleName}");
 
-            IEnumerable<Branch> remoteRelevantBranches = submoduleRepo.Branches
-                .Where(x => remoteRelevantBranchesNames.Contains(x.FriendlyName));
+            List<Branch> remoteRelevantBranches = submoduleRepo.Branches
+                .Where(x => remoteRelevantBranchesNames.Contains(x.FriendlyName)).ToList();
 
             foreach (Branch branch in remoteRelevantBranches)
             {
-                string remoteHeadCommit = branch.Tip.Sha[..20]; // Hash of head commit
+                string remoteHeadCommit = branch.Tip.Sha[..20];
+                string branchFriendlyName = branch.FriendlyName.Split("/").Last();
 
-                Experimental[branch.FriendlyName.Split("/").Last()] = new KeyValuePair<string, string>(submoduleName, remoteHeadCommit);
+                if (submoduleHeadCommitsForBranches.TryGetValue(branchFriendlyName, out Dictionary<string, string>? value))
+                {
+                    value.Add(submoduleName, remoteHeadCommit);
+                }
+                else
+                {
+                    submoduleHeadCommitsForBranches[branchFriendlyName] = new() { { submoduleName, remoteHeadCommit } };
+                }
             }
         }
 
-        //foreach (string branchName in relevantBranches)
-        //{
-        //    Dictionary<string, string> commitMap = new();
-
-        //    foreach (string submoduleName in relevantSubmodules)
-        //    {
-        //        string submoduleWorkdir = $@"{WorkingDirectory}\{submoduleName}";
-
-        //        GitFacade.Switch(submoduleWorkdir, branchName); // done so we can check where submodules points on this branch
-        //        GitFacade.FetchAndPull(submoduleWorkdir); // fetch actual remote state for submodule in question
-
-        //        Repository submoduleRepository = new(submoduleWorkdir);
-
-        //        Branch? branch = submoduleRepository.Branches.FirstOrDefault(x => x.IsRemote && x.FriendlyName.EndsWith(branchName)); // find 
-        //        if (branch == null)
-        //        {
-        //            Console.WriteLine($"{branch} was not found in {submoduleWorkdir}");
-        //        }
-
-        //        commitMap.Add(submoduleName, branch!.Reference.TargetIdentifier[..20]); // [..20] - first 20 chars
-        //    }
-
-        //    SubmoduleHeadCommitsForBranches.Add(branchName, commitMap);
-        //}
-
-        return SubmoduleHeadCommitsForBranches;
+        return submoduleHeadCommitsForBranches;
     }        
 
     public RobustSuperProject ToRobustSuperproject(List<string> relevantBranches, List<string>? relevantSubmodules = null)
