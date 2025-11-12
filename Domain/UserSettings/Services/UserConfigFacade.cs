@@ -96,12 +96,12 @@ public sealed class UserConfigFacade
             // workdir in Repository object is trimmed of excessive chars
             string clearedWorkingDirectory = superProjectGitRepository.Info.WorkingDirectory;
 
-            if(clearedWorkingDirectory.EndsWith('\\'))
+            if (clearedWorkingDirectory.EndsWith('\\'))
             {
-                clearedWorkingDirectory = clearedWorkingDirectory.Substring(0, clearedWorkingDirectory.Length - 1);
+                clearedWorkingDirectory  = clearedWorkingDirectory.Substring(0, clearedWorkingDirectory .Length - 1);
             }
 
-            return clearedWorkingDirectory;
+            return Path.GetFullPath(clearedWorkingDirectory);
         }
         catch (LibGit2SharpException)
         {
