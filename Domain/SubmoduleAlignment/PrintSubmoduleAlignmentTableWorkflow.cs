@@ -15,7 +15,7 @@ public static class PrintSubmoduleAlignmentTableWorkflow
     {
         Dictionary<string, TableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
 
-        Console.WriteLine(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine);
+        CustomConsole.WriteColored(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine, PredefinedColor.ImporantText);
 
         PrintTableHeader(columns);
 

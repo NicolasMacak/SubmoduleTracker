@@ -48,65 +48,9 @@ public static class CustomConsole
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="upperBoundary"></param>
-    /// <param name="lowerBoundary"></param>
-    /// <returns>
-    /// </returns>
-    [Obsolete]
-    public static ModelResult<int> BabkineBentley(List<string> options, string prompt)
-    {
-        for (int i = 0; i < options.Count; i++)
-        {
-            Console.WriteLine($"{i}. {options[i]}");
-        }
-
-        WriteLineColored(prompt, ConsoleColor.White);
-
-        string? maybeNumberChoice = Console.ReadLine();
-
-        if (string.IsNullOrEmpty(maybeNumberChoice))
-        { // empty input
-            return ModelResult<int>.WithFailure("Matky");
-        }
-
-        if (!int.TryParse(maybeNumberChoice, out int parsedNumberOption))
-        { // not a number
-            return ModelResult<int>.WithFailure("Not a nubmer");
-        }
-
-        // cant be lower than lowBoundary
-        //if (lowerBoundary.HasValue && parsedNumberOption < lowerBoundary.Value)
-        //{
-        //    return ModelResult<int>.WithFailure($"Vyberte cislo z rozsahu 0 - {upperBounday}");
-        //}
-
-        //// cant be greater than upper boundary
-        //if (parsedNumberOption > upperBoundary)
-        //{
-        //    return null;
-        //}
-
-        throw new NotImplementedException();
-    }
-
-    public static string ReadStringInput()
-    {
-        Console.ForegroundColor = ConsoleColor.Magenta;
-
-        Console.Write(">> ");
-        string? answer = Console.ReadLine();
-        Console.ForegroundColor= ConsoleColor.White;
-
-        return string.IsNullOrEmpty(answer) ? null : answer;
-    }
-
-
     public static bool AskYesOrNoQuestion(string question)
     {
-        Console.WriteLine(question);
+        CustomConsole.WriteLineColored(question, PredefinedColor.Question);
         Console.WriteLine("Napiste \"yes\" pre pokracovanie");
 
         string? read = Console.ReadLine();

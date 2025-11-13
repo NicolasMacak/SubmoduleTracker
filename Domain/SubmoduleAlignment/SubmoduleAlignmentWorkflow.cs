@@ -47,22 +47,31 @@ public class SubmoduleAlignmentWorkflow
         PushToRemoteWithPermission(aligningSuperprojects);
     }
 
-    private static void PushToRemoteWithPermission(List<AligningSuperproject> superprojectsToAlign)
+    private void PushToRemoteWithPermission(List<AligningSuperproject> superprojectsToAlign)
     {
+        CustomConsole.WriteColored("Superprojekt a branche ktore budu zarovnane:", PredefinedColor.ImporantText);
         foreach (AligningSuperproject superproject in superprojectsToAlign)
         {
-            Console.WriteLine(superproject.Title);
+            CustomConsole.WriteColored(superproject.Title, PredefinedColor.MundaneText);
             foreach(string branch in superproject.branchesToAlign)
             {
-                Console.WriteLine(branch);
+                CustomConsole.WriteColored(branch, PredefinedColor.MundaneText);
             }
         }
 
-        bool approvedByUser = CustomConsole.AskYesOrNoQuestion("Branche v tychto superprojektoch budu pushnute na remote. Pokracovat?");
+        CustomConsole.WriteColored("Forward commity boli vytvorene", PredefinedColor.ImporantText);
+
+        if (!_userConfigFacade.PushingToRemote)
+        {
+            CustomConsole.WriteColored("Push na remote zakazany. Mozete zmenit v nastaveniach. Ukoncujem exekuciu.", PredefinedColor.ImporantText);
+            return;
+        }
+
+        bool approvedByUser = CustomConsole.AskYesOrNoQuestion("Push na remote?");
 
         if(!approvedByUser)
         {
-            Console.WriteLine("Proces zastaveny uzivatelom"); // todo farbicky
+            Console.WriteLine("Proces zastaveny uzivatelom");
             return;
         }
 
@@ -94,7 +103,7 @@ public class SubmoduleAlignmentWorkflow
             return false;
         }
 
-        return CustomConsole.AskYesOrNoQuestion("Tieto branche budu zarovnane ESTE DOKODIT. Pokracovat?");
+        return CustomConsole.AskYesOrNoQuestion("Pre nezarovnane branche budu vytvorene forward commity. Pokracovat?");
     }
 
     /// <summary>
@@ -123,10 +132,6 @@ public class SubmoduleAlignmentWorkflow
 
                     // Forward submodule in superproject
                     GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
-                    //if (/*SAFE MODE DISABLED*/true)
-                    //{
-                    //    GitFacade.Push(superproject.Workdir);
-                    //}
                 }
             }
 
