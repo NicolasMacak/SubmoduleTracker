@@ -1,9 +1,8 @@
-﻿using LibGit2Sharp;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SubmoduleTracker.Domain.HomeScreen;
-using SubmoduleTracker.Domain.SubmoduleAlignment;
-using SubmoduleTracker.Domain.SubmoduleIndexValidation;
+using SubmoduleTracker.Domain.AlignmentExecution;
+using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
@@ -27,7 +26,7 @@ class Program
                 services.AddTransient<AlignmentValidationWorkflow>();
 
                 // Aligning
-                services.AddTransient<SubmoduleAlignmentWorkflow>();
+                services.AddTransient<AlignmentExecutionWorkflow>();
 
                 // Playing
 
@@ -58,7 +57,7 @@ class Program
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
+        var aaa = app.Services.GetRequiredService<AlignmentExecutionWorkflow>();
 
         aaa.Run();
 

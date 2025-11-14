@@ -2,7 +2,7 @@
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
-namespace SubmoduleTracker.Domain.SubmoduleIndexValidation;
+namespace SubmoduleTracker.Domain.AlignmentValidation;
 public sealed class AlignmentValidationWorkflow
 {
     private const string AllSuperprojects = "AllSubmodules";
@@ -26,7 +26,7 @@ public sealed class AlignmentValidationWorkflow
 
         foreach (MetaSuperProject metaSuperProject in metaSuperprojectValidate)
         {
-            RobustSuperProject robustSuperProject = metaSuperProject .ToRobustSuperproject(_userConfigfacade.RelevantBranches);
+            RobustSuperProject robustSuperProject = metaSuperProject.ToRobustSuperproject(_userConfigfacade.RelevantBranches);
             CommitsIndexValidationTable.GenerateOutput(robustSuperProject);
         }
     }

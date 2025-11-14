@@ -1,6 +1,6 @@
 ﻿using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Domain.SubmoduleIndexValidation;
-using SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
+using SubmoduleTracker.Domain.AlignmentValidation;
+using SubmoduleTracker.Domain.AlignmentValidation.Dto;
 using SubmoduleTracker.Domain.UserSettings.Model;
 using SubmoduleTracker.Domain.UserSettings.Services;
 

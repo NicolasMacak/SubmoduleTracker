@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Domain.SubmoduleIndexValidation.Dto;
+﻿namespace SubmoduleTracker.Domain.AlignmentValidation.Dto;
 
 [Obsolete("Use robust superproject")]
 public sealed class PrintableSuperprojectDto

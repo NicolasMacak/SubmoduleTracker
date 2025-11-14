@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Domain.SubmoduleAlignment.Models;
+﻿namespace SubmoduleTracker.Domain.AlignmentExecution.Models;
 /// <summary>
 /// Used when aligning submodule in git repositories
 /// </summary>

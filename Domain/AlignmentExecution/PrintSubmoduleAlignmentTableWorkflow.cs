@@ -4,7 +4,7 @@ using SubmoduleTracker.Core.TablePrinting;
 using static SubmoduleTracker.Core.TablePrinting.TableConstants;
 
 
-namespace SubmoduleTracker.Domain.SubmoduleAlignment;
+namespace SubmoduleTracker.Domain.AlignmentExecution;
 
 /// <summary>
 /// Prints table 

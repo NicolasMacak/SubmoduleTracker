@@ -4,12 +4,12 @@ using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
-namespace SubmoduleTracker.Domain.SubmoduleAlignment;
-public class SubmoduleAlignmentWorkflow
+namespace SubmoduleTracker.Domain.AlignmentExecution;
+public class AlignmentExecutionWorkflow
 {
     private readonly UserConfigFacade _userConfigFacade;
 
-    public SubmoduleAlignmentWorkflow(UserConfigFacade userConfigFacade)
+    public AlignmentExecutionWorkflow(UserConfigFacade userConfigFacade)
     {
         _userConfigFacade = userConfigFacade;
     }

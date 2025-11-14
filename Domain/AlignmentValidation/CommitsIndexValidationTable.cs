@@ -3,7 +3,7 @@ using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Core.TablePrinting;
 using static SubmoduleTracker.Core.TablePrinting.TableConstants;
 
-namespace SubmoduleTracker.Domain.SubmoduleIndexValidation;
+namespace SubmoduleTracker.Domain.AlignmentValidation;
 
 /// <summary>
 /// Designed to print output of a specific kidn
