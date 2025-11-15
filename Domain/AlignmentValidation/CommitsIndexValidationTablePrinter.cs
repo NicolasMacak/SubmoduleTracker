@@ -8,9 +8,9 @@ namespace SubmoduleTracker.Domain.AlignmentValidation;
 /// <summary>
 /// Designed to print output of a specific kidn
 /// </summary>
-public static class CommitsIndexValidationTable
+public static class CommitsIndexValidationTablePrinter
 {
-    public static void GenerateOutput(RobustSuperProject superProject)
+    public static void PrintTable(RobustSuperProject superProject)
     {
         Console.WriteLine();
         CustomConsole.WriteLineColored($"{superProject.Name}", ConsoleColor.DarkCyan);

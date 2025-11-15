@@ -2,10 +2,11 @@
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentExecution;
-public class AlignmentExecutionWorkflow
+public class AlignmentExecutionWorkflow : IWorkflow
 {
     private readonly UserConfigFacade _userConfigFacade;
 
@@ -16,94 +17,60 @@ public class AlignmentExecutionWorkflow
 
     public void Run()
     {
-        List<MetaSuperProject> allSuperprojects = _userConfigFacade.MetaSupeprojects;
-        List<string> relevantBranches = _userConfigFacade.RelevantBranches;
-
+        Console.Clear();
         // Superprojects that contain submodule(selected by user in this method)
-        string selectedSubmodule = LetUserSelectSubmodule(allSuperprojects);
+        string selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSupeprojects);
 
         // superprojects that contain relevant submodule
-        List<RobustSuperProject> relevantRobustSuperProjects = allSuperprojects
+        List<RobustSuperProject> relevantRobustSuperProjects =_userConfigFacade.MetaSupeprojects 
             .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
-            .Select(x => x.ToRobustSuperproject(relevantBranches))
+            .Select(x => x.ToRobustSuperproject(_userConfigFacade.RelevantBranches))
             .ToList();
 
-        PrintSubmoduleAlignmentTableWorkflow.Run(selectedSubmodule, relevantRobustSuperProjects, relevantBranches);
+        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule, relevantRobustSuperProjects, _userConfigFacade.RelevantBranches);
 
-        if (!ShouldAlignmentContinue(relevantRobustSuperProjects))
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _userConfigFacade.RelevantBranches);
+
+        if (superprojectsToAlign.Count == 0)
         {
+            CustomConsole.WriteLineColored($"Zarovnanie pre submodul {selectedSubmodule} nie je potrebne. Ukoncujem exekuciu.", TextType.Success);
             return;
         }
 
-        List<AligningSuperproject> aligningSuperprojects = GetSuperProjectsToAlign(relevantRobustSuperProjects, relevantBranches);
+        if(!CustomConsole.AskYesOrNoQuestion("Nasleduje vytvorene forward commitov pre nezarovnané superprojekty. Pokracovat?"))
+        {
+            return;
+        }
 
         // Begin alignemnt process
-        if (!AlignSuperprojects(selectedSubmodule, aligningSuperprojects))
+        List<AligningSuperproject> successfullyAlignedSuperprojects = CreateForwardCommitsForSuperprojects(selectedSubmodule, superprojectsToAlign);
+
+        if (!ShouldOperationContinue(superprojectsToAlign, successfullyAlignedSuperprojects))
         {
             return;
         }
 
-        // Locally aligned. Last thing to do is push to remote
-        PushToRemoteWithPermission(aligningSuperprojects);
-    }
-
-    private void PushToRemoteWithPermission(List<AligningSuperproject> superprojectsToAlign)
-    {
-        CustomConsole.WriteColored("Superprojekt a branche ktore budu zarovnane:", PredefinedColor.ImporantText);
-        foreach (AligningSuperproject superproject in superprojectsToAlign)
+        foreach (AligningSuperproject superproject in successfullyAlignedSuperprojects)
         {
-            CustomConsole.WriteColored(superproject.Title, PredefinedColor.MundaneText);
-            foreach(string branch in superproject.branchesToAlign)
-            {
-                CustomConsole.WriteColored(branch, PredefinedColor.MundaneText);
-            }
-        }
-
-        CustomConsole.WriteColored("Forward commity boli vytvorene", PredefinedColor.ImporantText);
-
-        if (!_userConfigFacade.PushingToRemote)
-        {
-            CustomConsole.WriteColored("Push na remote zakazany. Mozete zmenit v nastaveniach. Ukoncujem exekuciu.", PredefinedColor.ImporantText);
-            return;
-        }
-
-        bool approvedByUser = CustomConsole.AskYesOrNoQuestion("Push na remote?");
-
-        if(!approvedByUser)
-        {
-            Console.WriteLine("Proces zastaveny uzivatelom");
-            return;
-        }
-
-        PushAlignedSuperprojects(superprojectsToAlign);
-    }
-
-    /// <summary>
-    /// Push aligned superproject to remote
-    /// </summary>
-    private static void PushAlignedSuperprojects(List<AligningSuperproject> superprojectsToAlign)
-    {
-        foreach(var superproject in superprojectsToAlign)
-        {
-            // Push main repo
             GitFacade.Push(superproject.Workdir);
         }
     }
 
-    /// <summary>
-    /// Checks whether there is something to align and asks user for permission
-    /// </summary>
-    /// <returns>True when dissaligments exists and user grants permission to procceed. False otherwise</returns>
-    private static bool ShouldAlignmentContinue(List<RobustSuperProject> relevantRobustSuperProjects)
+    private bool ShouldOperationContinue(List<AligningSuperproject> superprojectsToAlign, List<AligningSuperproject> successfullyAlignedSuperprojects)
     {
-        // Nothing to align
-        if(!relevantRobustSuperProjects.Any(x => x.GetDisalignemnts().Count > 0))
+        if (successfullyAlignedSuperprojects.Count == 0)
         {
-            CustomConsole.WriteColored("Nothing to Align! Stopping execution.", ConsoleColor.DarkGreen);
+            CustomConsole.WriteLineColored(Environment.NewLine + "Ziaden superproject sa nepodarilo zaronat! Ukoncujem exekuciu.", TextType.Error);
             return false;
         }
 
-        return CustomConsole.AskYesOrNoQuestion("Pre nezarovnane branche budu vytvorene forward commity. Pokracovat?");
+        if (!_userConfigFacade.PushingToRemote)
+        {
+            CustomConsole.WriteColored(Environment.NewLine + "Forward commity vytvorene. Ukoncujem exekuciu. Push na remote zakazany. Mozno zmenit v nastaveniach.", TextType.Success);
+            return false;
+        }
+
+        return CustomConsole.AskYesOrNoQuestion("Pushnut uspesne zarovnane superprojekty na remote?");
     }
 
     /// <summary>
@@ -111,12 +78,14 @@ public class AlignmentExecutionWorkflow
     /// </summary>
     /// <param name="submoduleToForward">Submodule to align</param>
     /// <param name="superprojectsToAlign">Superprojects to be aligned</param>
-    /// <returns>True if Forwarding commit was created for every superproject to align, false otherwise</returns>
-    private static bool AlignSuperprojects(string submoduleToForward, List<AligningSuperproject> superprojectsToAlign)
+    /// <returns>Successfully forwarded superprojects</returns>
+    private static List<AligningSuperproject> CreateForwardCommitsForSuperprojects(string submoduleToForward, List<AligningSuperproject> superprojectsToAlign)
     {
-        try
+        List<AligningSuperproject> successfullyAlignedSuperprojects = new();
+
+        foreach (AligningSuperproject superproject in superprojectsToAlign)
         {
-            foreach (AligningSuperproject superproject in superprojectsToAlign)
+            try
             {
                 string submoduleWorkdir = superproject.Workdir + @$"\{submoduleToForward}";
 
@@ -132,17 +101,23 @@ public class AlignmentExecutionWorkflow
 
                     // Forward submodule in superproject
                     GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
+                    CustomConsole.WriteLineColored($"Forward commit vytvoreny. Superprojekt: {superproject.Title} Branch: {branchToAlign}", TextType.Success);
+                    successfullyAlignedSuperprojects.Add(superproject);
                 }
             }
+            catch (CommandExecutionException ex)
+            {
+                CustomConsole.WriteLineColored($"Failed to align superproject {superproject.Title}", TextType.Error);
+                CustomConsole.WriteLineColored(ex.Message, TextType.Error);
+            }
+        }
 
-            return true;
-        }
-        catch (CommandExecutionException ex)
+        if (successfullyAlignedSuperprojects.Count != superprojectsToAlign.Count && successfullyAlignedSuperprojects.Count > 0)
         {
-            // print
-            CustomConsole.WriteErrorLine(ex.Message);
-            return false;
+            CustomConsole.WriteErrorLine("Nie vsetky superprojekty sa podarilo zarovnat");
         }
+
+        return successfullyAlignedSuperprojects;
     }
 
     /// <summary>

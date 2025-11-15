@@ -39,7 +39,6 @@ public sealed class MetaSuperProject
     /// Get commit ids to which submodules points to for provided branches (DEV, TEST)
     /// </summary>
     /// <param name="branches">branches to get results for</param>
-    /// <param name="relevantSubmodules">subomdules to get results for</param>
     /// <remarks>
     /// branch - branch for which we want to find out submodule commit indexes <br></br>
     /// indexCommitId - commit to which submodule points to
@@ -50,7 +49,7 @@ public sealed class MetaSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
     
-    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches, List<string> relevantSubmodules)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches)
     {
         Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new(); // Tu isto nechceme tiez remote branches ako v GetSubmoduleHeadCommitRefs??
 
@@ -123,7 +122,7 @@ public sealed class MetaSuperProject
             name: Name,
             workingDirectory: WorkingDirectory,
             submodulesNames: SubmodulesNames,
-            indexCommitRefs: GetSubmoduleIndexCommitsRefs(relevantBranches, relevantSubmodules ?? SubmodulesNames),
+            indexCommitRefs: GetSubmoduleIndexCommitsRefs(relevantBranches),
             headCommitRefs: GetSubmoduleHeadCommitRefs(relevantBranches, relevantSubmodules ?? SubmodulesNames)
         );
     }

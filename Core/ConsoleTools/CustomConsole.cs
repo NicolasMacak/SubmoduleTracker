@@ -14,9 +14,7 @@ public static class CustomConsole
     /// </summary>
     public static void WriteErrorLine(string? error)
     {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine(error);
-        Console.ForegroundColor = ConsoleColor.White;
+        WriteLineColored(error, TextType.Error);
     }
 
     /// <summary>
@@ -50,7 +48,7 @@ public static class CustomConsole
 
     public static bool AskYesOrNoQuestion(string question)
     {
-        CustomConsole.WriteLineColored(question, PredefinedColor.Question);
+        CustomConsole.WriteLineColored(question, TextType.Question);
         Console.WriteLine("Napiste \"yes\" pre pokracovanie");
 
         string? read = Console.ReadLine();

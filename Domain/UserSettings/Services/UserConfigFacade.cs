@@ -55,6 +55,15 @@ public sealed class UserConfigFacade
             : VoidResult.WithFailure("Was not able to save the User Config");
     }
 
+    public VoidResult TogglePushingToRemote()
+    {
+        _userConfig.PushingToRemote = !_userConfig.PushingToRemote;
+
+        return SaveOptions()
+            ? VoidResult.WithSuccess()
+            : VoidResult.WithFailure("Was not able to save the User Config");
+    }
+
     public VoidResult DeleteSuperProject(int superProjectIndex)
     {
         _userConfig.SuperProjects.RemoveAt(superProjectIndex);

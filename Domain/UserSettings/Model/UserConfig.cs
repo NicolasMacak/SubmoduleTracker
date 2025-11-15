@@ -7,7 +7,7 @@ public sealed class UserConfig
 
     public List<string> RelevantBranches { get; set; } = new List<string> { "dev", "test" };
 
-    public bool PushingToRemote => false;
+    public bool PushingToRemote { get; set; } = false;
 
     public bool ContainsSuperproject(string workingDirectory)
     {

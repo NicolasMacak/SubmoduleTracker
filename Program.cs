@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SubmoduleTracker.Domain.HomeScreen;
+using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
+using SubmoduleTracker.Domain.Navigation;
 
 class Program
 {
@@ -15,8 +16,9 @@ class Program
             {
                 services.AddSingleton<UserConfigFacade>();
 
-                // Home screen
-                services.AddSingleton<ShowHomeScreenActionsWorkflow>();
+                // Navigation
+                services.AddSingleton<HomeScreenWorkflow>();
+                services.AddTransient<NavigationService>();
 
                 // Settings
                 services.AddTransient<ManageUserSettingsWorkflow>();
@@ -27,6 +29,7 @@ class Program
 
                 // Aligning
                 services.AddTransient<AlignmentExecutionWorkflow>();
+
 
                 // Playing
 
@@ -57,7 +60,7 @@ class Program
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<AlignmentExecutionWorkflow>();
+        var aaa = app.Services.GetRequiredService<HomeScreenWorkflow>();
 
         aaa.Run();
 

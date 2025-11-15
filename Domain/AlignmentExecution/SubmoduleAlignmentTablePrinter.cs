@@ -9,13 +9,13 @@ namespace SubmoduleTracker.Domain.AlignmentExecution;
 /// <summary>
 /// Prints table 
 /// </summary>
-public static class PrintSubmoduleAlignmentTableWorkflow
+public static class SubmoduleAlignmentTablePrinter
 {
-    public static void Run(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
+    public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
     {
         Dictionary<string, TableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
 
-        CustomConsole.WriteColored(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine, PredefinedColor.ImporantText);
+        CustomConsole.WriteColored(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine, TextType.ImporantText);
 
         PrintTableHeader(columns);
 
