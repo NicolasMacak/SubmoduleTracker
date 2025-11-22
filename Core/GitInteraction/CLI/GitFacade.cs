@@ -27,7 +27,7 @@ public static class GitFacade
         GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
     }
 
-    public static void AddAndCommit(string path, string submoduleName)
+    public static void CreateForwardCommit(string path, string submoduleName)
     {
         GitProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
         try

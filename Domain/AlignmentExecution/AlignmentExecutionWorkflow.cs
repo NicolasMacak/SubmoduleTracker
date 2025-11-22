@@ -30,7 +30,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
         SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule, relevantRobustSuperProjects, _userConfigFacade.RelevantBranches);
 
-        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _userConfigFacade.RelevantBranches);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _userConfigFacade.RelevantBranches, selectedSubmodule);
 
         if (superprojectsToAlign.Count == 0)
         {
@@ -38,7 +38,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             return;
         }
 
-        if(!CustomConsole.AskYesOrNoQuestion("Nasleduje vytvorene forward commitov pre nezarovnané superprojekty. Pokracovat?"))
+        if(!CustomConsole.AskYesOrNoQuestion("Nasleduje vytvorenie forward commitov pre nezarovnané superprojekty. Pokracovat?"))
         {
             return;
         }
@@ -101,8 +101,8 @@ public class AlignmentExecutionWorkflow : IWorkflow
                     GitFacade.FetchAndFastForwardPull(submoduleWorkdir); // fetch and pull
 
                     // Forward submodule in superproject
-                    GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
-                    CustomConsole.WriteLineColored($"Forward commit vytvoreny. Superprojekt: {superproject.Title} Branch: {branchToAlign}", TextType.Success);
+                    GitFacade.CreateForwardCommit(superproject.Workdir, submoduleToForward);
+                    CustomConsole.WriteLineColored($"{superproject.Title}: {branchToAlign}. Forward commit vytvoreny.", TextType.Success);
                     successfullyAlignedSuperprojects.Add(superproject);
                 }
             }
@@ -148,7 +148,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
         return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);
     }
     
-    private static List<AligningSuperproject> GetSuperProjectsToAlign(List<RobustSuperProject> relevantSuperprojects, List<string> relevantBranches)
+    private static List<AligningSuperproject> GetSuperProjectsToAlign(List<RobustSuperProject> relevantSuperprojects, List<string> relevantBranches, string selectedSubmodule)
     {
         List<AligningSuperproject> superProjectsToAlign = new();
 
@@ -158,8 +158,8 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
             foreach(string branch in relevantBranches)
             {
-                string indexCommit = superProject.IndexCommitRefs[branch].First().Value; // where submodule points on in this branch
-                string headCommit = superProject.HeadCommitRefs[branch].First().Value; // HEAD commit on this branch
+                string indexCommit = superProject.IndexCommitRefs[branch][selectedSubmodule]; // where submodule points on in this branch
+                string headCommit = superProject.HeadCommitRefs[branch][selectedSubmodule]; // HEAD commit on this branch
 
                 // Does submodule in superproject points to the HEAD commit?
                 if(indexCommit != headCommit)

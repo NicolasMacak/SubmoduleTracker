@@ -19,7 +19,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
     public void Run(/*string? errorMessage = null*/)
     {
-        Console.Clear();
+        Console.Clear(); // TODO. TOTO VYRIESIT
         //if (!string.IsNullOrEmpty(errorMessage))
         //{
         //    CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);

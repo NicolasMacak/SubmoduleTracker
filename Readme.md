@@ -34,17 +34,20 @@ Fast forward strategy is used. Histories diverged. It needs to handled mannualy
 ## Testing cases
 
 ### Aligning superproject
-Zarovna 1 superproject
-
-Zarovna viacero superprojektov
+Umoznuje zarovnat 1 superprojekt alebo vsetky superprojekty.
 
 Conflict
+- exception je vyhodne
 
-Branch not existing locally
+Superprojekt nema branchu na ktorej je treba zarovnat submodule.
+- git switch ju vytvori
 
-Submodule nema dev
-
-Superprojekt nema dev
+Submodul nema branchu na ktorej head sa treba referencovat
+- git switch ju vytvory
 
 Histories diverged on the remote.
-Should fail with exception
+NOT YET TESTED
+
+Pozor: Ak ma aplikacia zakazane pushovat a lokalne branchce smeruju spravne, user dostane exception.
+Pretoze applikacia kontroluje sa pozera na remote branchce.
+Dovod: Origin stav nesedi. Ale taktiez nema co comitnut pretoze na lokal to ukazuje dobre.
