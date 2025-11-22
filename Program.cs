@@ -61,6 +61,7 @@ class Program
         IHost app = host.Build();
 
         var aaa = app.Services.GetRequiredService<HomeScreenWorkflow>();
+        //var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
 
         aaa.Run();
 

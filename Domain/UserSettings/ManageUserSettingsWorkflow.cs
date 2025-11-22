@@ -2,7 +2,6 @@
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.Navigation;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.UserSettings;
@@ -36,7 +35,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
             "Spat do hlavneho menu"
         ];
 
-        int? validatedChoice = ConsoleValidation.GetIndexFromChoices(menuOptions, "Zvolte akciu");
+        int? validatedChoice = CustomConsole.GetIndexFromChoices(menuOptions, "Zvolte akciu");
 
         if (!validatedChoice.HasValue)
         {
@@ -64,11 +63,11 @@ public class ManageUserSettingsWorkflow : IWorkflow
     /// <param name="errorMessage">Contains error message from last attempt</param>
     private void TryAddingNewSuperproject(string? errorMessage = null)
     {
+        Console.Clear();
         if (!string.IsNullOrEmpty(errorMessage)) {
             CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
         }
 
-        Console.Clear();
         CustomConsole.WriteLineColored("Pridanie superprojektu", TextType.ImporantText);
         CustomConsole.WriteLineColored("Zadajte absolutnu cestu ku git repozitaru", TextType.Question);
         Console.WriteLine("Pre krok spat zadajte empty string" + Environment.NewLine);
@@ -79,7 +78,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         if (string.IsNullOrEmpty(superprojectWorkdir))
         {
             Console.Clear();
-            Run();
+            Run(); // Return to the start of the page
         }
 
         // user input is handled here
@@ -87,10 +86,9 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         if (result.ResultCode != ResultCode.Success)
         {
-            CustomConsole.WriteErrorLine(result.ErrorMessage + Environment.NewLine);
+            TryAddingNewSuperproject(result.ErrorMessage);
         }
 
-        Console.Clear();
         Run();
     }
 
@@ -106,7 +104,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-        int? indexToDeleteAt = ConsoleValidation.GetIndexFromChoices(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?");
+        int? indexToDeleteAt = CustomConsole.GetIndexFromChoices(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?");
 
         if (!indexToDeleteAt.HasValue)
         {

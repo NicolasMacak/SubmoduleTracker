@@ -1,10 +1,24 @@
-﻿namespace SubmoduleTracker.Core.GitInteraction.CLI;
+﻿using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
+using SubmoduleTracker.Domain.AlignmentExecution.Exceptions;
+
+namespace SubmoduleTracker.Core.GitInteraction.CLI;
 public static class GitFacade
 { 
-    public static void FetchAndPull(string path)
+    public static void FetchAndFastForwardPull(string path)
     {
         GitProcessExecutor.ExecuteVoidCommand(path, "fetch");
-        GitProcessExecutor.ExecuteVoidCommand(path, "pull");
+        try
+        {
+            GitProcessExecutor.ExecuteVoidCommand(path, "pull --ff-only");
+        }
+        catch (CommandExecutionException)
+        {
+            throw new FastForwardMergeFailureException(path);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public static void FetchAllInMainAndSubmodules(string path)
@@ -16,7 +30,18 @@ public static class GitFacade
     public static void AddAndCommit(string path, string submoduleName)
     {
         GitProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
-        GitProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward \"");
+        try
+        {
+            GitProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward \"");
+        }
+        catch (CommandExecutionException)
+        {
+            throw new ForwardCommitCreationException(path);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
     }
 
     public static void Push(string path)

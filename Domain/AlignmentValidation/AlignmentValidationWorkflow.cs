@@ -6,7 +6,7 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 namespace SubmoduleTracker.Domain.AlignmentValidation;
 public sealed class AlignmentValidationWorkflow : IWorkflow
 {
-    private const string AllSuperprojects = "AllSubmodules";
+    private const string AllSuperprojects = "All Superprojects";
     private readonly UserConfigFacade _userConfigfacade;
 
     public AlignmentValidationWorkflow(UserConfigFacade  userConfigFacade)
@@ -31,6 +31,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
             RobustSuperProject robustSuperProject = metaSuperProject.ToRobustSuperproject(_userConfigfacade.RelevantBranches);
             CommitsIndexValidationTablePrinter.PrintTable(robustSuperProject);
         }
+
     }
 
     private string SelectRange()

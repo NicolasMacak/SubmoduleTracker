@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using SubmoduleTracker.Core.ConsoleTools;
+﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.UserSettings;
@@ -19,9 +18,9 @@ public class HomeScreenWorkflow : IWorkflow
     {
         Console.Clear();
         CustomConsole.WriteLineColored("Submodule operator", TextType.ImporantText);
-        List<string> choices = new () { "Validacia zarovnania", "Zarovnanie submodulov", "Configuracia" };
+        List<string> choices = new () { "Validacia zarovnania", "Zarovnanie submodulov", "Nastavenia" };
 
-        int? choice = ConsoleValidation.GetIndexFromChoices(choices, "Vyberte akciu");
+        int? choice = CustomConsole.GetIndexFromChoices(choices, "Vyberte akciu");
 
         if (!choice.HasValue)
         {

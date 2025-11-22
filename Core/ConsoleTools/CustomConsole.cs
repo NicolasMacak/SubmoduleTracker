@@ -60,4 +60,58 @@ public static class CustomConsole
 
         return false;
     }
+
+    public static int? GetIndexFromChoices(List<string> choices, string prompt, string? emptyStringPrompt = null)
+    {
+        CustomConsole.WriteLineColored(prompt, TextType.Question);
+
+        int index = 0;
+        foreach (string choice in choices)
+        {
+            CustomConsole.WriteLineColored($"{index}. {choice}", TextType.MundaneText);
+            index++;
+        }
+
+        if (!string.IsNullOrEmpty(emptyStringPrompt))
+        {
+            CustomConsole.WriteLineColored(emptyStringPrompt, TextType.Question);
+        }
+
+        string? stringNumberOption = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(stringNumberOption))
+        {
+            if (!string.IsNullOrEmpty(emptyStringPrompt))
+            {
+                return null;
+            }
+
+            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            GetIndexFromChoices(choices, prompt, emptyStringPrompt); // Todo. Refactor. Pouziva sa niekde? Ak je empty string prompt sade, tak netreba
+        }
+
+        if (!int.TryParse(stringNumberOption, out int parsedNumberOption))
+        {
+            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
+        }
+
+        // cant be lower than lowBoundary
+        if (parsedNumberOption < 0)
+        {
+            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
+
+        }
+
+        // cant be greater than number of choices
+        if (parsedNumberOption > choices.Count - 1)
+        {
+            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
+        }
+
+        return parsedNumberOption;
+    }
+
 }

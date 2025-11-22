@@ -40,9 +40,9 @@ public static class SubmoduleAlignmentTablePrinter
 
             foreach (string branch in relevantBranches)
             {
-                int offsetForThisColumn = columns[Column.SuperProject].Width;
-                string indexCommit = superProject.IndexCommitRefs[branch].First().Value; // where submodule points on in this branch
-                string headCommit = superProject.HeadCommitRefs[branch].First().Value; // HEAD commit on this branch
+                int offsetForThisColumn = columns[Column.SuperProject].Width; // TODO. SHOULDNT I USE ALIGNING SUBMODULE NAME?
+                string indexCommit = superProject.IndexCommitRefs[branch][aligningSubmoduleName]; // where submodule points on in this branch. .First() because 
+                string headCommit = superProject.HeadCommitRefs[branch][aligningSubmoduleName]; // HEAD commit on this branch
 
                 // Outputs bellow is one row. We put offset only into the first
                 Console.Write(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, offsetForThisColumn + Delimiter.Length) + Delimiter);

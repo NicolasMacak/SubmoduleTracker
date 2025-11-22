@@ -60,7 +60,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
     {
         if (successfullyAlignedSuperprojects.Count == 0)
         {
-            CustomConsole.WriteLineColored(Environment.NewLine + "Ziaden superproject sa nepodarilo zaronat! Ukoncujem exekuciu.", TextType.Error);
+            CustomConsole.WriteLineColored(Environment.NewLine + "Forward commit nebol uspesne vytvoreny pre ziadny projekt! Ukoncujem exekuciu.", TextType.Error);
             return false;
         }
 
@@ -93,11 +93,11 @@ public class AlignmentExecutionWorkflow : IWorkflow
                 {
                     // checkout branch in superproject
                     GitFacade.Switch(superproject.Workdir, branchToAlign);
-                    GitFacade.FetchAndPull(superproject.Workdir);
+                    GitFacade.FetchAndFastForwardPull(superproject.Workdir);
 
                     // checkout and pull submodule branch
                     GitFacade.Switch(submoduleWorkdir, branchToAlign); // checkout
-                    GitFacade.FetchAndPull(submoduleWorkdir); // fetch and pull
+                    GitFacade.FetchAndFastForwardPull(submoduleWorkdir); // fetch and pull
 
                     // Forward submodule in superproject
                     GitFacade.AddAndCommit(superproject.Workdir, submoduleToForward);
@@ -105,7 +105,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
                     successfullyAlignedSuperprojects.Add(superproject);
                 }
             }
-            catch (CommandExecutionException ex)
+            catch (Exception ex)
             {
                 CustomConsole.WriteLineColored($"Failed to align superproject {superproject.Title}", TextType.Error);
                 CustomConsole.WriteLineColored(ex.Message, TextType.Error);

@@ -21,7 +21,7 @@ public sealed class MetaSuperProject
 {
     public readonly string Name;
     public readonly string WorkingDirectory;
-    public List<string> SubmodulesNames { get; } = new(); // todo. Get can be removed
+    public List<string> SubmodulesNames { get; } = new();
 
     public MetaSuperProject(string repoPath)
     {
@@ -38,31 +38,31 @@ public sealed class MetaSuperProject
     /// <summary>
     /// Get commit ids to which submodules points to for provided branches (DEV, TEST)
     /// </summary>
-    /// <param name="branches">branches to get results for</param>
+    /// <param name="relevantBranches">branches to get results for</param>
     /// <remarks>
     /// branch - branch for which we want to find out submodule commit indexes <br></br>
     /// indexCommitId - commit to which submodule points to
-    /// </remarks>
-    /// 
-    /// <returns>
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
     
-    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> branches)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> relevantBranches)
     {
-        Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new(); // Tu isto nechceme tiez remote branches ako v GetSubmoduleHeadCommitRefs??
+        Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new();
+        List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // Remote branches used so we can get data when branches doesn't exist locally
 
         Repository mainRepo = new(WorkingDirectory);
-        foreach (Branch branch in mainRepo.Branches.Where(x => branches.Contains(x.FriendlyName)))
+
+        foreach (Branch branch in mainRepo.Branches.Where(x => remoteRelevantBranchesNames.Contains(x.FriendlyName)))
         {
             Commit headOfBranch = branch.Tip;
 
             Dictionary<string, string> submodulesPointings = headOfBranch.Tree
                 .Where(entry => entry.TargetType == TreeEntryTargetType.GitLink) // GitLink => Submodule
                 .ToDictionary(entry => entry.Name, entry => entry.Target.Id.ToString()[..20]); // [SubmoduleName, IndexCommit(First 20 chars)]
-            
-            pointingsOfSubmodulesForBranches.Add(branch.FriendlyName, submodulesPointings);
+
+            string friendlyName = branch.FriendlyName.Split("/").Last(); // remove prefix "origin/"
+            pointingsOfSubmodulesForBranches.Add(friendlyName , submodulesPointings);
         }
 
         return pointingsOfSubmodulesForBranches;
@@ -85,9 +85,9 @@ public sealed class MetaSuperProject
     {
         Dictionary<string, Dictionary<string, string>> submoduleHeadCommitsForBranches = new();
 
-        List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // ensures that later we consider only remote branches
+        List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // Remote branches used so we can get data when branches doesn't exist locally
 
-        foreach(string submoduleName in relevantSubmodules)
+        foreach (string submoduleName in relevantSubmodules)
         {
             Repository submoduleRepo = new($@"{WorkingDirectory}\{submoduleName}");
 
@@ -97,15 +97,15 @@ public sealed class MetaSuperProject
             foreach (Branch branch in remoteRelevantBranches)
             {
                 string remoteHeadCommit = branch.Tip.Sha[..20];
-                string branchFriendlyName = branch.FriendlyName.Split("/").Last();
+                string branchFriendlyName = branch.FriendlyName.Split("/").Last(); // remove prefix "origin/"
 
                 if (submoduleHeadCommitsForBranches.TryGetValue(branchFriendlyName, out Dictionary<string, string>? value))
                 {
-                    value.Add(submoduleName, remoteHeadCommit);
+                    value.Add(submoduleName, remoteHeadCommit); // Key exists. Add an item to dictionary attached to it
                 }
                 else
                 {
-                    submoduleHeadCommitsForBranches[branchFriendlyName] = new() { { submoduleName, remoteHeadCommit } };
+                    submoduleHeadCommitsForBranches[branchFriendlyName] = new() { { submoduleName, remoteHeadCommit } }; // Key doesnt exists. Initiate dictionary with item
                 }
             }
         }
