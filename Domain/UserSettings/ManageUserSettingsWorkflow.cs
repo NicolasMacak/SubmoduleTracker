@@ -128,7 +128,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         if (result.ResultCode != ResultCode.Success)
         {
-            CustomConsole.WriteErrorLine(result.ErrorMessage);
+            CustomConsole.WriteErrorLine(result.ErrorMessage!);
         }
 
         Run();

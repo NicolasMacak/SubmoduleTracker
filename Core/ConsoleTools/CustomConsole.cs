@@ -10,7 +10,7 @@ public static class CustomConsole
     /// <summary>
     /// Writes red line
     /// </summary>
-    public static void WriteErrorLine(string? error)
+    public static void WriteErrorLine(string error)
     {
         WriteLineColored(error, TextType.Error);
     }
@@ -44,6 +44,11 @@ public static class CustomConsole
         Console.BackgroundColor = ConsoleColor.Black;
     }
 
+    /// <summary>
+    /// Prints <paramref name="question"/>. Promps user for typing "yes" to confirm
+    /// </summary>
+    /// <param name="question"></param>
+    /// <returns>True when user types yes, false otherwise</returns>
     public static bool AskYesOrNoQuestion(string question)
     {
         WriteLineColored(question, TextType.Question);
@@ -59,6 +64,28 @@ public static class CustomConsole
         return false;
     }
 
+    /// <summary>
+    /// Displays a numbered list of choices and reads the user's selection.
+    /// Supports an empty input when <paramref name="emptyStringPrompt"/> is provided.
+    /// </summary>
+    /// <param name="choices">
+    /// The list of selectable options. Displayed to the user as items 1..n.
+    /// </param>
+    /// <param name="prompt">
+    /// The main prompt shown before listing the choices.
+    /// </param>
+    /// <param name="emptyStringPrompt">
+    /// Optional message shown when empty input is allowed.  
+    /// When set, an empty input returns <c>null</c>.
+    /// </param>
+    /// <returns>
+    /// The zero-based index of the selected option, or <c>null</c> if empty input
+    /// is allowed and the user submits an empty line.
+    /// </returns>
+    /// <remarks>
+    /// The user sees options numbered from 1 to <c>choices.Count</c>. Internally,
+    /// the method returns a zero-based index.
+    /// </remarks>
     public static int? GetIndexFromChoices(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
         WriteLineColored(prompt, TextType.Question);
