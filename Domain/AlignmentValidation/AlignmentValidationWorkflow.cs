@@ -7,17 +7,20 @@ namespace SubmoduleTracker.Domain.AlignmentValidation;
 public sealed class AlignmentValidationWorkflow : IWorkflow
 {
     private const string AllSuperprojects = "All Superprojects";
-    private readonly UserConfigFacade _userConfigfacade;
 
-    public AlignmentValidationWorkflow(UserConfigFacade  userConfigFacade)
+    private readonly UserConfigFacade _userConfigfacade;
+    private readonly NavigationService _navigationService;
+
+    public AlignmentValidationWorkflow(UserConfigFacade  userConfigFacade, NavigationService navigationService)
     {
         _userConfigfacade = userConfigFacade;
+        _navigationService = navigationService;
     }
 
     public void Run()
     {
         Console.Clear();
-        string selectedSuperproject = SelectRange();
+        string selectedSuperproject = getSelectedSuperprojectName();
 
         IEnumerable<MetaSuperProject> metaSuperprojectValidate = _userConfigfacade.MetaSupeprojects;
 
@@ -34,7 +37,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
 
     }
 
-    private string SelectRange()
+    private string getSelectedSuperprojectName()
     {
         List<string> superprojectOptions = _userConfigfacade.MetaSupeprojects
             .Select(x  => x.Name)
@@ -42,31 +45,14 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
 
         superprojectOptions.Add(AllSuperprojects);
 
-        CustomConsole.WriteLineColored("Select superproject", ConsoleColor.DarkCyan);
-
-        for (int i = 0; i < superprojectOptions.Count; i++)
+        int? selectedSuperprojectIndex = CustomConsole.GetIndexFromChoices(superprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        if (!selectedSuperprojectIndex.HasValue)
         {
-            Console.WriteLine($"{i}. {superprojectOptions[i]}");
+            _navigationService.Navigate(typeof(HomeScreenWorkflow));
         }
 
-        string? choice = Console.ReadLine();
-
-        if (string.IsNullOrEmpty(choice))
-        {
-            // jozef vajda. vrat sa naspat na home screen
-        }
-
-        int? userChoice = ConsoleValidation.ReturnValidatedNumberOption(choice, superprojectOptions.Count);
-
-        // invalid
-        if(!userChoice.HasValue)
-        {
-            CustomConsole.WriteErrorLine("Select the number from the provided range");
-            SelectRange();
-        }
-
-        return userChoice == superprojectOptions.Count - 1
+        return selectedSuperprojectIndex == superprojectOptions.Count - 1
             ? AllSuperprojects
-            : superprojectOptions[userChoice!.Value];
+            : superprojectOptions[selectedSuperprojectIndex!.Value];
     }
 }

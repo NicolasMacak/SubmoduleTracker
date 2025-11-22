@@ -17,7 +17,7 @@ public class HomeScreenWorkflow : IWorkflow
     public void Run()
     {
         Console.Clear();
-        CustomConsole.WriteLineColored("Submodule operator", TextType.ImporantText);
+        CustomConsole.WriteLineColored("Hlavne menu", TextType.ImporantText);
         List<string> choices = new () { "Validacia zarovnania", "Zarovnanie submodulov", "Nastavenia" };
 
         int? choice = CustomConsole.GetIndexFromChoices(choices, "Vyberte akciu");

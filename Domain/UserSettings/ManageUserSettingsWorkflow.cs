@@ -74,11 +74,10 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         string? superprojectWorkdir = Console.ReadLine();
 
-        // Step back if user enters nothing
+        // "" input. Cancel action 
         if (string.IsNullOrEmpty(superprojectWorkdir))
         {
-            Console.Clear();
-            Run(); // Return to the start of the page
+            Run();
         }
 
         // user input is handled here
@@ -104,12 +103,11 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-        int? indexToDeleteAt = CustomConsole.GetIndexFromChoices(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?");
+        int? indexToDeleteAt = CustomConsole.GetIndexFromChoices(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
 
+        // "" input. Cancel action
         if (!indexToDeleteAt.HasValue)
         {
-            Console.Clear();
-            CustomConsole.WriteErrorLine($"Invalid input. Valid options are from {0} to {superProjectsToDelete.Count - 1}");
             Run();
         }
 

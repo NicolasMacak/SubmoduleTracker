@@ -1,6 +1,5 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
-using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
@@ -9,10 +8,12 @@ namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
     private readonly UserConfigFacade _userConfigFacade;
+    private readonly NavigationService _navigationService;
 
-    public AlignmentExecutionWorkflow(UserConfigFacade userConfigFacade)
+    public AlignmentExecutionWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
     {
         _userConfigFacade = userConfigFacade;
+        _navigationService = navigationService;
     }
 
     public void Run()
@@ -124,7 +125,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
     /// Submodules from all superprojects are listed. User picks one. Superprojets that contain this submodule are returned
     /// </summary>
     /// <returns>Superprojects that contain submodule selected by user</returns>
-    private static string LetUserSelectSubmodule(List<MetaSuperProject> allSuperprojects, string? errorMessage = null)
+    private string LetUserSelectSubmodule(List<MetaSuperProject> allSuperprojects, string? errorMessage = null)
     {
         if (errorMessage != null)
         {
@@ -137,22 +138,14 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Distinct() // Unique list
             .ToList();
 
-        for(int i = 0; i < allSubmodules.Count; i++)
+        int? selectedSubmoduleIndex = CustomConsole.GetIndexFromChoices(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+
+        if (!selectedSubmoduleIndex.HasValue)
         {
-            Console.WriteLine($"{i}. {allSubmodules[i]}");
+            _navigationService.Navigate(typeof(HomeScreenWorkflow));
         }
 
-        Console.WriteLine("Vyberte submodule na zarovnanie \n");
-
-        string? stringChoice = Console.ReadLine();
-
-        int? maybeNumberChoice = ConsoleValidation.ReturnValidatedNumberOption(stringChoice, allSubmodules.Count, 0);
-        if (!maybeNumberChoice.HasValue)
-        {
-            LetUserSelectSubmodule(allSuperprojects, $"Invalid choice. Pick between 0 and {allSubmodules.Count-1}");
-        }
-
-        return allSubmodules.ElementAt(maybeNumberChoice!.Value);
+        return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);
     }
     
     private static List<AligningSuperproject> GetSuperProjectsToAlign(List<RobustSuperProject> relevantSuperprojects, List<string> relevantBranches)

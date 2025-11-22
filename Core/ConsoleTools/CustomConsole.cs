@@ -1,6 +1,4 @@
-﻿using SubmoduleTracker.Core.Result;
-
-namespace SubmoduleTracker.Core.ConsoleTools;
+﻿namespace SubmoduleTracker.Core.ConsoleTools;
 public static class CustomConsole
 {
     public static void ClearAndWriteLine(string? text)
@@ -48,7 +46,7 @@ public static class CustomConsole
 
     public static bool AskYesOrNoQuestion(string question)
     {
-        CustomConsole.WriteLineColored(question, TextType.Question);
+        WriteLineColored(question, TextType.Question);
         Console.WriteLine("Napiste \"yes\" pre pokracovanie");
 
         string? read = Console.ReadLine();
@@ -63,18 +61,19 @@ public static class CustomConsole
 
     public static int? GetIndexFromChoices(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
-        CustomConsole.WriteLineColored(prompt, TextType.Question);
+        WriteLineColored(prompt, TextType.Question);
+        string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
 
-        int index = 0;
+        int index = 1; // increased for more intuitive user experience
         foreach (string choice in choices)
         {
-            CustomConsole.WriteLineColored($"{index}. {choice}", TextType.MundaneText);
+            WriteLineColored($"{index}. {choice}", TextType.MundaneText);
             index++;
         }
 
         if (!string.IsNullOrEmpty(emptyStringPrompt))
         {
-            CustomConsole.WriteLineColored(emptyStringPrompt, TextType.Question);
+            WriteLineColored(emptyStringPrompt, TextType.Question);
         }
 
         string? stringNumberOption = Console.ReadLine();
@@ -86,20 +85,23 @@ public static class CustomConsole
                 return null;
             }
 
-            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
-            GetIndexFromChoices(choices, prompt, emptyStringPrompt); // Todo. Refactor. Pouziva sa niekde? Ak je empty string prompt sade, tak netreba
+            WriteErrorLine(incorrectRangeErrorMessage);
+            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
         }
+
 
         if (!int.TryParse(stringNumberOption, out int parsedNumberOption))
         {
-            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            WriteErrorLine(incorrectRangeErrorMessage);
             GetIndexFromChoices(choices, prompt, emptyStringPrompt);
         }
+
+        parsedNumberOption--; // We increased at int index = 1. now we need to decrease because indexes are from 0
 
         // cant be lower than lowBoundary
         if (parsedNumberOption < 0)
         {
-            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            WriteErrorLine(incorrectRangeErrorMessage);
             GetIndexFromChoices(choices, prompt, emptyStringPrompt);
 
         }
@@ -107,7 +109,7 @@ public static class CustomConsole
         // cant be greater than number of choices
         if (parsedNumberOption > choices.Count - 1)
         {
-            CustomConsole.WriteErrorLine($"Zadajte cislo medzi 0 a {choices.Count - 1}");
+            WriteErrorLine(incorrectRangeErrorMessage);
             GetIndexFromChoices(choices, prompt, emptyStringPrompt);
         }
 
