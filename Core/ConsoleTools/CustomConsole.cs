@@ -88,59 +88,64 @@ public static class CustomConsole
     /// </remarks>
     public static int? GetIndexFromChoices(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
-        WriteLineColored(prompt, TextType.Question);
-        string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
-
-        int index = 1; // increased for more intuitive user experience
-        foreach (string choice in choices)
+        if (choices == null || choices.Count == 0)
         {
-            WriteLineColored($"{index}. {choice}", TextType.MundaneText);
-            index++;
+            throw new ArgumentNullException("Choices must contain at least one item. What is wrong with you");
         }
 
-        if (!string.IsNullOrEmpty(emptyStringPrompt))
+        while (true)
         {
-            WriteLineColored(emptyStringPrompt, TextType.Question);
-        }
+            WriteLineColored(prompt, TextType.Question);
+            string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
 
-        string? stringNumberOption = Console.ReadLine();
-
-        if (string.IsNullOrEmpty(stringNumberOption))
-        {
-            if (!string.IsNullOrEmpty(emptyStringPrompt))
+            int index = 1; // increased for more intuitive user experience
+            foreach (string choice in choices)
             {
-                return null;
+                WriteLineColored($"{index}. {choice}", TextType.MundaneText);
+                index++;
             }
 
-            WriteErrorLine(incorrectRangeErrorMessage);
-            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
+            if (!string.IsNullOrEmpty(emptyStringPrompt))
+            {
+                WriteLineColored(emptyStringPrompt, TextType.Question);
+            }
+
+            string? stringNumberOption = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(stringNumberOption))
+            {
+                if (!string.IsNullOrEmpty(emptyStringPrompt))
+                {
+                    return null;
+                }
+
+                WriteErrorLine(incorrectRangeErrorMessage);
+                continue;
+            }
+
+            if (!int.TryParse(stringNumberOption, out int choiceIndex))
+            {
+                WriteErrorLine(incorrectRangeErrorMessage);
+                continue;
+            }
+
+            choiceIndex--; // We increased at int index = 1. now we need to decrease because indexes are from 0
+
+            // cant be lower than lowBoundary
+            if (choiceIndex < 0)
+            {
+                WriteErrorLine(incorrectRangeErrorMessage);
+                continue;
+            }
+
+            // cant be greater than number of choices
+            if (choiceIndex > choices.Count - 1)
+            {
+                WriteErrorLine(incorrectRangeErrorMessage);
+                continue;
+            }
+
+            return choiceIndex;
         }
-
-
-        if (!int.TryParse(stringNumberOption, out int parsedNumberOption))
-        {
-            WriteErrorLine(incorrectRangeErrorMessage);
-            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
-        }
-
-        parsedNumberOption--; // We increased at int index = 1. now we need to decrease because indexes are from 0
-
-        // cant be lower than lowBoundary
-        if (parsedNumberOption < 0)
-        {
-            WriteErrorLine(incorrectRangeErrorMessage);
-            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
-
-        }
-
-        // cant be greater than number of choices
-        if (parsedNumberOption > choices.Count - 1)
-        {
-            WriteErrorLine(incorrectRangeErrorMessage);
-            GetIndexFromChoices(choices, prompt, emptyStringPrompt);
-        }
-
-        return parsedNumberOption;
     }
-
 }
