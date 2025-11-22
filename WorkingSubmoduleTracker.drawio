@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="5501" dy="1777" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3976" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -31,10 +31,10 @@
         <mxCell id="iCKe8L9vZJJtGCBKQtnD-5" value="Merge&amp;nbsp;" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="415" y="410" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-2" value="Pointing report" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-2" value="AlignmentValidation" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
           <mxGeometry x="-1520" y="120" width="370" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="9OnaElkXCphRrL8_LYWj-3" value="Zarovnanie submodulu" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
+        <mxCell id="9OnaElkXCphRrL8_LYWj-3" value="AlignmentExecution" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
           <mxGeometry x="-2360" y="140" width="370" height="60" as="geometry" />
         </mxCell>
         <mxCell id="9OnaElkXCphRrL8_LYWj-4" value="Settings screen" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=50;" parent="1" vertex="1">
@@ -59,10 +59,7 @@
           <mxGeometry x="-370" y="220" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="zN_APJOsYA4pf0mJ2beM-2" value="Cyan user input" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="-799.9999999999995" y="330.0000000000002" width="90" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="zN_APJOsYA4pf0mJ2beM-3" value="Pekne naformatovany layout" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="-799.9999999999995" y="390.0000000000002" width="90" height="40" as="geometry" />
+          <mxGeometry x="-749.9999999999995" y="960.0000000000002" width="90" height="40" as="geometry" />
         </mxCell>
         <mxCell id="zN_APJOsYA4pf0mJ2beM-9" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Subor so submodulmi.&amp;nbsp;&lt;br&gt;Prepisatelny?&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-2420" y="260" width="230" height="60" as="geometry" />
@@ -111,8 +108,8 @@
         <mxCell id="zN_APJOsYA4pf0mJ2beM-31" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Commitnut IBA Submodule. NIe vsetko&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2090" y="1050" width="370" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="H2F9SjrpHdT_mPWx4sjv-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ready for branchToAlign&amp;nbsp;&lt;br&gt;not existing locally&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#b85450;fillColor=#f8cecc;" parent="1" vertex="1">
-          <mxGeometry x="-2085" y="2530" width="250" height="60" as="geometry" />
+        <mxCell id="H2F9SjrpHdT_mPWx4sjv-2" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ready for branchToAlign&amp;nbsp;&lt;br&gt;not existing locally&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
+          <mxGeometry x="-2095" y="1790" width="250" height="60" as="geometry" />
         </mxCell>
         <mxCell id="UUlGnFPibLMLo2vJmDTm-2" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Let branches be separate vstup&amp;nbsp;&lt;br&gt;do merge method&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2090" y="1100" width="310" height="60" as="geometry" />
@@ -172,49 +169,70 @@
           <mxGeometry x="-2085" y="2160" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KmtbBU7O1MVXMlfpvVJH-5" value="&lt;span style=&quot;text-wrap-mode: wrap;&quot;&gt;ReturnValidatedNumberOption zvalidovat upperBoundarySystem&lt;br&gt;Refactoring. posunies moznosi vypisu sa a vrati sa ti moznost&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
-          <mxGeometry x="-410" y="860" width="370" height="40" as="geometry" />
+          <mxGeometry x="-430" y="525" width="370" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KmtbBU7O1MVXMlfpvVJH-6" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Fix Superproject removal&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
-          <mxGeometry x="-340" y="765" width="250" height="40" as="geometry" />
+          <mxGeometry x="-360" y="430" width="250" height="40" as="geometry" />
         </mxCell>
         <mxCell id="OczMxfgcbA_oLDJbfJq5-2" value="Push is always approved. NOt tested" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
-          <mxGeometry x="-2092.5" y="1590" width="375" height="60" as="geometry" />
+          <mxGeometry x="-2092.5" y="1590" width="352.5" height="70" as="geometry" />
         </mxCell>
         <mxCell id="4u06fGQrroIY45WFivXT-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Effective Submodule getting&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2095" y="1450" width="270" height="40" as="geometry" />
         </mxCell>
         <mxCell id="dIL3XvpIWe0-pPTWCn-q-1" value="Setting push to remote" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" parent="1" vertex="1">
-          <mxGeometry x="-340" y="650" width="200" height="90" as="geometry" />
+          <mxGeometry x="-360" y="315" width="200" height="90" as="geometry" />
         </mxCell>
         <mxCell id="zctfOx8RVIVzuL0na5OC-1" value="Konflikt pri checkoute" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=30;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="-2095" y="1700" width="375" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-2" value="&lt;font&gt;Main PAGE&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=50;" vertex="1" parent="1">
-          <mxGeometry x="-780" y="1580" width="280" height="70" as="geometry" />
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-2" value="&lt;font&gt;Main PAGE&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;fontSize=50;" parent="1" vertex="1">
+          <mxGeometry x="65" y="625" width="280" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-3" value="GetSubmoduleIndexCommitsRefs" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-3" value="GetSubmoduleIndexCommitsRefs" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-2100" y="2660" width="200" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-4" value="GetSubmoduleHeadCommitRefs" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-4" value="GetSubmoduleHeadCommitRefs" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-2100" y="2690" width="200" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-5" value="Ak brancha neexistuje lokalne, nebude v RobustSUperprojekte. FIXNUT" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-5" value="Ak brancha neexistuje lokalne, nebude v RobustSUperprojekte. FIXNUT" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-2100" y="2720" width="410" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-6" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" vertex="1" parent="1">
-          <mxGeometry x="-780" y="1160" width="130" height="50" as="geometry" />
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-6" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" parent="1" vertex="1">
+          <mxGeometry x="-750" y="1365" width="130" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-9" value="Odstranit VoidResult&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" vertex="1" parent="1">
-          <mxGeometry x="-780" y="1215" width="210" height="40" as="geometry" />
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-9" value="Odstranit VoidResult&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
+          <mxGeometry x="-750" y="1420" width="210" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-10" value="ReturnChoiseOutOfOptions by mohla pri chybe zavolat samu seba.&lt;br&gt;Ak da uzivate empty space vrati null a zavola sa RUN()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="-790" y="1270" width="380" height="40" as="geometry" />
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-10" value="ReturnChoiseOutOfOptions by mohla pri chybe zavolat samu seba.&lt;br&gt;Ak da uzivate empty space vrati null a zavola sa RUN()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+          <mxGeometry x="-760" y="1475" width="380" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-12" value="Pekny layout" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" vertex="1" parent="1">
-          <mxGeometry x="-780" y="1330" width="140" height="40" as="geometry" />
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-12" value="Pekny layout" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
+          <mxGeometry x="-750" y="1030" width="140" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-13" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" vertex="1" parent="1">
+        <mxCell id="KCZfSD6XprjZVH1BgdUc-13" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" parent="1" vertex="1">
           <mxGeometry x="-2085" y="1930" width="130" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="XZAUpuuf4bfCtXn-2mGG-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Mala by pozerat na stav na origine?&lt;br&gt;Ano. To je ten finalny. Ten co plati pre vsetkych&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
+          <mxGeometry x="-1670" y="755" width="440" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-4" value="Test cases&lt;br&gt;Submodule nema dev&lt;br&gt;Superprojekt nema dev" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="-2495" y="1930" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Retrow exceptions&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="-2095" y="1870" width="190" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-8" value="Odstranenie. Moznost krok spat" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-380" y="610" width="280" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-12" value="Iterovat moznosti od 1&lt;br&gt;od 0" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-370" y="690" width="270" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-13" value="Repeat validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-1650" y="895" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="EOY68dGk1cK8fynP5NS2-14" value="Exit options&lt;br&gt;1. End&lt;br&gt;2. Submodule validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-2520" y="2170" width="360" height="110" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
