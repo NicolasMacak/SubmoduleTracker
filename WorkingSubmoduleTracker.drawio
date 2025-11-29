@@ -1,6 +1,6 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="3976" dy="883" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3759" dy="1515" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -202,10 +202,10 @@
           <mxGeometry x="-750" y="1365" width="130" height="50" as="geometry" />
         </mxCell>
         <mxCell id="KCZfSD6XprjZVH1BgdUc-9" value="Odstranit VoidResult&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
-          <mxGeometry x="-750" y="1420" width="210" height="40" as="geometry" />
+          <mxGeometry x="-770" y="1565" width="210" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KCZfSD6XprjZVH1BgdUc-10" value="ReturnChoiseOutOfOptions by mohla pri chybe zavolat samu seba.&lt;br&gt;Ak da uzivate empty space vrati null a zavola sa RUN()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="-760" y="1475" width="380" height="40" as="geometry" />
+          <mxGeometry x="-780" y="1620" width="380" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KCZfSD6XprjZVH1BgdUc-12" value="Pekny layout" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-750" y="1030" width="140" height="40" as="geometry" />
@@ -216,23 +216,64 @@
         <mxCell id="XZAUpuuf4bfCtXn-2mGG-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Mala by pozerat na stav na origine?&lt;br&gt;Ano. To je ten finalny. Ten co plati pre vsetkych&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-1670" y="755" width="440" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-4" value="Test cases&lt;br&gt;Submodule nema dev&lt;br&gt;Superprojekt nema dev" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="EOY68dGk1cK8fynP5NS2-4" value="Test cases&lt;br&gt;Submodule nema dev&lt;br&gt;Superprojekt nema dev" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-2495" y="1930" width="230" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Retrow exceptions&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" vertex="1" parent="1">
+        <mxCell id="EOY68dGk1cK8fynP5NS2-7" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Retrow exceptions&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
           <mxGeometry x="-2095" y="1870" width="190" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-8" value="Odstranenie. Moznost krok spat" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" vertex="1" parent="1">
+        <mxCell id="EOY68dGk1cK8fynP5NS2-8" value="Odstranenie. Moznost krok spat" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-380" y="610" width="280" height="70" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-12" value="Iterovat moznosti od 1&lt;br&gt;od 0" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" vertex="1" parent="1">
+        <mxCell id="EOY68dGk1cK8fynP5NS2-12" value="Iterovat moznosti od 1&lt;br&gt;od 0" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-370" y="690" width="270" height="65" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-13" value="Repeat validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
-          <mxGeometry x="-1650" y="895" width="250" height="80" as="geometry" />
+        <mxCell id="EOY68dGk1cK8fynP5NS2-13" value="Repeat validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
+          <mxGeometry x="-1230" y="1490" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-14" value="Exit options&lt;br&gt;1. End&lt;br&gt;2. Submodule validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+        <mxCell id="EOY68dGk1cK8fynP5NS2-14" value="Exit options&lt;br&gt;1. End&lt;br&gt;2. Submodule validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-2520" y="2170" width="360" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-1" value="Insert Relevant branches" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-1230" y="1390" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-2" value="Remove obsolete" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-1080" y="1870" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-4" value="Its not about fiixing the bug. It&#39;s about understanding what caused it. It&#39;s not about implementing new feature. It&#39;s about understanding how it fit&#39;s into the product and how it&#39;s tied to customer. I will ask those important questions to make your product better." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1350" y="2210" width="400" height="10" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tLnxERMP1s8ftt1qe_WE-7" target="tLnxERMP1s8ftt1qe_WE-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-7" value="dev" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1575" y="1800" width="95" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tLnxERMP1s8ftt1qe_WE-8" target="tLnxERMP1s8ftt1qe_WE-10">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tLnxERMP1s8ftt1qe_WE-8" target="tLnxERMP1s8ftt1qe_WE-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-8" value="getIndex" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1400" y="1840" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-10" value="origin/ + dev" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1240" y="1870" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="tLnxERMP1s8ftt1qe_WE-13">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-1240.0000000000002" y="1999.7931034482758" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-13" value="commit" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1400" y="1960" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-16" value="dev" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-1240" y="1990" width="90" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="tLnxERMP1s8ftt1qe_WE-17" value="BUG&lt;br&gt;No superprojects fix&lt;br&gt;no submodules fix" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="-1260" y="1220" width="330" height="100" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

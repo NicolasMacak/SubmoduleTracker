@@ -20,39 +20,30 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     public void Run()
     {
         Console.Clear();
-        string selectedSuperproject = getSelectedSuperprojectName();
 
-        IEnumerable<MetaSuperProject> metaSuperprojectValidate = _userConfigfacade.MetaSupeprojects;
-
-        if (selectedSuperproject != AllSuperprojects)
+        List<string> allSelectSuperprojectOptions = _userConfigfacade.MetaSupeprojects.Select(x => x.Name).ToList();
+        // If There is more than 1 superproject we want to provide "all superproject" options
+        if (allSelectSuperprojectOptions.Count > 1)
         {
-            metaSuperprojectValidate = metaSuperprojectValidate.Where(x => x.Name == selectedSuperproject);
+            allSelectSuperprojectOptions.Add(AllSuperprojects);
         }
+
+        int? selectedSuperprojectIndex = CustomConsole.GetIndexFromChoices(allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+
+        if (!selectedSuperprojectIndex.HasValue)
+        {
+            _navigationService.Navigate(typeof(HomeScreenWorkflow));
+            return;
+        }
+
+        IEnumerable<MetaSuperProject> metaSuperprojectValidate = selectedSuperprojectIndex == allSelectSuperprojectOptions.Count - 1
+            ? _userConfigfacade.MetaSupeprojects // User selected All superprojects options
+            : _userConfigfacade.MetaSupeprojects.Where(x => x.Name == allSelectSuperprojectOptions[selectedSuperprojectIndex.Value]); // User selected specific 
 
         foreach (MetaSuperProject metaSuperProject in metaSuperprojectValidate)
         {
             RobustSuperProject robustSuperProject = metaSuperProject.ToRobustSuperproject(_userConfigfacade.RelevantBranches);
             CommitsIndexValidationTablePrinter.PrintTable(robustSuperProject);
         }
-
-    }
-
-    private string getSelectedSuperprojectName()
-    {
-        List<string> superprojectOptions = _userConfigfacade.MetaSupeprojects
-            .Select(x  => x.Name)
-            .ToList();
-
-        superprojectOptions.Add(AllSuperprojects);
-
-        int? selectedSuperprojectIndex = CustomConsole.GetIndexFromChoices(superprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
-        if (!selectedSuperprojectIndex.HasValue)
-        {
-            _navigationService.Navigate(typeof(HomeScreenWorkflow));
-        }
-
-        return selectedSuperprojectIndex == superprojectOptions.Count - 1
-            ? AllSuperprojects
-            : superprojectOptions[selectedSuperprojectIndex!.Value];
     }
 }
