@@ -46,7 +46,7 @@ public sealed class MetaSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
     
-    private Dictionary<string, Dictionary<string, string>> GetSubmoduleIndexCommitsRefs(IEnumerable<string> relevantBranches)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleCommitRefs(IEnumerable<string> relevantBranches)
     {
         Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new();
         List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // Remote branches used so we can get data when branches doesn't exist locally
@@ -122,7 +122,7 @@ public sealed class MetaSuperProject
             name: Name,
             workingDirectory: WorkingDirectory,
             submodulesNames: SubmodulesNames,
-            indexCommitRefs: GetSubmoduleIndexCommitsRefs(relevantBranches),
+            indexCommitRefs: GetSubmoduleCommitRefs(relevantBranches),
             headCommitRefs: GetSubmoduleHeadCommitRefs(relevantBranches, relevantSubmodules ?? SubmodulesNames)
         );
     }

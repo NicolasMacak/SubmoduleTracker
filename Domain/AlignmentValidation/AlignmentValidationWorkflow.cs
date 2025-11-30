@@ -1,5 +1,6 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
@@ -11,7 +12,13 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     private readonly UserConfigFacade _userConfigfacade;
     private readonly NavigationService _navigationService;
 
-    public AlignmentValidationWorkflow(UserConfigFacade  userConfigFacade, NavigationService navigationService)
+    private readonly List<List<GitBranch>> relevantBranchesOptions = new() {
+         new () { new GitBranch("dev"), new GitBranch("test") },
+         new () { new GitBranch("master") },
+         new () { new GitBranch("dev"), new GitBranch("test"), new GitBranch("master") },
+    };
+
+    public AlignmentValidationWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
     {
         _userConfigfacade = userConfigFacade;
         _navigationService = navigationService;
@@ -28,11 +35,11 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
             allSelectSuperprojectOptions.Add(AllSuperprojects);
         }
 
-        int? selectedSuperprojectIndex = CustomConsole.GetIndexFromChoices(allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        int? selectedSuperprojectIndex = CustomConsole.GetIndexOfUserChoice(allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
 
         if (!selectedSuperprojectIndex.HasValue)
         {
-            _navigationService.Navigate(typeof(HomeScreenWorkflow));
+            _navigationService.Navigate<HomeScreenWorkflow>();
             return;
         }
 

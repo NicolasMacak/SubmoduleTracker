@@ -5,7 +5,7 @@ using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
-using SubmoduleTracker.Domain.Navigation;
+using SubmoduleTracker.Domain.HomeScreen;
 
 class Program
 {

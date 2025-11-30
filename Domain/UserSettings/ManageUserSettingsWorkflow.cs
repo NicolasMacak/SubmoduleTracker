@@ -1,6 +1,7 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Core.Result;
+using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
@@ -35,7 +36,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
             "Spat do hlavneho menu"
         ];
 
-        int? validatedChoice = CustomConsole.GetIndexFromChoices(menuOptions, "Zvolte akciu");
+        int? validatedChoice = CustomConsole.GetIndexOfUserChoice(menuOptions, "Zvolte akciu");
 
         if (!validatedChoice.HasValue)
         {
@@ -51,7 +52,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
             case 1: DeleteSuperproject(); break;
             case 2: TogglePushingToRemote(); break;
-            case 3: _navigationService.Navigate(typeof(HomeScreenWorkflow)); break;
+            case 3: _navigationService.Navigate<HomeScreenWorkflow>(); break;
             default: Console.WriteLine("Taka moznost nie je!"); break;
         }
     }
@@ -103,7 +104,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-        int? indexToDeleteAt = CustomConsole.GetIndexFromChoices(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+        int? indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
 
         // "" input. Cancel action
         if (!indexToDeleteAt.HasValue)

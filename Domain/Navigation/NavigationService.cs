@@ -9,16 +9,9 @@ public sealed class NavigationService
         _serviceProvider = serviceProvider;
     }
 
-    public void Navigate(Type workflowToNavigateTo)
+    public void Navigate<TWorkflow>() where TWorkflow : class, IWorkflow
     {
-        if (!typeof(IWorkflow).IsAssignableFrom(workflowToNavigateTo))
-        {
-            throw new InvalidCastException($"Class to navigate must implement {nameof(IWorkflow)} interface!");
-        }
-
-        IWorkflow worfkflow = (IWorkflow)_serviceProvider.GetRequiredService(workflowToNavigateTo);
-
-        worfkflow.Run();
+        _serviceProvider.GetRequiredService<TWorkflow>().Run();
     }
 }
 

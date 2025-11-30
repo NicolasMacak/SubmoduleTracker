@@ -1,12 +1,15 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
+    private readonly List<GitBranch> AlignmentRelevantBranches = new () {new GitBranch("dev"), new GitBranch("test") };
+
     private readonly UserConfigFacade _userConfigFacade;
     private readonly NavigationService _navigationService;
 
@@ -138,11 +141,11 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Distinct() // Unique list
             .ToList();
 
-        int? selectedSubmoduleIndex = CustomConsole.GetIndexFromChoices(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+        int? selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
 
         if (!selectedSubmoduleIndex.HasValue)
         {
-            _navigationService.Navigate(typeof(HomeScreenWorkflow));
+            _navigationService.Navigate<HomeScreenWorkflow>();
         }
 
         return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);

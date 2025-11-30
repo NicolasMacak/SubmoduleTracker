@@ -86,7 +86,7 @@ public static class CustomConsole
     /// The user sees options numbered from 1 to <c>choices.Count</c>. Internally,
     /// the method returns a zero-based index.
     /// </remarks>
-    public static int? GetIndexFromChoices(List<string> choices, string prompt, string? emptyStringPrompt = null)
+    public static int? GetIndexOfUserChoice(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
         if (choices == null || choices.Count == 0)
         {
