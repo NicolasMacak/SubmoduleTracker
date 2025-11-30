@@ -5,8 +5,6 @@ public sealed class UserConfig
 {
     public List<ConfigSuperProject> SuperProjects { get; set; } = new ();
 
-    public List<string> RelevantBranches { get; set; } = new List<string> { "dev", "test" };
-
     public bool PushingToRemote { get; set; } = false;
 
     public bool ContainsSuperproject(string workingDirectory)

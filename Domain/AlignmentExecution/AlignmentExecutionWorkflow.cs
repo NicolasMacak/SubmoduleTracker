@@ -8,7 +8,7 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
-    private readonly List<GitBranch> AlignmentRelevantBranches = new () {new GitBranch("dev"), new GitBranch("test") };
+    private readonly List<GitBranch> _alignmentRelevantBranches = new () {new GitBranch("dev"), new GitBranch("test") };
 
     private readonly UserConfigFacade _userConfigFacade;
     private readonly NavigationService _navigationService;
@@ -28,12 +28,12 @@ public class AlignmentExecutionWorkflow : IWorkflow
         // superprojects that contain relevant submodule
         List<RobustSuperProject> relevantRobustSuperProjects =_userConfigFacade.MetaSupeprojects 
             .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
-            .Select(x => x.ToRobustSuperproject(_userConfigFacade.RelevantBranches))
+            .Select(x => x.ToRobustSuperproject(_alignmentRelevantBranches))
             .ToList();
 
-        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule, relevantRobustSuperProjects, _userConfigFacade.RelevantBranches);
+        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule, relevantRobustSuperProjects, _alignmentRelevantBranches);
 
-        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _userConfigFacade.RelevantBranches, selectedSubmodule);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _alignmentRelevantBranches, selectedSubmodule);
 
         if (superprojectsToAlign.Count == 0)
         {
@@ -151,7 +151,14 @@ public class AlignmentExecutionWorkflow : IWorkflow
         return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);
     }
     
-    private static List<AligningSuperproject> GetSuperProjectsToAlign(List<RobustSuperProject> relevantSuperprojects, List<string> relevantBranches, string selectedSubmodule)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="relevantSuperprojects"></param>
+    /// <param name="relevantBranches"></param>
+    /// <param name="selectedSubmodule"></param>
+    /// <returns></returns>
+    private static List<AligningSuperproject> GetSuperProjectsToAlign(List<RobustSuperProject> relevantSuperprojects, List<GitBranch> relevantBranches, string selectedSubmodule)
     {
         List<AligningSuperproject> superProjectsToAlign = new();
 
@@ -159,15 +166,15 @@ public class AlignmentExecutionWorkflow : IWorkflow
         {
             List<string> branchesToAlign = new();
 
-            foreach(string branch in relevantBranches)
+            foreach(GitBranch branch in relevantBranches) // TODO. SKONTROLOVAT
             {
-                string indexCommit = superProject.IndexCommitRefs[branch][selectedSubmodule]; // where submodule points on in this branch
-                string headCommit = superProject.HeadCommitRefs[branch][selectedSubmodule]; // HEAD commit on this branch
+                string indexCommit = superProject.IndexCommitRefs[branch.RemoteName][selectedSubmodule]; // where submodule points on in this branch
+                string headCommit = superProject.HeadCommitRefs[branch.RemoteName][selectedSubmodule]; // HEAD commit on this branch
 
                 // Does submodule in superproject points to the HEAD commit?
                 if(indexCommit != headCommit)
                 {
-                    branchesToAlign.Add(branch); // add branch to align
+                    branchesToAlign.Add(branch.LocalName); // add branch to align
                 }
             }
 
@@ -181,5 +188,11 @@ public class AlignmentExecutionWorkflow : IWorkflow
         return superProjectsToAlign;
     }
     
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="Title"></param>
+    /// <param name="Workdir"></param>
+    /// <param name="branchesToAlign">NON-REMOTE friendly name for branch. Non-remote, because it will be used to create commits</param>
     private record AligningSuperproject(string Title, string Workdir, List<string> branchesToAlign);
 }

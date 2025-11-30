@@ -46,14 +46,12 @@ public sealed class MetaSuperProject
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </returns>
     
-    private Dictionary<string, Dictionary<string, string>> GetSubmoduleCommitRefs(IEnumerable<string> relevantBranches)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleCommitRefs(List<GitBranch> relevantBranches)
     {
         Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new();
-        List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // Remote branches used so we can get data when branches doesn't exist locally
-
         Repository mainRepo = new(WorkingDirectory);
 
-        foreach (Branch branch in mainRepo.Branches.Where(x => remoteRelevantBranchesNames.Contains(x.FriendlyName)))
+        foreach (Branch branch in mainRepo.Branches.Where(x => relevantBranches.GetRemotes().Contains(x.FriendlyName)))
         {
             Commit headOfBranch = branch.Tip;
 
@@ -61,7 +59,7 @@ public sealed class MetaSuperProject
                 .Where(entry => entry.TargetType == TreeEntryTargetType.GitLink) // GitLink => Submodule
                 .ToDictionary(entry => entry.Name, entry => entry.Target.Id.ToString()[..20]); // [SubmoduleName, IndexCommit(First 20 chars)]
 
-            string friendlyName = branch.FriendlyName.Split("/").Last(); // remove prefix "origin/"
+            string friendlyName = branch.FriendlyName;
             pointingsOfSubmodulesForBranches.Add(friendlyName , submodulesPointings);
         }
 
@@ -81,23 +79,21 @@ public sealed class MetaSuperProject
     /// Dictionary[string, Dictionary[string, string]] <br></br>
     /// Dictionary[branch, Dictionary[submodule, HeadCommitId]]
     /// </returns>
-    private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<string> relevantBranches, List<string> relevantSubmodules)
+    private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<GitBranch> relevantBranches, List<string> relevantSubmodules)
     {
         Dictionary<string, Dictionary<string, string>> submoduleHeadCommitsForBranches = new();
-
-        List<string> remoteRelevantBranchesNames = relevantBranches.Select(x => $"origin/{x}").ToList(); // Remote branches used so we can get data when branches doesn't exist locally
 
         foreach (string submoduleName in relevantSubmodules)
         {
             Repository submoduleRepo = new($@"{WorkingDirectory}\{submoduleName}");
 
             List<Branch> remoteRelevantBranches = submoduleRepo.Branches
-                .Where(x => remoteRelevantBranchesNames.Contains(x.FriendlyName)).ToList();
+                .Where(x => relevantBranches.GetRemotes().Contains(x.FriendlyName)).ToList();
 
             foreach (Branch branch in remoteRelevantBranches)
             {
                 string remoteHeadCommit = branch.Tip.Sha[..20];
-                string branchFriendlyName = branch.FriendlyName.Split("/").Last(); // remove prefix "origin/"
+                string branchFriendlyName = branch.FriendlyName;
 
                 if (submoduleHeadCommitsForBranches.TryGetValue(branchFriendlyName, out Dictionary<string, string>? value))
                 {
@@ -105,7 +101,7 @@ public sealed class MetaSuperProject
                 }
                 else
                 {
-                    submoduleHeadCommitsForBranches[branchFriendlyName] = new() { { submoduleName, remoteHeadCommit } }; // Key doesnt exists. Initiate dictionary with item
+                    submoduleHeadCommitsForBranches[branchFriendlyName] = new() { { submoduleName, remoteHeadCommit } }; // Key doesn't exists. Initiate dictionary with item
                 }
             }
         }
@@ -113,7 +109,7 @@ public sealed class MetaSuperProject
         return submoduleHeadCommitsForBranches;
     }        
 
-    public RobustSuperProject ToRobustSuperproject(List<string> relevantBranches, List<string>? relevantSubmodules = null)
+    public RobustSuperProject ToRobustSuperproject(List<GitBranch> relevantBranches, List<string>? relevantSubmodules = null)
     {
         CustomConsole.WriteLineColored($"Superproject: {Name} >> Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);
         GitFacade.FetchAllInMainAndSubmodules(WorkingDirectory);

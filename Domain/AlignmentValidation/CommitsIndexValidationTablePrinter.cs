@@ -12,9 +12,6 @@ public static class CommitsIndexValidationTablePrinter
 {
     public static void PrintTable(RobustSuperProject superProject)
     {
-        Console.WriteLine();
-        CustomConsole.WriteLineColored($"{superProject.Name}", ConsoleColor.DarkCyan);
-
         Dictionary<string, TableColumn> columns = GetColumns(superProject);
 
         PrintTableHeader(columns);

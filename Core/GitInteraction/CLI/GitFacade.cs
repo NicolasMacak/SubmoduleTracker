@@ -32,7 +32,7 @@ public static class GitFacade
         GitProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
         try
         {
-            GitProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward \"");
+            GitProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward\"");
         }
         catch (CommandExecutionException)
         {
@@ -67,36 +67,5 @@ public static class GitFacade
     {
         // --show-current branch name is returned
         return GitProcessExecutor.ExecuteResponseCommand(path, "branch --show-current");
-    }
-
-    private static bool AreChangesInWorkdir(string path)
-    {
-        // -s for short. Returns just modified files
-        string modifiedFilesString = GitProcessExecutor.ExecuteResponseCommand(path, "status -s");
-
-        // no modified fiels
-        return modifiedFilesString != string.Empty;
-    }
-
-    /// <summary>
-    /// Stashes changes
-    /// </summary>
-    /// <param name="path">Directory to stash changse in</param>
-    /// <returns>Return true if some changes were stashed, false otherwise</returns>
-    public static bool StashChanges(string path)
-    {
-        bool areChanges = AreChangesInWorkdir(path);
-
-        if (areChanges) {
-            GitProcessExecutor.ExecuteVoidCommand(path, "stash");
-            return true;
-        }
-
-        return false;
-    }
-
-    public static void StashPop(string path)
-    {
-        GitProcessExecutor.ExecuteVoidCommand(path, "stash pop");
     }
 }

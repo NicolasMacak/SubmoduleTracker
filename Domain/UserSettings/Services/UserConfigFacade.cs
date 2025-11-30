@@ -19,8 +19,6 @@ public sealed class UserConfigFacade
 
     public readonly List<MetaSuperProject> MetaSupeprojects;
 
-    public List<string> RelevantBranches => _userConfig.RelevantBranches;
-
     public bool PushingToRemote => _userConfig.PushingToRemote;
 
     public UserConfigFacade()
@@ -124,7 +122,6 @@ public sealed class UserConfigFacade
 
         return null;
     }
-
 
     private UserConfig LoadUserConfig()
     {

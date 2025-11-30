@@ -1,4 +1,5 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.GitInteraction;
 using SubmoduleTracker.Core.GitInteraction.Model;
 using SubmoduleTracker.Core.TablePrinting;
 using static SubmoduleTracker.Core.TablePrinting.TableConstants;
@@ -11,7 +12,7 @@ namespace SubmoduleTracker.Domain.AlignmentExecution;
 /// </summary>
 public static class SubmoduleAlignmentTablePrinter
 {
-    public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
+    public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches)
     {
         Dictionary<string, TableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
 
@@ -32,19 +33,19 @@ public static class SubmoduleAlignmentTablePrinter
         );
     }
 
-    private static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<string> relevantBranches, Dictionary<string, TableColumn> columns)
+    private static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<GitBranch> relevantBranches, Dictionary<string, TableColumn> columns)
     {
         foreach (RobustSuperProject superProject in relevantSuperProjects)
         {
             Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(superProject.Name, 0));
 
-            foreach (string branch in relevantBranches)
+            foreach (string branch in relevantBranches.GetRemotes())
             {
                 int offsetForThisColumn = columns[Column.SuperProject].Width; // TODO. SHOULDNT I USE ALIGNING SUBMODULE NAME?
                 string indexCommit = superProject.IndexCommitRefs[branch][aligningSubmoduleName]; // where submodule points on in this branch. .First() because 
                 string headCommit = superProject.HeadCommitRefs[branch][aligningSubmoduleName]; // HEAD commit on this branch
 
-                // Outputs bellow is one row. We put offset only into the first
+                // Outputs bellow are in one row. We put offset only into the first
                 Console.Write(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, offsetForThisColumn + Delimiter.Length) + Delimiter);
 
                 ConsoleColor color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
@@ -59,7 +60,7 @@ public static class SubmoduleAlignmentTablePrinter
         Console.WriteLine();
     }
 
-    private static Dictionary<string, TableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<string> relevantBranches)
+    private static Dictionary<string, TableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches)
     {
         return new Dictionary<string, TableColumn>()
         {
@@ -82,7 +83,7 @@ public static class SubmoduleAlignmentTablePrinter
                         string.Empty, // Later removed
                         TableColumn.CalculateColumnWidth(
                                 columnName: Column.Branch,
-                                longestValueLength: relevantBranches.MaxBy(x => x.Length)!.Length
+                                longestValueLength: relevantBranches.MaxBy(x => x.RemoteName.Length)!.RemoteName.Length
                         )
                 )
             },
