@@ -2,6 +2,6 @@
 public enum ResultCode
 {
     Success,
-    Failed,
+    Failure,
     EmptyInput
 }

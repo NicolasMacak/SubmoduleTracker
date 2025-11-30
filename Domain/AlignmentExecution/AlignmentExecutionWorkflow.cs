@@ -9,10 +9,11 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
-    private readonly List<GitBranch> _alignmentRelevantBranches = new () { new GitBranch("dev"), new GitBranch("test") };
-
     private readonly UserConfigFacade _userConfigFacade;
     private readonly NavigationService _navigationService;
+
+    // For alignment, this is only possible option for now
+    private readonly List<GitBranch> _alignmentRelevantBranches = new() { new GitBranch("dev"), new GitBranch("test") };
 
     public AlignmentExecutionWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
     {
@@ -146,7 +147,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
         if (!selectedSubmoduleIndex.HasValue)
         {
-            _navigationService.Navigate<HomeScreenWorkflow>();
+            _navigationService.NavigateTo<HomeScreenWorkflow>();
         }
 
         return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);

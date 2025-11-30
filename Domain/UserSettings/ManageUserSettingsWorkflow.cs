@@ -18,43 +18,37 @@ public class ManageUserSettingsWorkflow : IWorkflow
         _navigationService = navigationService;
     }
 
-    public void Run(/*string? errorMessage = null*/)
+    public void Run()
     {
-        Console.Clear(); // TODO. TOTO VYRIESIT
-        //if (!string.IsNullOrEmpty(errorMessage))
-        //{
-        //    CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
-        //}
-
+        Console.Clear(); 
         PrintUserConfig();
 
-        List<string> menuOptions = 
-        [
-            "Pridat superprojekt",
-            "Zmazat superprojekt",
-            "Toggle pushovanie na remote // Ak False, aplikacia ma zakazane pushovat na remote",
-            "Spat do hlavneho menu"
-        ];
+        List<(string menuItem, Action userSettingsAction)> userSetttingsActions = GetUserSettingsActions();
 
-        int? validatedChoice = CustomConsole.GetIndexOfUserChoice(menuOptions, "Zvolte akciu");
-
+        int? validatedChoice = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.menuItem).ToList(), "Zvolte akciu");
         if (!validatedChoice.HasValue)
         {
-            //Console.Clear();
-            //Run($"Invalid input. Must be number from 0 to {menuOptionsCount - 1}");
+            throw new Exception("User choice is not supposed to be null");
         }
 
-        switch (validatedChoice!.Value) {
-            case 0:
-                // Add Superproject to the userConfig and save
-                TryAddingNewSuperproject();
-                break;
+        userSetttingsActions[validatedChoice.Value].userSettingsAction();
+    }
 
-            case 1: DeleteSuperproject(); break;
-            case 2: TogglePushingToRemote(); break;
-            case 3: _navigationService.Navigate<HomeScreenWorkflow>(); break;
-            default: Console.WriteLine("Taka moznost nie je!"); break;
+    private List<(string menuItem, Action userSettingsAction)> GetUserSettingsActions()
+    {
+        List<(string menuItem, Action userSettingsAction)> settingsActions = new();
+
+        settingsActions.Add(("Add Superproject", () => TryAddingNewSuperproject()));
+
+        if(_userConfigFacade.MetaSupeprojects.Count > 0)
+        {
+            settingsActions.Add(("Remove Superproject", () => DeleteSuperproject()));
         }
+
+        settingsActions.Add(("Toggle \"Push to Remote\"", () => TogglePushingToRemote()));
+        settingsActions.Add(("Back to Main Menu", _navigationService.NavigateTo<HomeScreenWorkflow>));
+
+        return settingsActions;
     }
 
     /// <summary>
@@ -82,7 +76,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         }
 
         // user input is handled here
-        VoidResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
+        NonModelResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
 
         if (result.ResultCode != ResultCode.Success)
         {
@@ -112,20 +106,19 @@ public class ManageUserSettingsWorkflow : IWorkflow
             Run();
         }
 
-        VoidResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
+        NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
 
         if (result.ResultCode != ResultCode.Success)
         {
             DeleteSuperproject(result.ErrorMessage); // todo. Refactoring. Malo by ma to vratit na hlavnu obrazovku?
         }
 
-        Console.Clear();
         Run();
     }
 
     private void TogglePushingToRemote()
     {
-        VoidResult result = _userConfigFacade.TogglePushingToRemote();
+        NonModelResult result = _userConfigFacade.TogglePushingToRemote();
 
         if (result.ResultCode != ResultCode.Success)
         {
@@ -138,7 +131,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
     private void PrintUserConfig()
     {
         CustomConsole.WriteLineColored("Configuration settigns", TextType.ImporantText);
-        CustomConsole.WriteLineColored("Superprojects: ", TextType.MundaneText);
+        CustomConsole.WriteLineColored("Superprojects: " + Environment.NewLine + "[", TextType.MundaneText);
 
         foreach(ConfigSuperProject superproject in _userConfigFacade.ConfigSuperProjects)
         {
@@ -149,12 +142,13 @@ public class ManageUserSettingsWorkflow : IWorkflow
             // We deconstruct the path to separate if to parts that we want highlithed and parts that we dont
             IEnumerable<string> unghighlitherParts = pathParts.Take(pathParts.Length - 1);
             string unghighlightedString = string.Join(@"/", unghighlitherParts); 
-            Console.Write("\t" + unghighlightedString + @"/");
+            Console.Write("    " + unghighlightedString + @"/");
 
             // Superproject name is highlithed
             string superProjectName = pathParts[pathParts.Length - 1];
             CustomConsole.WriteLineColored(superProjectName, TextType.ImporantText);
         }
+        CustomConsole.WriteLineColored("]", TextType.MundaneText);
 
 
         CustomConsole.WriteColored("Push to remote: ", TextType.MundaneText);
@@ -163,23 +157,5 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         CustomConsole.WriteLineColored(Environment.NewLine + Environment.NewLine + "Data saved at: C:\\Users\\{user}\\AppData\\Roaming", TextType.MundaneText);
         Console.WriteLine();
-    }
-
-    private static int PrintMenuOptionsAndGetTheirCount()
-    {
-        List<string> menuOptions =
-        [
-            "0. Pridat superprojekt",
-            "1. Zmazat superprojekt",
-            "4. Toggle pushovanie na remote",
-            "3. Spat do hlavneho menu",
-        ];
-
-        foreach(string menuOption in menuOptions)
-        {
-            Console.WriteLine(menuOption);
-        }
-
-        return menuOptions.Count;
     }
 }

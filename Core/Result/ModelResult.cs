@@ -7,24 +7,23 @@ public sealed class ModelResult<T>
 
     public string? ErrorMessage { get; set; }
 
-    private ModelResult() { }
+    public ModelResult() { }
 
-    public static ModelResult<T> WithSuccess()
+    public ModelResult<T> WithSuccess(T model)
     {
-        return new ModelResult<T>
-        {
-            ResultCode = ResultCode.Success,
-            ErrorMessage = string.Empty
-        };
+        ResultCode = ResultCode.Success;
+        ErrorMessage = string.Empty;
+        Model = model;
+        
+        return this;
     }
 
-    public static ModelResult<T> WithFailure(string errorMessage)
+    public ModelResult<T> WithFailure(string errorMessage)
     {
-        return new ModelResult<T> 
-        {
-            ResultCode = ResultCode.Failed,
-            ErrorMessage = errorMessage
-        };
+        ResultCode = ResultCode.Failure;
+        ErrorMessage = errorMessage;
+        
+        return this;
     }
 
 }

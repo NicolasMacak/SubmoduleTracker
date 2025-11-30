@@ -30,45 +30,45 @@ public sealed class UserConfigFacade
             .ToList();
     }
 
-    public VoidResult AddSuperproject(string superProjectWorkdir) 
+    public NonModelResult AddSuperproject(string superProjectWorkdir) 
     {
-        string? validSuperprojectPath = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
+        ModelResult<string> addingSuperprojectResult = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
 
-        if (validSuperprojectPath == null)
+        if (addingSuperprojectResult.ResultCode == ResultCode.Failure)
         {
             // invalid path
-            return VoidResult.WithFailure("Na zadanej ceste sa nenachadza git repozitar");
+            return NonModelResult.WithFailure(addingSuperprojectResult.ErrorMessage!);
         }
 
         // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
         if (_userConfig.ContainsSuperproject(superProjectWorkdir))
         {
-            return VoidResult.WithFailure("Superprojekt uz je pridany");
+            return NonModelResult.WithFailure("Superproject already added!");
         }
 
-        _userConfig.SuperProjects.Add(new ConfigSuperProject() { WorkingDirectory = validSuperprojectPath });
+        _userConfig.SuperProjects.Add(new ConfigSuperProject() { WorkingDirectory = addingSuperprojectResult.Model! });
 
         return SaveOptions()
-            ? VoidResult.WithSuccess()
-            : VoidResult.WithFailure("Was not able to save the User Config");
+            ? NonModelResult.WithSuccess()
+            : NonModelResult.WithFailure("Was not able to save the User Config");
     }
 
-    public VoidResult TogglePushingToRemote()
+    public NonModelResult TogglePushingToRemote()
     {
         _userConfig.PushingToRemote = !_userConfig.PushingToRemote;
 
         return SaveOptions()
-            ? VoidResult.WithSuccess()
-            : VoidResult.WithFailure("Was not able to save the User Config");
+            ? NonModelResult.WithSuccess()
+            : NonModelResult.WithFailure("Was not able to save the User Config");
     }
 
-    public VoidResult DeleteSuperProject(int superProjectIndex)
+    public NonModelResult DeleteSuperProject(int superProjectIndex)
     {
         _userConfig.SuperProjects.RemoveAt(superProjectIndex);
 
         return SaveOptions()
-            ? VoidResult.WithSuccess()
-            : VoidResult.WithFailure("Was not able to save the User Config");
+            ? NonModelResult.WithSuccess()
+            : NonModelResult.WithFailure("Was not able to save the User Config");
     }
 
     /// <summary>
@@ -95,32 +95,35 @@ public sealed class UserConfigFacade
     /// Validates whether is valid Git repository and return path
     /// </summary>
     /// <returns>Returns working directory if there is a Git repository at path, null otherwise </returns>
-    private static string? TryGetGitRepositoryWorkingDirectory(string superprojectWorkdir)
+    private static ModelResult<string> TryGetGitRepositoryWorkingDirectory(string superprojectWorkdir)
     {
+        ModelResult<string> result = new();
         try
         {
-            Repository superProjectGitRepository = new(superprojectWorkdir);
+            Repository gitRepository = new(superprojectWorkdir);
+            if(gitRepository.Submodules.Count() == 0)
+            {
+                return result.WithFailure("Repository must contain submodules!");
+            }
+
             // workdir in Repository object is trimmed of excessive chars
-            string clearedWorkingDirectory = superProjectGitRepository.Info.WorkingDirectory;
+            string clearedWorkingDirectory = gitRepository.Info.WorkingDirectory;
 
             if (clearedWorkingDirectory.EndsWith('\\'))
             {
                 clearedWorkingDirectory  = clearedWorkingDirectory.Substring(0, clearedWorkingDirectory .Length - 1);
             }
 
-            return Path.GetFullPath(clearedWorkingDirectory);
+            return result.WithSuccess(Path.GetFullPath(clearedWorkingDirectory));
         }
         catch (LibGit2SharpException)
         {
-            return null; // repository not found on path
+            return result.WithFailure("No repository found on path");
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Neznáma chyba. Kontaktujte Joška Vajdu.");
-            Console.WriteLine(ex.Message);
+            return result.WithFailure(ex.Message);
         }
-
-        return null;
     }
 
     private UserConfig LoadUserConfig()

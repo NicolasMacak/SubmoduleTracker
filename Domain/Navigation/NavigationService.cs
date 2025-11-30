@@ -9,7 +9,7 @@ public sealed class NavigationService
         _serviceProvider = serviceProvider;
     }
 
-    public void Navigate<TWorkflow>() where TWorkflow : class, IWorkflow
+    public void NavigateTo<TWorkflow>() where TWorkflow : class, IWorkflow
     {
         _serviceProvider.GetRequiredService<TWorkflow>().Run();
     }

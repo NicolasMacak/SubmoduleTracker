@@ -33,7 +33,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         int? selectedSuperprojectIndex = LetUserChooseSuperprojects();
         if (!selectedSuperprojectIndex.HasValue)
         {
-            _navigationService.Navigate<HomeScreenWorkflow>();
+            _navigationService.NavigateTo<HomeScreenWorkflow>();
             return;
         }
 

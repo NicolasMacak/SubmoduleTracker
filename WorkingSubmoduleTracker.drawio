@@ -201,20 +201,11 @@
         <mxCell id="KCZfSD6XprjZVH1BgdUc-6" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" parent="1" vertex="1">
           <mxGeometry x="-750" y="1365" width="130" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-9" value="Odstranit VoidResult&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
-          <mxGeometry x="-770" y="1565" width="210" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="KCZfSD6XprjZVH1BgdUc-10" value="ReturnChoiseOutOfOptions by mohla pri chybe zavolat samu seba.&lt;br&gt;Ak da uzivate empty space vrati null a zavola sa RUN()" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="-780" y="1620" width="380" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="KCZfSD6XprjZVH1BgdUc-12" value="Pekny layout" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#6c8ebf;fillColor=#dae8fc;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-750" y="1030" width="140" height="40" as="geometry" />
         </mxCell>
         <mxCell id="KCZfSD6XprjZVH1BgdUc-13" value="Backlog" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=30;" parent="1" vertex="1">
           <mxGeometry x="-2085" y="1930" width="130" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="XZAUpuuf4bfCtXn-2mGG-1" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Mala by pozerat na stav na origine?&lt;br&gt;Ano. To je ten finalny. Ten co plati pre vsetkych&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=#82b366;fillColor=#d5e8d4;" parent="1" vertex="1">
-          <mxGeometry x="-1670" y="755" width="440" height="60" as="geometry" />
         </mxCell>
         <mxCell id="EOY68dGk1cK8fynP5NS2-4" value="Test cases&lt;br&gt;Submodule nema dev&lt;br&gt;Superprojekt nema dev" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-2495" y="1930" width="230" height="90" as="geometry" />
@@ -233,9 +224,6 @@
         </mxCell>
         <mxCell id="EOY68dGk1cK8fynP5NS2-14" value="Exit options&lt;br&gt;1. End&lt;br&gt;2. Submodule validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-2520" y="2170" width="360" height="110" as="geometry" />
-        </mxCell>
-        <mxCell id="tLnxERMP1s8ftt1qe_WE-1" value="Insert Relevant branches" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
-          <mxGeometry x="-1230" y="1320" width="250" height="80" as="geometry" />
         </mxCell>
         <mxCell id="tLnxERMP1s8ftt1qe_WE-2" value="Remove obsolete" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-1080" y="1870" width="250" height="80" as="geometry" />
@@ -272,8 +260,14 @@
         <mxCell id="tLnxERMP1s8ftt1qe_WE-16" value="dev" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1240" y="1990" width="90" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="tLnxERMP1s8ftt1qe_WE-17" value="BUG&lt;br&gt;No superprojects fix&lt;br&gt;no submodules fix" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
-          <mxGeometry x="-1230" y="1190" width="250" height="80" as="geometry" />
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-3" value="User settigns edge cases&lt;br&gt;&lt;br&gt;Superproject not a git repository&lt;br&gt;&lt;br&gt;Superproject already added to settings&lt;br&gt;&lt;br&gt;Superprojects doesnt contain any submodules" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-1380" y="1550" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-5" value="&lt;span&gt;Superproject has no submodules!&lt;/span&gt;" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="-1460" y="1100" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-6" value="&lt;span&gt;Get choice index returns Result&lt;/span&gt;" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="-1460" y="1200" width="250" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

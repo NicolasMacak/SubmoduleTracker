@@ -1,26 +1,26 @@
 ﻿namespace SubmoduleTracker.Core.Result;
-public sealed class VoidResult
+public sealed class NonModelResult
 {
     public ResultCode ResultCode { get; set; }
 
     public string? ErrorMessage { get; set; }
 
-    private VoidResult() {}
+    private NonModelResult() {}
 
-    public static VoidResult WithSuccess()
+    public static NonModelResult WithSuccess()
     {
-        return new VoidResult
+        return new NonModelResult
         {
             ResultCode = ResultCode.Success,
             ErrorMessage = string.Empty
         };
     }
 
-    public static VoidResult WithFailure(string errorMessage)
+    public static NonModelResult WithFailure(string errorMessage)
     {
-        return new VoidResult
+        return new NonModelResult
         {
-            ResultCode = ResultCode.Failed,
+            ResultCode = ResultCode.Failure,
             ErrorMessage = errorMessage
         };
     }
