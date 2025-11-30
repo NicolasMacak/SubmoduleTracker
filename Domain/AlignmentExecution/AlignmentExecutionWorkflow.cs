@@ -1,6 +1,7 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.AlignmentExecution.Models;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
@@ -143,14 +144,13 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Distinct() // Unique list
             .ToList();
 
-        int? selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
-
-        if (!selectedSubmoduleIndex.HasValue)
+        ModelResult<int> selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+        if (selectedSubmoduleIndex.ResultCode == ResultCode.EmptyInput)
         {
             _navigationService.NavigateTo<HomeScreenWorkflow>();
         }
 
-        return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);
+        return allSubmodules.ElementAt(selectedSubmoduleIndex.Model);
     }
     
     /// <summary>

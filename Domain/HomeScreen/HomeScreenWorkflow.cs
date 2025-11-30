@@ -1,4 +1,5 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings;
@@ -29,14 +30,13 @@ public class HomeScreenWorkflow : IWorkflow
             CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the Settings", TextType.Error);
         }
 
-        int? choice = CustomConsole.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.menuItem).ToList(), "Choose an action");
-
-        if (!choice.HasValue)
+        ModelResult<int> choiceIndex = CustomConsole.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.menuItem).ToList(), "Choose an action");
+        if (choiceIndex.ResultCode == ResultCode.EmptyInput)
         {
-            throw new ArgumentNullException("User choice is not supposed to be null");
+            throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
         }
 
-        homeScreenOptions[choice.Value].navigationAction();
+        homeScreenOptions[choiceIndex.Model].navigationAction();
     }
 
     private List<(string menuItem, Action navigationAction)> GetHomeScreenActions()

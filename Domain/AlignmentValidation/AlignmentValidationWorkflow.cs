@@ -1,5 +1,6 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
@@ -30,16 +31,16 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         Console.Clear();
 
-        int? selectedSuperprojectIndex = LetUserChooseSuperprojects();
-        if (!selectedSuperprojectIndex.HasValue)
+        ModelResult<int> selectedSuperprojectIndexResult = LetUserChooseSuperprojects();
+        if (selectedSuperprojectIndexResult.ResultCode == ResultCode.EmptyInput)
         {
             _navigationService.NavigateTo<HomeScreenWorkflow>();
             return;
         }
 
-        IEnumerable<MetaSuperProject> metaSuperprojectValidate = selectedSuperprojectIndex == _allSelectSuperprojectOptions.Count - 1
+        IEnumerable<MetaSuperProject> metaSuperprojectValidate = selectedSuperprojectIndexResult.Model == _allSelectSuperprojectOptions.Count - 1
             ? _userConfigfacade.MetaSupeprojects // User selected All superprojects options
-            : _userConfigfacade.MetaSupeprojects.Where(x => x.Name == _allSelectSuperprojectOptions[selectedSuperprojectIndex.Value]); // User selected specific 
+            : _userConfigfacade.MetaSupeprojects.Where(x => x.Name == _allSelectSuperprojectOptions[selectedSuperprojectIndexResult.Model]); // User selected specific 
 
         // ---- Branch selection
         List<GitBranch> relevantBranches = LetUserChooseRelevantBranches();
@@ -51,7 +52,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         }
     }
 
-    private int? LetUserChooseSuperprojects()
+    private ModelResult<int> LetUserChooseSuperprojects()
     {
         // If There is more than 1 superproject we want to provide "all superproject" options
         if (_allSelectSuperprojectOptions.Count > 1)
@@ -66,14 +67,14 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         List<string> options = _relevantBranchesOptions.Select(x => string.Join(", ", x.Select(x => x.RemoteName))).ToList();
 
-        int? selectedOptionIndex = CustomConsole.GetIndexOfUserChoice(options, "Zvolte sadu branchov pre validaciu zarovnania.");
+        ModelResult<int> selectedOptionIndexResult = CustomConsole.GetIndexOfUserChoice(options, "Zvolte sadu branchov pre validaciu zarovnania.");
 
         // If we wont use emptyStringPrompt CustomConsole.GetIndexOfUserChoice is not supposed to return null
-        if (!selectedOptionIndex.HasValue)
+        if (selectedOptionIndexResult.ResultCode == ResultCode.EmptyInput)
         {
             throw new Exception("Index of selected branches branches options was null.");
         }
 
-        return _relevantBranchesOptions[selectedOptionIndex.Value];
+        return _relevantBranchesOptions[selectedOptionIndexResult.Model];
     }
 }

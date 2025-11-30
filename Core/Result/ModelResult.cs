@@ -9,6 +9,14 @@ public sealed class ModelResult<T>
 
     public ModelResult() { }
 
+    public ModelResult<T> With(ResultCode resultCode, T? model = default)
+    {
+        ResultCode = resultCode;
+        Model = model;
+
+        return this;
+    }
+
     public ModelResult<T> WithSuccess(T model)
     {
         ResultCode = ResultCode.Success;

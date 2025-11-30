@@ -7,7 +7,7 @@ using SubmoduleTracker.Domain.UserSettings.Model;
 namespace SubmoduleTracker.Domain.UserSettings.Services;
 
 // File location
-// C:\Users\macak\AppData\Roaming
+// C:\Users\{user}\AppData\Roaming
 public sealed class UserConfigFacade
 {
     private UserConfig _userConfig;

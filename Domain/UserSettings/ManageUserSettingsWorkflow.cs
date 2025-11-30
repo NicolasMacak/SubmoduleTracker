@@ -25,13 +25,13 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<(string menuItem, Action userSettingsAction)> userSetttingsActions = GetUserSettingsActions();
 
-        int? validatedChoice = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.menuItem).ToList(), "Zvolte akciu");
-        if (!validatedChoice.HasValue)
+        ModelResult<int> userChoiceIndexResult = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.menuItem).ToList(), "Zvolte akciu");
+        if (userChoiceIndexResult.ResultCode == ResultCode.EmptyInput)
         {
-            throw new Exception("User choice is not supposed to be null");
+            throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
         }
 
-        userSetttingsActions[validatedChoice.Value].userSettingsAction();
+        userSetttingsActions[userChoiceIndexResult.Model].userSettingsAction();
     }
 
     private List<(string menuItem, Action userSettingsAction)> GetUserSettingsActions()
@@ -98,15 +98,14 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-        int? indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
-
-        // "" input. Cancel action
-        if (!indexToDeleteAt.HasValue)
+        ModelResult<int> indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+        // Empty input => User wants step back
+        if (indexToDeleteAt.ResultCode == ResultCode.EmptyInput)
         {
             Run();
         }
 
-        NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt!.Value);
+        NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt.Model);
 
         if (result.ResultCode != ResultCode.Success)
         {

@@ -1,4 +1,6 @@
-﻿namespace SubmoduleTracker.Core.ConsoleTools;
+﻿using SubmoduleTracker.Core.Result;
+
+namespace SubmoduleTracker.Core.ConsoleTools;
 public static class CustomConsole
 {
     public static void ClearAndWriteLine(string? text)
@@ -79,14 +81,14 @@ public static class CustomConsole
     /// When set, an empty input returns <c>null</c>.
     /// </param>
     /// <returns>
-    /// The zero-based index of the selected option, or <c>null</c> if empty input
-    /// is allowed and the user submits an empty line.
+    /// <see cref="ResultCode.Success"/> When picks between proposed options, <br></br>
+    /// <see cref="ResultCode.EmptyInput"/> When <paramref name="emptyStringPrompt"/> is not null and user enters empty string
     /// </returns>
     /// <remarks>
     /// The user sees options numbered from 1 to <c>choices.Count</c>. Internally,
     /// the method returns a zero-based index.
     /// </remarks>
-    public static int? GetIndexOfUserChoice(List<string> choices, string prompt, string? emptyStringPrompt = null)
+    public static ModelResult<int> GetIndexOfUserChoice(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
         if (choices == null || choices.Count == 0)
         {
@@ -116,7 +118,7 @@ public static class CustomConsole
             {
                 if (!string.IsNullOrEmpty(emptyStringPrompt))
                 {
-                    return null;
+                    return new ModelResult<int>().With(ResultCode.EmptyInput);
                 }
 
                 WriteErrorLine(incorrectRangeErrorMessage);
@@ -145,7 +147,7 @@ public static class CustomConsole
                 continue;
             }
 
-            return choiceIndex;
+            return new ModelResult<int>().WithSuccess(choiceIndex);
         }
     }
 }

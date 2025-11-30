@@ -266,7 +266,7 @@
         <mxCell id="tnvOtmtbqIyWH4iodOLJ-5" value="&lt;span&gt;Superproject has no submodules!&lt;/span&gt;" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
           <mxGeometry x="-1460" y="1100" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="tnvOtmtbqIyWH4iodOLJ-6" value="&lt;span&gt;Get choice index returns Result&lt;/span&gt;" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-7" value="Create console promptsObject" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
           <mxGeometry x="-1460" y="1200" width="250" height="80" as="geometry" />
         </mxCell>
       </root>
