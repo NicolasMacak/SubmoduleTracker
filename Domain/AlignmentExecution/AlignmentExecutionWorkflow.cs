@@ -1,6 +1,7 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Domain.AlignmentExecution.Models;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
@@ -8,7 +9,7 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
-    private readonly List<GitBranch> _alignmentRelevantBranches = new () {new GitBranch("dev"), new GitBranch("test") };
+    private readonly List<GitBranch> _alignmentRelevantBranches = new () { new GitBranch("dev"), new GitBranch("test") };
 
     private readonly UserConfigFacade _userConfigFacade;
     private readonly NavigationService _navigationService;
@@ -70,7 +71,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
         if (!_userConfigFacade.PushingToRemote)
         {
-            CustomConsole.WriteColored(Environment.NewLine + "Forward commity vytvorene. Ukoncujem exekuciu. Push na remote zakazany. Mozno zmenit v nastaveniach.", TextType.Success);
+            CustomConsole.WriteColored(Environment.NewLine + "Forward commity vytvorene. Push to remote yourself. Automatic push to remote can be set in User settings. Terminating execution.", TextType.Success);
             return false;
         }
 
@@ -93,7 +94,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             {
                 string submoduleWorkdir = superproject.Workdir + @$"\{submoduleToForward}";
 
-                foreach (string branchToAlign in superproject.branchesToAlign)
+                foreach (string branchToAlign in superproject.BranchesToAlign)
                 {
                     // checkout branch in superproject
                     GitFacade.Switch(superproject.Workdir, branchToAlign);
@@ -187,12 +188,4 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
         return superProjectsToAlign;
     }
-    
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="Title"></param>
-    /// <param name="Workdir"></param>
-    /// <param name="branchesToAlign">NON-REMOTE friendly name for branch. Non-remote, because it will be used to create commits</param>
-    private record AligningSuperproject(string Title, string Workdir, List<string> branchesToAlign);
 }
