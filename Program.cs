@@ -17,7 +17,7 @@ class Program
                 services.AddSingleton<UserConfigFacade>();
 
                 // Navigation
-                services.AddSingleton<HomeScreenWorkflow>();
+                services.AddTransient<HomeScreenWorkflow>();
                 services.AddTransient<NavigationService>();
 
                 // Settings
@@ -29,41 +29,11 @@ class Program
 
                 // Aligning
                 services.AddTransient<AlignmentExecutionWorkflow>();
-
-
-                // Playing
-
-                //Repository repo = new("C:\\NON_SYSTEM\\Superproject-A");
-
-                //foreach (var branch in repo.Branches)
-                //{
-                //    Console.WriteLine($"Branch: {branch.FriendlyName}");
-
-                //    // Get the commit tree for the branch
-                //    var commit = branch.Tip;
-                //    if (commit == null) continue;
-
-                //    foreach (var entry in commit.Tree)
-                //    {
-                //        if (entry.TargetType == TreeEntryTargetType.GitLink)
-                //        {
-                //            Console.WriteLine($"  Submodule: {entry.Name} -> Commit {entry.Target.Id}");
-                //        }
-                //    }
-                //}
-
-
-
-                //git fetch --all--recurse - submodules
-                //git submodule update--init--recursive
             });
 
         IHost app = host.Build();
 
-        var aaa = app.Services.GetRequiredService<HomeScreenWorkflow>();
-        //var aaa = app.Services.GetRequiredService<AlignmentValidationWorkflow>();
-
-        aaa.Run();
+        app.Services.GetRequiredService<HomeScreenWorkflow>().Run();
 
         return 0;
     }

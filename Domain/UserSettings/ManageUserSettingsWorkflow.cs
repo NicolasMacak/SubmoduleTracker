@@ -1,5 +1,6 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.MenuItems;
 using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
@@ -23,30 +24,30 @@ public class ManageUserSettingsWorkflow : IWorkflow
         Console.Clear();
         PrintUserConfig();
 
-        List<(string menuItem, Action userSettingsAction)> userSetttingsActions = GetUserSettingsActions();
+        List<MenuItem> userSetttingsActions = GetUserSettingsActions();
 
-        ModelResult<int> userChoiceIndexResult = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.menuItem).ToList(), "Zvolte akciu");
+        ModelResult<int> userChoiceIndexResult = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Zvolte akciu");
         if (userChoiceIndexResult.ResultCode == ResultCode.EmptyInput)
         {
             throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
         }
 
-        userSetttingsActions[userChoiceIndexResult.Model].userSettingsAction();
+        userSetttingsActions[userChoiceIndexResult.Model].ItemAction();
     }
 
-    private List<(string menuItem, Action userSettingsAction)> GetUserSettingsActions()
+    private List<MenuItem> GetUserSettingsActions()
     {
-        List<(string menuItem, Action userSettingsAction)> settingsActions = new();
+        List<MenuItem> settingsActions = new();
 
-        settingsActions.Add(("Add Superproject", () => TryAddingNewSuperproject()));
+        settingsActions.Add(new MenuItem("Add Superproject", () => TryAddingNewSuperproject()));
 
         if(_userConfigFacade.MetaSupeprojects.Count > 0)
         {
-            settingsActions.Add(("Remove Superproject", () => DeleteSuperproject()));
+            settingsActions.Add(new MenuItem("Remove Superproject", () => DeleteSuperproject()));
         }
 
-        settingsActions.Add(("Toggle \"Push to Remote\"", () => TogglePushingToRemote()));
-        settingsActions.Add(("Back to Main Menu", _navigationService.NavigateTo<HomeScreenWorkflow>));
+        settingsActions.Add(new MenuItem("Toggle \"Push to Remote\"", TogglePushingToRemote));
+        settingsActions.Add(new MenuItem("Back to Main Menu", _navigationService.NavigateTo<HomeScreenWorkflow>));
 
         return settingsActions;
     }
@@ -77,7 +78,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
             }
 
             // user input is handled here
-            NonModelResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
+            NonModelResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir.Trim()!);
 
             if (result.ResultCode != ResultCode.Success)
             {

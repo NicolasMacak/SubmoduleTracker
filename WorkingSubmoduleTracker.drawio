@@ -260,13 +260,10 @@
         <mxCell id="tLnxERMP1s8ftt1qe_WE-16" value="dev" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-1240" y="1990" width="90" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="tnvOtmtbqIyWH4iodOLJ-3" value="User settigns edge cases&lt;br&gt;&lt;br&gt;Superproject not a git repository&lt;br&gt;&lt;br&gt;Superproject already added to settings&lt;br&gt;&lt;br&gt;Superprojects doesnt contain any submodules" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" vertex="1" parent="1">
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-3" value="User settigns edge cases&lt;br&gt;&lt;br&gt;Superproject not a git repository&lt;br&gt;&lt;br&gt;Superproject already added to settings&lt;br&gt;&lt;br&gt;Superprojects doesnt contain any submodules" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-1380" y="1550" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="tnvOtmtbqIyWH4iodOLJ-5" value="&lt;span&gt;Superproject has no submodules!&lt;/span&gt;" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
-          <mxGeometry x="-1460" y="1100" width="250" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="tnvOtmtbqIyWH4iodOLJ-7" value="Create console promptsObject" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="tnvOtmtbqIyWH4iodOLJ-7" value="Create console promptsObject" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-1460" y="1200" width="250" height="80" as="geometry" />
         </mxCell>
       </root>

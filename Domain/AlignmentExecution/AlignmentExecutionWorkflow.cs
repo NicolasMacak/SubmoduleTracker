@@ -146,7 +146,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
         ModelResult<int> selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
         if (selectedSubmoduleIndex.ResultCode == ResultCode.EmptyInput)
         {
-            _navigationService.NavigateTo<HomeScreenWorkflow>();
+            _navigationService.NavigateTo<HomeScreenWorkflow>(); // Todo. also leaking
         }
 
         return allSubmodules.ElementAt(selectedSubmoduleIndex.Model);
