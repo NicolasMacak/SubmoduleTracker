@@ -14,7 +14,7 @@ class Program
         IHostBuilder host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<UserConfigFacade>();
+                services.AddSingleton<UserConfigService>();
 
                 // Navigation
                 services.AddTransient<HomeScreenWorkflow>();
@@ -22,7 +22,7 @@ class Program
 
                 // Settings
                 services.AddTransient<ManageUserSettingsWorkflow>();
-                services.AddTransient<UserConfigFacade>();
+                services.AddTransient<UserConfigService>();
 
                 // AlignmentControl
                 services.AddTransient<AlignmentValidationWorkflow>();

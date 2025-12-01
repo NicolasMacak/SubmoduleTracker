@@ -10,10 +10,10 @@ namespace SubmoduleTracker.Domain.UserSettings;
 
 public class ManageUserSettingsWorkflow : IWorkflow
 {
-    private readonly UserConfigFacade _userConfigFacade;
+    private readonly UserConfigService _userConfigFacade;
     private readonly NavigationService _navigationService;
 
-    public ManageUserSettingsWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
+    public ManageUserSettingsWorkflow(UserConfigService userConfigFacade, NavigationService navigationService)
     {
         _userConfigFacade = userConfigFacade;
         _navigationService = navigationService;
@@ -42,7 +42,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
             new MenuItem("Add Superproject", () => TryAddingNewSuperproject())
         };        
 
-        if(_userConfigFacade.ConfigSuperProjects.Count > 0)
+        if(_userConfigFacade.MetaSuperprojects.Count > 0)
         {
             settingsActions.Add(new MenuItem("Remove Superproject", () => DeleteSuperproject()));
         }
@@ -104,7 +104,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         // repeat until success
         while (true)
         {
-            List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
+            List<string> superProjectsToDelete = _userConfigFacade.MetaSuperprojects.Select(x => x.WorkingDirectory).ToList();
 
             int? indexToDeleteIndex = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
             // Empty input => User wants step back
@@ -148,7 +148,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         CustomConsole.WriteLineColored("Configuration settigns", TextType.ImporantText);
         CustomConsole.WriteLineColored("Superprojects: " + Environment.NewLine + "[", TextType.MundaneText);
 
-        foreach(ConfigSuperProject superproject in _userConfigFacade.ConfigSuperProjects)
+        foreach(MetaSuperProject superproject in _userConfigFacade.MetaSuperprojects)
         {
             // We separate path by folders
             // last element is the name of the superproject(Which we want to highlight)

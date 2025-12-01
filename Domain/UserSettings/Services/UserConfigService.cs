@@ -8,25 +8,28 @@ namespace SubmoduleTracker.Domain.UserSettings.Services;
 
 // File location
 // C:\Users\{user}\AppData\Roaming
-public sealed class UserConfigFacade
+public sealed class UserConfigService
 {
-    private UserConfig _userConfig;
+    private readonly UserConfig _userConfig;
 
     private const string ConfigFileName = "SubmoduleTrackerConfig.txt";
     private readonly string ConfigFilePath = $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\{ConfigFileName}";
 
-    public List<ConfigSuperProject> ConfigSuperProjects => _userConfig.SuperProjects;
-
-    public readonly List<MetaSuperProject> MetaSupeprojects;
+    public List<MetaSuperProject> MetaSuperprojects;
 
     public bool PushingToRemote => _userConfig.PushingToRemote;
 
-    public UserConfigFacade()
+    public UserConfigService()
     {
         _userConfig = LoadUserConfig();
 
-        MetaSupeprojects = _userConfig.SuperProjects
-            .Select(x => new MetaSuperProject(x.WorkingDirectory))
+        MetaSuperprojects = CreateMetaSuperprojectsFromWorkdirs();
+    }
+
+    private List<MetaSuperProject> CreateMetaSuperprojectsFromWorkdirs()
+    {
+        return _userConfig.SuperProjectsWorkdirs
+            .Select(superProjectWorkdir => new MetaSuperProject(superProjectWorkdir))
             .ToList();
     }
 
@@ -37,21 +40,23 @@ public sealed class UserConfigFacade
             return NonModelResult.WithFailure("Superproject workdir can not be null");
         }
 
-        ModelResult<string> addingSuperprojectResult = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
+        ModelResult<string> addedSuperProjectWorkdirResult = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
 
-        if (addingSuperprojectResult.ResultCode == ResultCode.Failure)
+        if (addedSuperProjectWorkdirResult.ResultCode != ResultCode.Success)
         {
             // invalid path
-            return NonModelResult.WithFailure(addingSuperprojectResult.ErrorMessage!);
+            return NonModelResult.WithFailure(addedSuperProjectWorkdirResult.ErrorMessage!);
         }
 
         // We exclude '\' from comparison There would be different count of '\' for path in newly added superproject and path added by user would be inconsisent. 
-        if (_userConfig.ContainsSuperproject(superProjectWorkdir))
+        if (_userConfig.ContainsSuperproject(addedSuperProjectWorkdirResult.Model!))
         {
-            return NonModelResult.WithFailure("Superproject already added!");
+            return NonModelResult.WithFailure($"Superproject at path {addedSuperProjectWorkdirResult.Model} already added!");
         }
 
-        _userConfig.SuperProjects.Add(new ConfigSuperProject() { WorkingDirectory = addingSuperprojectResult.Model! });
+        _userConfig.SuperProjectsWorkdirs.Add(addedSuperProjectWorkdirResult.Model!);
+
+        MetaSuperprojects = CreateMetaSuperprojectsFromWorkdirs(); // Collection changed. Recreate
 
         return SaveOptions()
             ? NonModelResult.WithSuccess()
@@ -69,7 +74,9 @@ public sealed class UserConfigFacade
 
     public NonModelResult DeleteSuperProject(int superProjectIndex)
     {
-        _userConfig.SuperProjects.RemoveAt(superProjectIndex);
+        _userConfig.SuperProjectsWorkdirs.RemoveAt(superProjectIndex);
+
+        MetaSuperprojects = CreateMetaSuperprojectsFromWorkdirs(); // Collection changed. Recreate
 
         return SaveOptions()
             ? NonModelResult.WithSuccess()

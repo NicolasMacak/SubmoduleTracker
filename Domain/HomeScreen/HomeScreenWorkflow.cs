@@ -11,9 +11,9 @@ namespace SubmoduleTracker.Domain.HomeScreen;
 public class HomeScreenWorkflow : IWorkflow
 {
     private readonly NavigationService _navigationService;
-    private readonly UserConfigFacade _userConfigFacade;
+    private readonly UserConfigService _userConfigFacade;
 
-    public HomeScreenWorkflow(NavigationService navigationService, UserConfigFacade userConfigFacade)
+    public HomeScreenWorkflow(NavigationService navigationService, UserConfigService userConfigFacade)
     {
         _navigationService = navigationService;
         _userConfigFacade = userConfigFacade;
@@ -25,7 +25,7 @@ public class HomeScreenWorkflow : IWorkflow
 
         List<MenuItem> homeScreenOptions = GetHomeScreenActions();
 
-        if (_userConfigFacade.MetaSupeprojects.Count == 0)
+        if (_userConfigFacade.MetaSuperprojects.Count == 0)
         {
             CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the Settings", TextType.Error);
         }
@@ -43,7 +43,7 @@ public class HomeScreenWorkflow : IWorkflow
     {
         List<MenuItem> homeScreenActionsToReturn = new();
 
-        if (_userConfigFacade.MetaSupeprojects.Count > 0)
+        if (_userConfigFacade.MetaSuperprojects.Count > 0)
         {
             homeScreenActionsToReturn.Add(new MenuItem("Submodule Commit Index Validation (Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
             homeScreenActionsToReturn.Add(new MenuItem("Submodule Alignment Across Superprojects (Well. not Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));

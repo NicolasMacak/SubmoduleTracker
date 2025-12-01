@@ -9,13 +9,13 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 namespace SubmoduleTracker.Domain.AlignmentExecution;
 public class AlignmentExecutionWorkflow : IWorkflow
 {
-    private readonly UserConfigFacade _userConfigFacade;
+    private readonly UserConfigService _userConfigFacade;
     private readonly NavigationService _navigationService;
 
     // For alignment, this is only possible option for now
     private readonly List<GitBranch> _alignmentRelevantBranches = new() { new GitBranch("dev"), new GitBranch("test") };
 
-    public AlignmentExecutionWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
+    public AlignmentExecutionWorkflow(UserConfigService userConfigFacade, NavigationService navigationService)
     {
         _userConfigFacade = userConfigFacade;
         _navigationService = navigationService;
@@ -24,14 +24,14 @@ public class AlignmentExecutionWorkflow : IWorkflow
     public void Run()
     {
         // Superprojects that contain submodule(selected by user in this method)
-        string? selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSupeprojects);
+        string? selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSuperprojects);
         if (string.IsNullOrEmpty(selectedSubmodule))
         {
             _navigationService.NavigateTo<HomeScreenWorkflow>();
         }
 
         // superprojects that contain relevant submodule
-        List<RobustSuperProject> relevantRobustSuperProjects =_userConfigFacade.MetaSupeprojects 
+        List<RobustSuperProject> relevantRobustSuperProjects =_userConfigFacade.MetaSuperprojects 
             .Where(x => x.SubmodulesNames.Contains(selectedSubmodule!))
             .Select(x => x.ToRobustSuperproject(_alignmentRelevantBranches))
             .ToList();

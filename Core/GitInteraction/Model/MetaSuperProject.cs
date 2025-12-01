@@ -13,7 +13,6 @@ namespace SubmoduleTracker.Core.GitInteraction.Model;
 /// <see cref="ToRobustSuperproject"/> will create with object with relevant data when they are needed
 /// </remarks>
 
-// ConfigSuperProject - workdir
 // MetaSuperProject - + Submodules
 // RobustSuperProject - + Commit pointings
 

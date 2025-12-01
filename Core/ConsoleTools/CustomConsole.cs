@@ -17,6 +17,12 @@ public static class CustomConsole
         WriteLineColored(error, TextType.Error);
     }
 
+    public static void ClearAndWriteErrorLine(string error)
+    {
+        Console.Clear();
+        WriteLineColored(error, TextType.Error);
+    }
+
     /// <summary>
     /// Writes text in provided color. No new line
     /// </summary>
@@ -94,6 +100,7 @@ public static class CustomConsole
         {
             throw new ArgumentNullException("Choices must contain at least one item. What is wrong with you");
         }
+
         string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
 
         while (true)
@@ -121,33 +128,24 @@ public static class CustomConsole
                     return null;
                 }
 
-                WriteErrorLine(incorrectRangeErrorMessage);
+                ClearAndWriteErrorLine(incorrectRangeErrorMessage);
                 continue;
             }
 
             if (!int.TryParse(stringNumberOption, out int choiceIndex))
             {
-                WriteErrorLine(incorrectRangeErrorMessage);
+                ClearAndWriteErrorLine(incorrectRangeErrorMessage);
                 continue;
             }
 
-            choiceIndex--; // We increased at int index = 1. now we need to decrease because indexes are from 0
-
-            // cant be lower than lowBoundary
-            if (choiceIndex < 0)
+            // cant be lower than lowBoundary && cant be greater than number of choices
+            if (choiceIndex < 0 && choiceIndex > choices.Count - 1)
             {
-                WriteErrorLine(incorrectRangeErrorMessage);
+                ClearAndWriteErrorLine(incorrectRangeErrorMessage);
                 continue;
             }
 
-            // cant be greater than number of choices
-            if (choiceIndex > choices.Count - 1)
-            {
-                WriteErrorLine(incorrectRangeErrorMessage);
-                continue;
-            }
-
-            return choiceIndex;
+            return --choiceIndex; // We increased at int index = 1. now we need to decrease because indexes are from 0
         }
     }
 }

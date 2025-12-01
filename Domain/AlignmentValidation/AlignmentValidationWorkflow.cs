@@ -9,7 +9,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
 {
     private const string AllSuperprojects = "All Superprojects";
 
-    private readonly UserConfigFacade _userConfigfacade;
+    private readonly UserConfigService _userConfigfacade;
     private readonly NavigationService _navigationService;
     private readonly List<string> _allSelectSuperprojectOptions;
 
@@ -19,11 +19,11 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
          new () { new GitBranch("dev"), new GitBranch("test"), new GitBranch("master") },
     };
 
-    public AlignmentValidationWorkflow(UserConfigFacade userConfigFacade, NavigationService navigationService)
+    public AlignmentValidationWorkflow(UserConfigService userConfigFacade, NavigationService navigationService)
     {
         _userConfigfacade = userConfigFacade;
         _navigationService = navigationService;
-        _allSelectSuperprojectOptions = _userConfigfacade.MetaSupeprojects.Select(x => x.Name).ToList();
+        _allSelectSuperprojectOptions = _userConfigfacade.MetaSuperprojects.Select(x => x.Name).ToList();
 
         // If There is more than 1 superproject we want to provide "all superproject" options
         if (_allSelectSuperprojectOptions.Count > 1)
@@ -69,12 +69,12 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         if(indexOfSuperprojectOptions.Value == _allSelectSuperprojectOptions.Count - 1)
         {
             // Picked last option. All superprojects
-            metaSuperProjectsToReturn.AddRange(_userConfigfacade.MetaSupeprojects);
+            metaSuperProjectsToReturn.AddRange(_userConfigfacade.MetaSuperprojects);
         }
         else
         {
             // Picked not last option. Specific superproject
-            metaSuperProjectsToReturn.Add(_userConfigfacade.MetaSupeprojects[indexOfSuperprojectOptions.Value]);
+            metaSuperProjectsToReturn.Add(_userConfigfacade.MetaSuperprojects[indexOfSuperprojectOptions.Value]);
         }
 
         return metaSuperProjectsToReturn;

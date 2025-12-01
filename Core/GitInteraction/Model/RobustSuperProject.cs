@@ -12,7 +12,6 @@ public sealed class RobustSuperProject
 
     /// <summary>
     /// Holds information where which commits submodules of this superprojects points to on relevant branches <br></br>
-    /// 
     /// </summary>
     /// <remarks>
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
