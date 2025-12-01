@@ -14,7 +14,7 @@ public static class SubmoduleAlignmentTablePrinter
 {
     public static void PrintTable(string aligningSubmoduleName, List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches)
     {
-        Dictionary<string, TableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
+        Dictionary<string, DynamicTableColumn> columns = GetColumns(allSuperprojects, relevantBranches);
 
         CustomConsole.WriteColored(Environment.NewLine + $"Aligning Submodule: {aligningSubmoduleName}" + Environment.NewLine, TextType.ImporantText);
 
@@ -23,21 +23,21 @@ public static class SubmoduleAlignmentTablePrinter
         PrintTableBody(aligningSubmoduleName, allSuperprojects, relevantBranches, columns);
     }
 
-    public static void PrintTableHeader(Dictionary<string, TableColumn> columns)
+    public static void PrintTableHeader(Dictionary<string, DynamicTableColumn> columns)
     {
         Console.WriteLine(
-            columns[Column.SuperProject].GetColumnWidthAdjustedValue(Column.SuperProject, 0) + Delimiter +
-            columns[Column.Branch].GetColumnWidthAdjustedValue(Column.Branch, 0) + Delimiter +
-            columns[Column.IndexCommit].GetColumnWidthAdjustedValue(Column.IndexCommit, 0) + Delimiter +
-            columns[Column.HeadCommit].GetColumnWidthAdjustedValue(Column.HeadCommit, 0) + Delimiter
+            columns[Column.SuperProject].GetAdjustedTextation(Column.SuperProject, 0) + Delimiter +
+            columns[Column.Branch].GetAdjustedTextation(Column.Branch, 0) + Delimiter +
+            columns[Column.IndexCommit].GetAdjustedTextation(Column.IndexCommit, 0) + Delimiter +
+            columns[Column.HeadCommit].GetAdjustedTextation(Column.HeadCommit, 0) + Delimiter
         );
     }
 
-    private static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<GitBranch> relevantBranches, Dictionary<string, TableColumn> columns)
+    private static void PrintTableBody(string aligningSubmoduleName, List<RobustSuperProject> relevantSuperProjects, List<GitBranch> relevantBranches, Dictionary<string, DynamicTableColumn> columns)
     {
         foreach (RobustSuperProject superProject in relevantSuperProjects)
         {
-            Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(superProject.Name, 0));
+            Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0));
 
             foreach (string branch in relevantBranches.GetRemotes())
             {
@@ -46,43 +46,37 @@ public static class SubmoduleAlignmentTablePrinter
                 string headCommit = superProject.HeadCommitRefs[branch][aligningSubmoduleName]; // HEAD commit on this branch
 
                 // Outputs bellow are in one row. We put offset only into the first
-                Console.Write(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, offsetForThisColumn + Delimiter.Length) + Delimiter);
+                Console.Write(columns[Column.Branch].GetAdjustedTextation(branch, offsetForThisColumn + Delimiter.Length) + Delimiter);
 
                 ConsoleColor color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
-                string indexCommitFormatted = columns[Column.IndexCommit].GetColumnWidthAdjustedValue(indexCommit, 0); // formatted value
+                string indexCommitFormatted = columns[Column.IndexCommit].GetAdjustedTextation(indexCommit, 0); // formatted value
                 CustomConsole.WriteColored(indexCommitFormatted, color);
                 Console.Write(Delimiter); // appending delimeter in normal color
 
-                Console.Write(columns[Column.HeadCommit].GetColumnWidthAdjustedValue(headCommit, 0) + Delimiter + Environment.NewLine);
+                Console.Write(columns[Column.HeadCommit].GetAdjustedTextation(headCommit, 0) + Delimiter + Environment.NewLine);
             }
         }
 
         Console.WriteLine();
     }
 
-    private static Dictionary<string, TableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches)
+    private static Dictionary<string, DynamicTableColumn> GetColumns(List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches)
     {
-        return new Dictionary<string, TableColumn>()
+        return new Dictionary<string, DynamicTableColumn>()
         {
             // Superproject
             {
                 Column.SuperProject,
-                new TableColumn(
-                        string.Empty, // Later removed
-                        TableColumn.CalculateColumnWidth(
-                                columnName: Column.SuperProject,
-                                longestValueLength: allSuperprojects.MaxBy(x => x.Name)!.Name.Length
+                new DynamicTableColumn(MaxColumnWidth                     
                         )
-                )
             },
 
             // branch
             {
                 Column.Branch,
-                new TableColumn(
-                        string.Empty, // Later removed
-                        TableColumn.CalculateColumnWidth(
-                                columnName: Column.Branch,
+                new DynamicTableColumn(
+                        DynamicTableColumn.CalculateColumnWidth(
+                                columnHeader: Column.Branch,
                                 longestValueLength: relevantBranches.MaxBy(x => x.RemoteName.Length)!.RemoteName.Length
                         )
                 )
@@ -91,17 +85,13 @@ public static class SubmoduleAlignmentTablePrinter
             // Index commit
             {
                 Column.IndexCommit,
-                new TableColumn(string.Empty, // Later removed
-                                MaxColumnWidth
-                        )
+                new DynamicTableColumn(MaxColumnWidth)
             },
 
             // Head commit
             {
                 Column.HeadCommit,
-                new TableColumn(string.Empty, // Later removed
-                                MaxColumnWidth
-                )
+                new DynamicTableColumn(MaxColumnWidth)
             }
         };
     }

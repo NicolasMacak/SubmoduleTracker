@@ -12,7 +12,7 @@ public static class CommitsIndexValidationTablePrinter
 {
     public static void PrintTable(RobustSuperProject superProject)
     {
-        Dictionary<string, TableColumn> columns = GetColumns(superProject);
+        Dictionary<string, DynamicTableColumn> columns = GetConfiguredDynamicTableColumns(superProject);
 
         PrintTableHeader(columns);
 
@@ -22,16 +22,16 @@ public static class CommitsIndexValidationTablePrinter
     /// <summary>
     /// Prints table that informs if submodules in superproject points to the headcommits in submodules
     /// </summary>
-    private static void PrintTableBody(RobustSuperProject superProject, Dictionary<string, TableColumn> columns)
+    private static void PrintTableBody(RobustSuperProject superProject, Dictionary<string, DynamicTableColumn> columns)
     {
 
         // Superproject title
-        Console.WriteLine(columns[Column.SuperProject].GetColumnWidthAdjustedValue(superProject.Name, 0));
+        Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0));
 
         foreach (string branch in superProject.GetAvailableBranches())
         {
             // Branch title
-            Console.WriteLine(columns[Column.Branch].GetColumnWidthAdjustedValue(branch, columns[Column.SuperProject].Width + Delimiter.Length));
+            Console.WriteLine(columns[Column.Branch].GetAdjustedTextation(branch, columns[Column.SuperProject].Width + Delimiter.Length));
 
             foreach (string submoduleName in superProject.SubmodulesNames)
             {
@@ -39,7 +39,7 @@ public static class CommitsIndexValidationTablePrinter
                 Dictionary<string, string> submoduleHeadCommits = superProject.HeadCommitRefs[branch];
 
                 // Submodule 
-                Console.Write(columns[Column.Submodule].GetColumnWidthAdjustedValue(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
+                Console.Write(columns[Column.Submodule].GetAdjustedTextation(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
 
                 // Index commit
                 // Does submodule points correctly?
@@ -64,61 +64,60 @@ public static class CommitsIndexValidationTablePrinter
     /// <remarks>
     /// Non-commit columns have dynamic width
     /// </remarks>
-    private static Dictionary<string, TableColumn> GetColumns(RobustSuperProject printableSuperprojectDto)
+    private static Dictionary<string, DynamicTableColumn> GetConfiguredDynamicTableColumns(RobustSuperProject printableSuperprojectDto)
     {
-        // Ordered
         return new()
         {
             // Superproject
             {
                 Column.SuperProject,
-                new TableColumn(Column.SuperProject,
-                    TableColumn.CalculateColumnWidth(
-                        columnName: Column.SuperProject,
+                new DynamicTableColumn(
+                    DynamicTableColumn.CalculateColumnWidth(
+                        columnHeader: Column.SuperProject,
                         longestValueLength: printableSuperprojectDto.Name.Length))
             },
 
             // Branch
             {
                 Column.Branch, 
-                new TableColumn(Column.Branch,
-                TableColumn.CalculateColumnWidth(
-                        columnName: Column.Branch,
+                new DynamicTableColumn(
+                DynamicTableColumn.CalculateColumnWidth(
+                        columnHeader: Column.Branch,
                         longestValueLength: printableSuperprojectDto.GetAvailableBranches().MaxBy(x => x.Length)!.Length))
             },
 
             // Submodule
             {
                 Column.Submodule,
-                new TableColumn(Column.Submodule,
-                    TableColumn.CalculateColumnWidth(
-                        columnName: Column.Submodule,
+                new DynamicTableColumn(
+                    DynamicTableColumn.CalculateColumnWidth(
+                        columnHeader: Column.Submodule,
                         longestValueLength: printableSuperprojectDto.SubmodulesNames.MaxBy(x => x.Length)!.Length))
             },
 
             // Index commit
             {
                 Column.IndexCommit,
-                new TableColumn(Column.IndexCommit, MaxColumnWidth)
+                new DynamicTableColumn(MaxColumnWidth)
             },
 
             // Head commit
             {
                 Column.HeadCommit,
-                new TableColumn(Column.HeadCommit, MaxColumnWidth)
+                new DynamicTableColumn(MaxColumnWidth)
             },
         };
     }
 
-    private static void PrintTableHeader(Dictionary<string, TableColumn> columns) {
+    private static void PrintTableHeader(Dictionary<string, DynamicTableColumn> dynamicTableColumns) {
         Console.WriteLine();
 
         CustomConsole.WriteLineColored(
-            columns[Column.SuperProject].GetPrintableHeader() + Delimiter + 
-            columns[Column.Branch].GetPrintableHeader() + Delimiter + 
-            columns[Column.Submodule].GetPrintableHeader() + Delimiter  + 
-            columns[Column.IndexCommit].GetPrintableHeader() + Delimiter  + 
-            columns[Column.HeadCommit].GetPrintableHeader() + Delimiter  + Environment.NewLine,
+            dynamicTableColumns[Column.SuperProject].GetAdjustedTextation(Column.SuperProject, 0) + Delimiter + 
+            dynamicTableColumns[Column.Branch].GetAdjustedTextation(Column.Branch, 0) + Delimiter + 
+            dynamicTableColumns[Column.Submodule].GetAdjustedTextation(Column.Submodule, 0) + Delimiter  + 
+            dynamicTableColumns[Column.IndexCommit].GetAdjustedTextation(Column.IndexCommit, 0) + Delimiter  + 
+            dynamicTableColumns[Column.HeadCommit].GetAdjustedTextation(Column.HeadCommit, 0) + Delimiter  + Environment.NewLine,
             ConsoleColor.DarkCyan
         );
     }

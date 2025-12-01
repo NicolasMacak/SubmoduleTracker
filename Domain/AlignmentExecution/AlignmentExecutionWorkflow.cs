@@ -52,7 +52,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
         }
 
         // Begin alignemnt process
-        List<AligningSuperproject> successfullyAlignedSuperprojects = CreateForwardCommitsForSuperprojects(selectedSubmodule, superprojectsToAlign);
+        List<AligningSuperproject> successfullyAlignedSuperprojects = CreateForwardCommitsForSuperprojects(selectedSubmodule!, superprojectsToAlign);
 
         if (!ShouldOperationContinue(superprojectsToAlign, successfullyAlignedSuperprojects))
         {
