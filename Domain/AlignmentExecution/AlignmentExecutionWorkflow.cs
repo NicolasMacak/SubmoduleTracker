@@ -24,7 +24,6 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
     public void Run()
     {
-        Console.Clear();
         // Superprojects that contain submodule(selected by user in this method)
         string selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSupeprojects);
 
@@ -141,7 +140,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
         // List of all submodules
         List<string> allSubmodules =
             allSuperprojects.SelectMany(x => x.SubmodulesNames, (superProject, submodule) => submodule)
-            .Distinct() // Unique list
+            .Distinct() // Made unique
             .ToList();
 
         ModelResult<int> selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
@@ -168,13 +167,13 @@ public class AlignmentExecutionWorkflow : IWorkflow
         {
             List<string> branchesToAlign = new();
 
-            foreach(GitBranch branch in relevantBranches) // TODO. SKONTROLOVAT
+            foreach(GitBranch branch in relevantBranches)
             {
-                string indexCommit = superProject.IndexCommitRefs[branch.RemoteName][selectedSubmodule]; // where submodule points on in this branch
-                string headCommit = superProject.HeadCommitRefs[branch.RemoteName][selectedSubmodule]; // HEAD commit on this branch
+                string superProjectBranchCommitIndex = superProject.IndexCommitRefs[branch.RemoteName][selectedSubmodule]; // where submodule points on in this branch
+                string submoduleBranchHeadCommit = superProject.HeadCommitRefs[branch.RemoteName][selectedSubmodule]; // HEAD commit on this branch
 
                 // Does submodule in superproject points to the HEAD commit?
-                if(indexCommit != headCommit)
+                if(superProjectBranchCommitIndex != submoduleBranchHeadCommit)
                 {
                     branchesToAlign.Add(branch.LocalName); // add branch to align
                 }

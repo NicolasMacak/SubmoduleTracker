@@ -94,12 +94,12 @@ public static class CustomConsole
         {
             throw new ArgumentNullException("Choices must contain at least one item. What is wrong with you");
         }
+        string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
 
         while (true)
         {
             WriteLineColored(prompt, TextType.Question);
-            string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
-
+            
             int index = 1; // increased for more intuitive user experience
             foreach (string choice in choices)
             {

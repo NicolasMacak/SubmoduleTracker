@@ -20,7 +20,6 @@ public class HomeScreenWorkflow : IWorkflow
 
     public void Run()
     {
-        Console.Clear();
         CustomConsole.WriteLineColored("Main Menu", TextType.ImporantText);
 
         List<(string menuItem, Action navigationAction)> homeScreenOptions = GetHomeScreenActions();

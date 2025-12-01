@@ -20,7 +20,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
     public void Run()
     {
-        Console.Clear(); 
+        Console.Clear();
         PrintUserConfig();
 
         List<(string menuItem, Action userSettingsAction)> userSetttingsActions = GetUserSettingsActions();
@@ -59,31 +59,38 @@ public class ManageUserSettingsWorkflow : IWorkflow
     private void TryAddingNewSuperproject(string? errorMessage = null)
     {
         Console.Clear();
-        if (!string.IsNullOrEmpty(errorMessage)) {
-            CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
-        }
 
-        CustomConsole.WriteLineColored("Pridanie superprojektu", TextType.ImporantText);
-        CustomConsole.WriteLineColored("Zadajte absolutnu cestu ku git repozitaru", TextType.Question);
-        Console.WriteLine("Pre krok spat zadajte empty string" + Environment.NewLine);
-
-        string? superprojectWorkdir = Console.ReadLine();
-
-        // "" input. Cancel action 
-        if (string.IsNullOrEmpty(superprojectWorkdir))
+        // repeat until success
+        while(true)
         {
-            Run();
+            CustomConsole.WriteLineColored("Pridanie superprojektu", TextType.ImporantText);
+            CustomConsole.WriteLineColored("Zadajte absolutnu cestu ku git repozitaru", TextType.Question);
+            Console.WriteLine("Pre krok spat zadajte empty string" + Environment.NewLine);
+
+            string? superprojectWorkdir = Console.ReadLine();
+
+            // "" input. Cancel action 
+            if (string.IsNullOrEmpty(superprojectWorkdir))
+            {
+                Run();
+                return;
+            }
+
+            // user input is handled here
+            NonModelResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
+
+            if (result.ResultCode != ResultCode.Success)
+            {
+                Console.Clear();
+                CustomConsole.WriteErrorLine(result.ErrorMessage!);
+                continue;
+            }
+
+            break;
         }
-
-        // user input is handled here
-        NonModelResult result = _userConfigFacade.AddSuperproject(superprojectWorkdir!);
-
-        if (result.ResultCode != ResultCode.Success)
-        {
-            TryAddingNewSuperproject(result.ErrorMessage);
-        }
-
+        
         Run();
+        return;
     }
 
     /// <summary>
@@ -91,28 +98,35 @@ public class ManageUserSettingsWorkflow : IWorkflow
     /// </summary>
     private void DeleteSuperproject(string? errorMessage = null)
     {
-        if (!string.IsNullOrEmpty(errorMessage))
+        Console.Clear();
+
+        // repeat until success
+        while (true)
         {
-            CustomConsole.WriteErrorLine(errorMessage + Environment.NewLine);
-        }
+            List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-        List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
+            ModelResult<int> indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+            // Empty input => User wants step back
+            if (indexToDeleteAt.ResultCode == ResultCode.EmptyInput)
+            {
+                Run();
+                return;
+            }
 
-        ModelResult<int> indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
-        // Empty input => User wants step back
-        if (indexToDeleteAt.ResultCode == ResultCode.EmptyInput)
-        {
-            Run();
-        }
+            NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt.Model);
 
-        NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt.Model);
+            if (result.ResultCode != ResultCode.Success)
+            {
+                Console.Clear();
+                CustomConsole.WriteErrorLine(result.ErrorMessage!);
+                continue;
+            }
 
-        if (result.ResultCode != ResultCode.Success)
-        {
-            DeleteSuperproject(result.ErrorMessage); // todo. Refactoring. Malo by ma to vratit na hlavnu obrazovku?
+            break;
         }
 
         Run();
+        return;
     }
 
     private void TogglePushingToRemote()
@@ -125,6 +139,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         }
 
         Run();
+        return;
     }
 
     private void PrintUserConfig()

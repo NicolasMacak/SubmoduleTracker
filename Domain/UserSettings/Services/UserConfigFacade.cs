@@ -32,6 +32,11 @@ public sealed class UserConfigFacade
 
     public NonModelResult AddSuperproject(string superProjectWorkdir) 
     {
+        if (string.IsNullOrEmpty(superProjectWorkdir))
+        {
+            return NonModelResult.WithFailure("Superproject workdir can not be null");
+        }
+
         ModelResult<string> addingSuperprojectResult = TryGetGitRepositoryWorkingDirectory(superProjectWorkdir);
 
         if (addingSuperprojectResult.ResultCode == ResultCode.Failure)

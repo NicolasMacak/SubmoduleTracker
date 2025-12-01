@@ -11,6 +11,7 @@ public sealed class NavigationService
 
     public void NavigateTo<TWorkflow>() where TWorkflow : class, IWorkflow
     {
+        Console.Clear();
         _serviceProvider.GetRequiredService<TWorkflow>().Run();
     }
 }

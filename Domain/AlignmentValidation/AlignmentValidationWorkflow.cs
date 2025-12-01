@@ -29,8 +29,6 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
 
     public void Run()
     {
-        Console.Clear();
-
         ModelResult<int> selectedSuperprojectIndexResult = LetUserChooseSuperprojects();
         if (selectedSuperprojectIndexResult.ResultCode == ResultCode.EmptyInput)
         {
@@ -42,7 +40,6 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
             ? _userConfigfacade.MetaSupeprojects // User selected All superprojects options
             : _userConfigfacade.MetaSupeprojects.Where(x => x.Name == _allSelectSuperprojectOptions[selectedSuperprojectIndexResult.Model]); // User selected specific 
 
-        // ---- Branch selection
         List<GitBranch> relevantBranches = LetUserChooseRelevantBranches();
 
         foreach (MetaSuperProject metaSuperProject in metaSuperprojectValidate)
@@ -72,7 +69,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         // If we wont use emptyStringPrompt CustomConsole.GetIndexOfUserChoice is not supposed to return null
         if (selectedOptionIndexResult.ResultCode == ResultCode.EmptyInput)
         {
-            throw new Exception("Index of selected branches branches options was null.");
+            throw new InvalidOperationException("Index of selected branches branches options was null.");
         }
 
         return _relevantBranchesOptions[selectedOptionIndexResult.Model];
