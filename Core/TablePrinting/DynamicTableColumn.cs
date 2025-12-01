@@ -20,20 +20,11 @@ public sealed class DynamicTableColumn
     /// </summary>
     /// <param name="columnHeader"></param>
     /// <param name="longestValueLength">Column needs to be as long, as it's longest(string length wise) value</param>
-    public static int CalculateColumnWidth(string columnHeader, int longestValueLength)
+    public static int CalculateColumnWidth(int headerLength, int longestValueLength)
     {
         int min = Math.Min(longestValueLength, TableConstants.MaxColumnWidth); // as thin as possible. Not more than maximum column of the width
 
-        return Math.Max(min, columnHeader.Length); // but more than column header length
-    }
-
-    public static int CalculateColumnWidth(int headerLength, IEnumerable<int> bodyValuesLength)
-    {
-        //int min = Math.Min(longestValueLength, TableConstants.MaxColumnWidth); // as thin as possible. Not more than maximum column of the width
-
-        //return Math.Max(min, columnHeader.Length); // but more than column header length
-
-        return 0;
+        return Math.Max(min, headerLength); // but at least as wide as header
     }
 
     /// <summary>

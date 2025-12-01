@@ -1,6 +1,6 @@
 <mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="5719" dy="1887" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="3976" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -254,10 +254,10 @@
         <mxCell id="tnvOtmtbqIyWH4iodOLJ-7" value="Create console promptsObject" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-1470" y="1280" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="JkNhsvKiFdOxrLN-IJZV-2" value="Readme" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="JkNhsvKiFdOxrLN-IJZV-2" value="Readme" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-760" y="1450" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="JkNhsvKiFdOxrLN-IJZV-3" value="Column with calculator method" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" vertex="1" parent="1">
+        <mxCell id="JkNhsvKiFdOxrLN-IJZV-3" value="Validation and execution print table UNION?" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-1475" y="1100" width="250" height="80" as="geometry" />
         </mxCell>
       </root>

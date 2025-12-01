@@ -1,6 +1,7 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.MenuItems;
 using SubmoduleTracker.Core.Result;
+using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings;
@@ -46,7 +47,7 @@ public class HomeScreenWorkflow : IWorkflow
         if (_userConfigFacade.MetaSuperprojects.Count > 0)
         {
             homeScreenActionsToReturn.Add(new MenuItem("Submodule Commit Index Validation (Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
-            homeScreenActionsToReturn.Add(new MenuItem("Submodule Alignment Across Superprojects (Well. not Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
+            homeScreenActionsToReturn.Add(new MenuItem("Submodule Alignment Across Superprojects (Well. not Read-only)", _navigationService.NavigateTo<AlignmentExecutionWorkflow>));
         }
 
         homeScreenActionsToReturn.Add(new MenuItem("Settings", _navigationService.NavigateTo<ManageUserSettingsWorkflow>));

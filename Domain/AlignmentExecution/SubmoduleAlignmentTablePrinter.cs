@@ -37,7 +37,7 @@ public static class SubmoduleAlignmentTablePrinter
     {
         foreach (RobustSuperProject superProject in relevantSuperProjects)
         {
-            Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0));
+            Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name, 0));
 
             foreach (string branch in relevantBranches.GetRemotes())
             {
@@ -67,8 +67,7 @@ public static class SubmoduleAlignmentTablePrinter
             // Superproject
             {
                 Column.SuperProject,
-                new DynamicTableColumn(MaxColumnWidth                     
-                        )
+                new DynamicTableColumn(MaxColumnWidth)
             },
 
             // branch
@@ -76,7 +75,7 @@ public static class SubmoduleAlignmentTablePrinter
                 Column.Branch,
                 new DynamicTableColumn(
                         DynamicTableColumn.CalculateColumnWidth(
-                                columnHeader: Column.Branch,
+                                headerLength: Column.Branch.Length,
                                 longestValueLength: relevantBranches.MaxBy(x => x.RemoteName.Length)!.RemoteName.Length
                         )
                 )

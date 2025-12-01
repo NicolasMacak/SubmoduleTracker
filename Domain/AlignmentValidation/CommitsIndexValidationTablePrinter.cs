@@ -26,7 +26,7 @@ public static class CommitsIndexValidationTablePrinter
     {
 
         // Superproject title
-        Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name + "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 0));
+        Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(superProject.Name, 0));
 
         foreach (string branch in superProject.GetAvailableBranches())
         {
@@ -73,7 +73,7 @@ public static class CommitsIndexValidationTablePrinter
                 Column.SuperProject,
                 new DynamicTableColumn(
                     DynamicTableColumn.CalculateColumnWidth(
-                        columnHeader: Column.SuperProject,
+                        headerLength: Column.SuperProject.Length,
                         longestValueLength: printableSuperprojectDto.Name.Length))
             },
 
@@ -82,7 +82,7 @@ public static class CommitsIndexValidationTablePrinter
                 Column.Branch, 
                 new DynamicTableColumn(
                 DynamicTableColumn.CalculateColumnWidth(
-                        columnHeader: Column.Branch,
+                        headerLength : Column.Branch.Length,
                         longestValueLength: printableSuperprojectDto.GetAvailableBranches().MaxBy(x => x.Length)!.Length))
             },
 
@@ -91,7 +91,7 @@ public static class CommitsIndexValidationTablePrinter
                 Column.Submodule,
                 new DynamicTableColumn(
                     DynamicTableColumn.CalculateColumnWidth(
-                        columnHeader: Column.Submodule,
+                        headerLength : Column.Submodule.Length,
                         longestValueLength: printableSuperprojectDto.SubmodulesNames.MaxBy(x => x.Length)!.Length))
             },
 

@@ -1,7 +1,7 @@
 ﻿namespace SubmoduleTracker.Core.TablePrinting;
 public static class TableConstants
 {
-    public const int MaxColumnWidth  = 20;
+    public const int MaxColumnWidth  = 30;
 
     public const string Delimiter = " | ";
 
