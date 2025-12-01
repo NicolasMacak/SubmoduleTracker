@@ -1,6 +1,5 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
@@ -25,53 +24,74 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         _userConfigfacade = userConfigFacade;
         _navigationService = navigationService;
         _allSelectSuperprojectOptions = _userConfigfacade.MetaSupeprojects.Select(x => x.Name).ToList();
+
+        // If There is more than 1 superproject we want to provide "all superproject" options
+        if (_allSelectSuperprojectOptions.Count > 1)
+        {
+            _allSelectSuperprojectOptions.Add(AllSuperprojects);
+        }
     }
 
     public void Run()
     {
-        ModelResult<int> selectedSuperprojectIndexResult = LetUserChooseSuperprojects();
-        if (selectedSuperprojectIndexResult.ResultCode == ResultCode.EmptyInput)
+        List<MetaSuperProject>? superprojectToValidate = LetUserChooseSuperprojectsToValidate();
+        if (superprojectToValidate == null)
         {
             _navigationService.NavigateTo<HomeScreenWorkflow>();
             return;
         }
 
-        IEnumerable<MetaSuperProject> metaSuperprojectValidate = selectedSuperprojectIndexResult.Model == _allSelectSuperprojectOptions.Count - 1
-            ? _userConfigfacade.MetaSupeprojects // User selected All superprojects options
-            : _userConfigfacade.MetaSupeprojects.Where(x => x.Name == _allSelectSuperprojectOptions[selectedSuperprojectIndexResult.Model]); // User selected specific 
-
         List<GitBranch> relevantBranches = LetUserChooseRelevantBranches();
 
-        foreach (MetaSuperProject metaSuperProject in metaSuperprojectValidate)
+        foreach (MetaSuperProject metaSuperProject in superprojectToValidate)
         {
             RobustSuperProject robustSuperProject = metaSuperProject.ToRobustSuperproject(relevantBranches);
             CommitsIndexValidationTablePrinter.PrintTable(robustSuperProject);
         }
     }
 
-    private ModelResult<int> LetUserChooseSuperprojects()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>
+    /// Superprojects that will be validated. Or null, if user enters empty string
+    /// </returns>
+    private List<MetaSuperProject>? LetUserChooseSuperprojectsToValidate()
     {
-        // If There is more than 1 superproject we want to provide "all superproject" options
-        if (_allSelectSuperprojectOptions.Count > 1)
+        List<MetaSuperProject> metaSuperProjectsToReturn = new();
+
+        int? indexOfSuperprojectOptions = CustomConsole.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        if (!indexOfSuperprojectOptions.HasValue)
         {
-            _allSelectSuperprojectOptions.Add(AllSuperprojects);
+            return null;
         }
 
-        return CustomConsole.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        if(indexOfSuperprojectOptions.Value == _allSelectSuperprojectOptions.Count - 1)
+        {
+            // Picked last option. All superprojects
+            metaSuperProjectsToReturn.AddRange(_userConfigfacade.MetaSupeprojects);
+        }
+        else
+        {
+            // Picked not last option. Specific superproject
+            metaSuperProjectsToReturn.Add(_userConfigfacade.MetaSupeprojects[indexOfSuperprojectOptions.Value]);
+        }
+
+        return metaSuperProjectsToReturn;
     }
 
     private List<GitBranch> LetUserChooseRelevantBranches()
     {
-        List<string> options = _relevantBranchesOptions.Select(x => string.Join(", ", x.Select(x => x.RemoteName))).ToList();
+        List<string> relevantBranchesOptions = _relevantBranchesOptions.Select(x => string.Join(", ", x.Select(x => x.RemoteName))).ToList();
 
-        ModelResult<int> selectedOptionIndexResult = CustomConsole.GetIndexOfUserChoice(options, "Zvolte sadu branchov pre validaciu zarovnania.");
+        int? indexOfRelevantBranchOption = CustomConsole.GetIndexOfUserChoice(relevantBranchesOptions, "Zvolte sadu branchov pre validaciu zarovnania.");
 
         // If we wont use emptyStringPrompt CustomConsole.GetIndexOfUserChoice is not supposed to return null
-        if (selectedOptionIndexResult.ResultCode == ResultCode.EmptyInput)
+        if (!indexOfRelevantBranchOption.HasValue)
         {
             throw new InvalidOperationException("Index of selected branches branches options was null.");
         }
 
-        return _relevantBranchesOptions[selectedOptionIndexResult.Model];
+        return _relevantBranchesOptions[indexOfRelevantBranchOption.Value];
     }
 }

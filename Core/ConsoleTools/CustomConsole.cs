@@ -88,7 +88,7 @@ public static class CustomConsole
     /// The user sees options numbered from 1 to <c>choices.Count</c>. Internally,
     /// the method returns a zero-based index.
     /// </remarks>
-    public static ModelResult<int> GetIndexOfUserChoice(List<string> choices, string prompt, string? emptyStringPrompt = null)
+    public static int? GetIndexOfUserChoice(List<string> choices, string prompt, string? emptyStringPrompt = null)
     {
         if (choices == null || choices.Count == 0)
         {
@@ -118,7 +118,7 @@ public static class CustomConsole
             {
                 if (!string.IsNullOrEmpty(emptyStringPrompt))
                 {
-                    return new ModelResult<int>().With(ResultCode.EmptyInput);
+                    return null;
                 }
 
                 WriteErrorLine(incorrectRangeErrorMessage);
@@ -147,7 +147,7 @@ public static class CustomConsole
                 continue;
             }
 
-            return new ModelResult<int>().WithSuccess(choiceIndex);
+            return choiceIndex;
         }
     }
 }

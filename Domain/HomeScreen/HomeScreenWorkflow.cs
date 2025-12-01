@@ -30,13 +30,13 @@ public class HomeScreenWorkflow : IWorkflow
             CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the Settings", TextType.Error);
         }
 
-        ModelResult<int> choiceIndex = CustomConsole.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
-        if (choiceIndex.ResultCode == ResultCode.EmptyInput)
+        int? choiceIndex = CustomConsole.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
+        if (!choiceIndex.HasValue)
         {
             throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
         }
 
-        homeScreenOptions[choiceIndex.Model].ItemAction();
+        homeScreenOptions[choiceIndex.Value].ItemAction();
     }
 
     private List<MenuItem> GetHomeScreenActions()

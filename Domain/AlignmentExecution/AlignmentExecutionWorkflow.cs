@@ -1,7 +1,6 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Core.Result;
 using SubmoduleTracker.Domain.AlignmentExecution.Models;
 using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.Navigation;
@@ -25,17 +24,21 @@ public class AlignmentExecutionWorkflow : IWorkflow
     public void Run()
     {
         // Superprojects that contain submodule(selected by user in this method)
-        string selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSupeprojects);
+        string? selectedSubmodule = LetUserSelectSubmodule(_userConfigFacade.MetaSupeprojects);
+        if (string.IsNullOrEmpty(selectedSubmodule))
+        {
+            _navigationService.NavigateTo<HomeScreenWorkflow>();
+        }
 
         // superprojects that contain relevant submodule
         List<RobustSuperProject> relevantRobustSuperProjects =_userConfigFacade.MetaSupeprojects 
-            .Where(x => x.SubmodulesNames.Contains(selectedSubmodule))
+            .Where(x => x.SubmodulesNames.Contains(selectedSubmodule!))
             .Select(x => x.ToRobustSuperproject(_alignmentRelevantBranches))
             .ToList();
 
-        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule, relevantRobustSuperProjects, _alignmentRelevantBranches);
+        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule!, relevantRobustSuperProjects, _alignmentRelevantBranches);
 
-        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _alignmentRelevantBranches, selectedSubmodule);
+        List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _alignmentRelevantBranches, selectedSubmodule!);
 
         if (superprojectsToAlign.Count == 0)
         {
@@ -129,27 +132,25 @@ public class AlignmentExecutionWorkflow : IWorkflow
     /// <summary>
     /// Submodules from all superprojects are listed. User picks one. Superprojets that contain this submodule are returned
     /// </summary>
-    /// <returns>Superprojects that contain submodule selected by user</returns>
-    private string LetUserSelectSubmodule(List<MetaSuperProject> allSuperprojects, string? errorMessage = null)
+    /// <returns>
+    /// Name of the submodule to align. Null when user want's to go back to the main menu
+    /// </returns>
+    private static string? LetUserSelectSubmodule(List<MetaSuperProject> allSuperprojects)
     {
-        if (errorMessage != null)
-        {
-            CustomConsole.WriteErrorLine(errorMessage);
-        }
-
         // List of all submodules
         List<string> allSubmodules =
             allSuperprojects.SelectMany(x => x.SubmodulesNames, (superProject, submodule) => submodule)
             .Distinct() // Made unique
             .ToList();
 
-        ModelResult<int> selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
-        if (selectedSubmoduleIndex.ResultCode == ResultCode.EmptyInput)
+        int? selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+        // User entered empty string
+        if (!selectedSubmoduleIndex.HasValue)
         {
-            _navigationService.NavigateTo<HomeScreenWorkflow>(); // Todo. also leaking
+            return null;
         }
 
-        return allSubmodules.ElementAt(selectedSubmoduleIndex.Model);
+        return allSubmodules.ElementAt(selectedSubmoduleIndex!.Value);
     }
     
     /// <summary>

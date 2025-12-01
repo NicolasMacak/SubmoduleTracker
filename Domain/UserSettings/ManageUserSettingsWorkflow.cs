@@ -26,22 +26,23 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<MenuItem> userSetttingsActions = GetUserSettingsActions();
 
-        ModelResult<int> userChoiceIndexResult = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Zvolte akciu");
-        if (userChoiceIndexResult.ResultCode == ResultCode.EmptyInput)
+        int? userSettingsMenuItemIndex = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Choose an action");
+        if (!userSettingsMenuItemIndex.HasValue)
         {
             throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
         }
 
-        userSetttingsActions[userChoiceIndexResult.Model].ItemAction();
+        userSetttingsActions[userSettingsMenuItemIndex.Value].ItemAction();
     }
 
     private List<MenuItem> GetUserSettingsActions()
     {
-        List<MenuItem> settingsActions = new();
+        List<MenuItem> settingsActions = new()
+        {
+            new MenuItem("Add Superproject", () => TryAddingNewSuperproject())
+        };        
 
-        settingsActions.Add(new MenuItem("Add Superproject", () => TryAddingNewSuperproject()));
-
-        if(_userConfigFacade.MetaSupeprojects.Count > 0)
+        if(_userConfigFacade.ConfigSuperProjects.Count > 0)
         {
             settingsActions.Add(new MenuItem("Remove Superproject", () => DeleteSuperproject()));
         }
@@ -70,11 +71,10 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
             string? superprojectWorkdir = Console.ReadLine();
 
-            // "" input. Cancel action 
+            // "" input. Back to user settings
             if (string.IsNullOrEmpty(superprojectWorkdir))
             {
-                Run();
-                return;
+                break;
             }
 
             // user input is handled here
@@ -106,15 +106,15 @@ public class ManageUserSettingsWorkflow : IWorkflow
         {
             List<string> superProjectsToDelete = _userConfigFacade.ConfigSuperProjects.Select(x => x.WorkingDirectory).ToList();
 
-            ModelResult<int> indexToDeleteAt = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+            int? indexToDeleteIndex = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
             // Empty input => User wants step back
-            if (indexToDeleteAt.ResultCode == ResultCode.EmptyInput)
+            if (!indexToDeleteIndex.HasValue)
             {
                 Run();
                 return;
             }
 
-            NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteAt.Model);
+            NonModelResult result = _userConfigFacade.DeleteSuperProject(indexToDeleteIndex.Value);
 
             if (result.ResultCode != ResultCode.Success)
             {

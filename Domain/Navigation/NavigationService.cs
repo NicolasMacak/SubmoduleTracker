@@ -9,7 +9,7 @@ public sealed class NavigationService
         _serviceProvider = serviceProvider;
     }
 
-    public void NavigateTo<TWorkflow>() where TWorkflow : class, IWorkflow // todo. Secure callings. They all need to return have return thing
+    public void NavigateTo<TWorkflow>() where TWorkflow : class, IWorkflow
     {
         Console.Clear();
         _serviceProvider.GetRequiredService<TWorkflow>().Run();
