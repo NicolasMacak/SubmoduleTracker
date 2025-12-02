@@ -1,6 +1,6 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/29.0.3 Chrome/140.0.7339.249 Electron/38.7.0 Safari/537.36" version="29.0.3">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/27.0.9 Chrome/134.0.6998.205 Electron/35.4.0 Safari/537.36" version="27.0.9">
   <diagram name="Page-1" id="3orqYU6fAVE5CK-2h4ND">
-    <mxGraphModel dx="3976" dy="849" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="4616" dy="1244" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -54,9 +54,6 @@
         </mxCell>
         <mxCell id="9OnaElkXCphRrL8_LYWj-10" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Can Delete&lt;/font&gt;" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
           <mxGeometry x="-370" y="220" width="120" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="zN_APJOsYA4pf0mJ2beM-2" value="Cyan user input" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="-749.9999999999995" y="960.0000000000002" width="90" height="40" as="geometry" />
         </mxCell>
         <mxCell id="zN_APJOsYA4pf0mJ2beM-9" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Subor so submodulmi.&amp;nbsp;&lt;br&gt;Prepisatelny?&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="-2420" y="260" width="230" height="60" as="geometry" />
@@ -216,9 +213,6 @@
         <mxCell id="tLnxERMP1s8ftt1qe_WE-2" value="Remove obsolete" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-1080" y="1870" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="tLnxERMP1s8ftt1qe_WE-4" value="Its not about fiixing the bug. It&#39;s about understanding what caused it. It&#39;s not about implementing new feature. It&#39;s about understanding how it fit&#39;s into the product and how it&#39;s tied to customer. I will ask those important questions to make your product better." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="-1350" y="2210" width="400" height="10" as="geometry" />
-        </mxCell>
         <mxCell id="tLnxERMP1s8ftt1qe_WE-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="tLnxERMP1s8ftt1qe_WE-7" target="tLnxERMP1s8ftt1qe_WE-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -251,14 +245,8 @@
         <mxCell id="tnvOtmtbqIyWH4iodOLJ-3" value="User settigns edge cases&lt;br&gt;&lt;br&gt;Superproject not a git repository&lt;br&gt;&lt;br&gt;Superproject already added to settings&lt;br&gt;&lt;br&gt;Superprojects doesnt contain any submodules" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-1380" y="1550" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="tnvOtmtbqIyWH4iodOLJ-7" value="Create console promptsObject" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
-          <mxGeometry x="-1470" y="1280" width="250" height="80" as="geometry" />
-        </mxCell>
         <mxCell id="JkNhsvKiFdOxrLN-IJZV-2" value="Readme" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-760" y="1450" width="250" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="JkNhsvKiFdOxrLN-IJZV-3" value="Validation and execution print table UNION?" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
-          <mxGeometry x="-1475" y="1100" width="250" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

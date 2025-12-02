@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Core.GitInteraction.Model;
+﻿namespace SubmoduleTracker.Core.CommonTypes.SuperProjects;
 /// <summary>
 /// Creating them is expensive. Dont use unless you needs index and head commits obtained through <br></br> 
 /// - <see cref="MetaSuperProject.GetSubmoduleHeadCommitRefs(List{string}, List{string})"/> <br></br>

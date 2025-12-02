@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Core.Result;
+﻿namespace SubmoduleTracker.Core.CommonTypes.Result;
 public sealed class ModelResult<T>
 {
     public ResultCode ResultCode { get; set; }

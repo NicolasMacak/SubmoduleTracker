@@ -1,8 +1,10 @@
 ﻿using LibGit2Sharp;
 using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.CLI;
+using SubmoduleTracker.Core.GitInteraction.Extensions;
+using SubmoduleTracker.Core.GitInteraction.Model;
 
-namespace SubmoduleTracker.Core.GitInteraction.Model;
+namespace SubmoduleTracker.Core.CommonTypes.SuperProjects;
 
 /// <summary>
 /// Has metadata to obtain informations
@@ -110,7 +112,7 @@ public sealed class MetaSuperProject
 
     public RobustSuperProject ToRobustSuperproject(List<GitBranch> relevantBranches, List<string>? relevantSubmodules = null)
     {
-        CustomConsole.WriteLineColored($"Superproject: {Name} >> Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);
+        CustomConsole.WriteLineColored($"Superproject: {Name}: Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);
         GitFacade.FetchAllInMainAndSubmodules(WorkingDirectory);
 
         return new RobustSuperProject(

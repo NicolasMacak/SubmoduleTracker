@@ -1,7 +1,9 @@
-﻿using SubmoduleTracker.Core.ConsoleTools;
+﻿using SubmoduleTracker.Core.CommonTypes.SuperProjects;
+using SubmoduleTracker.Core.ConsoleTools;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.Navigation.Services;
+using SubmoduleTracker.Core.SubmoduleAlignmentTable;
 using SubmoduleTracker.Domain.HomeScreen;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentValidation;
@@ -43,11 +45,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
 
         List<GitBranch> relevantBranches = LetUserChooseRelevantBranches();
 
-        foreach (MetaSuperProject metaSuperProject in superprojectToValidate)
-        {
-            RobustSuperProject robustSuperProject = metaSuperProject.ToRobustSuperproject(relevantBranches);
-            CommitsIndexValidationTablePrinter.PrintTable(robustSuperProject);
-        }
+        SubmoduleAlignmentTablePrinter.PrintTableForSuperProjects(superprojectToValidate.Select(x => x.ToRobustSuperproject(relevantBranches)).ToList(), relevantBranches);
     }
 
     /// <summary>
@@ -60,7 +58,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         List<MetaSuperProject> metaSuperProjectsToReturn = new();
 
-        int? indexOfSuperprojectOptions = CustomConsole.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        int? indexOfSuperprojectOptions = UserPrompts.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
         if (!indexOfSuperprojectOptions.HasValue)
         {
             return null;
@@ -84,9 +82,9 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         List<string> relevantBranchesOptions = _relevantBranchesOptions.Select(x => string.Join(", ", x.Select(x => x.RemoteName))).ToList();
 
-        int? indexOfRelevantBranchOption = CustomConsole.GetIndexOfUserChoice(relevantBranchesOptions, "Zvolte sadu branchov pre validaciu zarovnania.");
+        int? indexOfRelevantBranchOption = UserPrompts.GetIndexOfUserChoice(relevantBranchesOptions, "Zvolte sadu branchov pre validaciu zarovnania.");
 
-        // If we wont use emptyStringPrompt CustomConsole.GetIndexOfUserChoice is not supposed to return null
+        // If we wont use emptyStringPrompt UserPrompts.GetIndexOfUserChoice is not supposed to return null
         if (!indexOfRelevantBranchOption.HasValue)
         {
             throw new InvalidOperationException("Index of selected branches branches options was null.");

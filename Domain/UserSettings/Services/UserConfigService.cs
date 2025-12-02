@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using LibGit2Sharp;
-using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Core.Result;
+using SubmoduleTracker.Core.CommonTypes.Result;
+using SubmoduleTracker.Core.CommonTypes.SuperProjects;
 using SubmoduleTracker.Domain.UserSettings.Model;
 
 namespace SubmoduleTracker.Domain.UserSettings.Services;

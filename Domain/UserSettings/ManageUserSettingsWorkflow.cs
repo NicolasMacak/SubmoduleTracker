@@ -1,9 +1,10 @@
-﻿using SubmoduleTracker.Core.ConsoleTools;
-using SubmoduleTracker.Core.GitInteraction.Model;
-using SubmoduleTracker.Core.MenuItems;
-using SubmoduleTracker.Core.Result;
+﻿using SubmoduleTracker.Core.CommonTypes.Menu;
+using SubmoduleTracker.Core.CommonTypes.Result;
+using SubmoduleTracker.Core.CommonTypes.SuperProjects;
+using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.ConsoleTools.Constants;
+using SubmoduleTracker.Core.Navigation.Services;
 using SubmoduleTracker.Domain.HomeScreen;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.UserSettings;
@@ -26,7 +27,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
 
         List<MenuItem> userSetttingsActions = GetUserSettingsActions();
 
-        int? userSettingsMenuItemIndex = CustomConsole.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Choose an action");
+        int? userSettingsMenuItemIndex = UserPrompts.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Choose an action");
         if (!userSettingsMenuItemIndex.HasValue)
         {
             throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
@@ -106,7 +107,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         {
             List<string> superProjectsToDelete = _userConfigFacade.MetaSuperprojects.Select(x => x.WorkingDirectory).ToList();
 
-            int? indexToDeleteIndex = CustomConsole.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+            int? indexToDeleteIndex = UserPrompts.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
             // Empty input => User wants step back
             if (!indexToDeleteIndex.HasValue)
             {

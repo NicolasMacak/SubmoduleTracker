@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
 using SubmoduleTracker.Domain.HomeScreen;
+using SubmoduleTracker.Core.Navigation.Services;
 
 class Program
 {
@@ -14,20 +14,20 @@ class Program
         IHostBuilder host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
-                services.AddSingleton<UserConfigService>();
-
                 // Navigation
-                services.AddTransient<HomeScreenWorkflow>();
                 services.AddTransient<NavigationService>();
 
-                // Settings
+                // Home screen
+                services.AddTransient<HomeScreenWorkflow>();
+
+                // User Settigns
                 services.AddTransient<ManageUserSettingsWorkflow>();
                 services.AddTransient<UserConfigService>();
 
-                // AlignmentControl
+                // Alignment Validation
                 services.AddTransient<AlignmentValidationWorkflow>();
 
-                // Aligning
+                // Alignment Execution
                 services.AddTransient<AlignmentExecutionWorkflow>();
             });
 

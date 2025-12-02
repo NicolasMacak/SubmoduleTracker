@@ -1,9 +1,10 @@
-﻿using SubmoduleTracker.Core.ConsoleTools;
-using SubmoduleTracker.Core.MenuItems;
-using SubmoduleTracker.Core.Result;
+﻿using SubmoduleTracker.Core.CommonTypes.Menu;
+using SubmoduleTracker.Core.CommonTypes.Result;
+using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.ConsoleTools.Constants;
+using SubmoduleTracker.Core.Navigation.Services;
 using SubmoduleTracker.Domain.AlignmentExecution;
 using SubmoduleTracker.Domain.AlignmentValidation;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
@@ -31,7 +32,7 @@ public class HomeScreenWorkflow : IWorkflow
             CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the Settings", TextType.Error);
         }
 
-        int? choiceIndex = CustomConsole.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
+        int? choiceIndex = UserPrompts.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
         if (!choiceIndex.HasValue)
         {
             throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");

@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Core.ConsoleTools;
+﻿namespace SubmoduleTracker.Core.ConsoleTools.Constants;
 public static class TextType
 {
     public const ConsoleColor ImporantText = ConsoleColor.DarkCyan;

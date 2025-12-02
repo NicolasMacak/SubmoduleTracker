@@ -1,9 +1,12 @@
-﻿using SubmoduleTracker.Core.ConsoleTools;
+﻿using SubmoduleTracker.Core.CommonTypes.SuperProjects;
+using SubmoduleTracker.Core.ConsoleTools;
+using SubmoduleTracker.Core.ConsoleTools.Constants;
 using SubmoduleTracker.Core.GitInteraction.CLI;
 using SubmoduleTracker.Core.GitInteraction.Model;
+using SubmoduleTracker.Core.Navigation.Services;
+using SubmoduleTracker.Core.SubmoduleAlignmentTable;
 using SubmoduleTracker.Domain.AlignmentExecution.Models;
 using SubmoduleTracker.Domain.HomeScreen;
-using SubmoduleTracker.Domain.Navigation;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentExecution;
@@ -36,7 +39,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Select(x => x.ToRobustSuperproject(_alignmentRelevantBranches))
             .ToList();
 
-        SubmoduleAlignmentTablePrinter.PrintTable(selectedSubmodule!, relevantRobustSuperProjects, _alignmentRelevantBranches);
+        SubmoduleAlignmentTablePrinter.PrintTableForSuperProjects(relevantRobustSuperProjects, _alignmentRelevantBranches, new() { selectedSubmodule! });
 
         List<AligningSuperproject> superprojectsToAlign = GetSuperProjectsToAlign(relevantRobustSuperProjects, _alignmentRelevantBranches, selectedSubmodule!);
 
@@ -46,7 +49,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             return;
         }
 
-        if(!CustomConsole.AskYesOrNoQuestion("Nasleduje vytvorenie forward commitov pre nezarovnané superprojekty. Pokracovat?"))
+        if(!UserPrompts.AskYesOrNoQuestion("Nasleduje vytvorenie forward commitov pre nezarovnané superprojekty. Pokracovat?"))
         {
             return;
         }
@@ -79,7 +82,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             return false;
         }
 
-        return CustomConsole.AskYesOrNoQuestion("Pushnut uspesne zarovnane superprojekty na remote?");
+        return UserPrompts.AskYesOrNoQuestion("Pushnut uspesne zarovnane superprojekty na remote?");
     }
 
     /// <summary>
@@ -143,7 +146,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Distinct() // Made unique
             .ToList();
 
-        int? selectedSubmoduleIndex = CustomConsole.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+        int? selectedSubmoduleIndex = UserPrompts.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
         // User entered empty string
         if (!selectedSubmoduleIndex.HasValue)
         {

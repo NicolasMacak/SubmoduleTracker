@@ -1,4 +1,4 @@
-﻿namespace SubmoduleTracker.Core.TablePrinting;
+﻿namespace SubmoduleTracker.Core.SubmoduleAlignmentTable;
 
 /// <summary>
 /// Used to create columns with flexible width.

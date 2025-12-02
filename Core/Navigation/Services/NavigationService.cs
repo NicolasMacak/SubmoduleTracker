@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-namespace SubmoduleTracker.Domain.Navigation;
+namespace SubmoduleTracker.Core.Navigation.Services;
 public sealed class NavigationService
 {
     private readonly IServiceProvider _serviceProvider;

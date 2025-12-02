@@ -1,6 +1,4 @@
-﻿using SubmoduleTracker.Core.Result;
-
-namespace SubmoduleTracker.Core.MenuItems;
+﻿namespace SubmoduleTracker.Core.CommonTypes.Menu;
 public class MenuItem
 {
     public string Title;
