@@ -2,7 +2,7 @@
 using SubmoduleTracker.Core.GitInteraction.CommandExceptions;
 
 namespace SubmoduleTracker.Core.GitInteraction.CLI;
-public static class GitProcessExecutor
+public static class ProcessExecutor
 {
     private static Process? GetCommandProcess(string path, string command)
     {

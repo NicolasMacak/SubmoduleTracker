@@ -248,6 +248,15 @@
         <mxCell id="JkNhsvKiFdOxrLN-IJZV-2" value="Readme" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-760" y="1450" width="250" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="FvdbKczLh_gC1pmZafr_-1" value="Alignment, Validation: if no submodules, fail" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
+          <mxGeometry x="-1460" y="940" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5diLwRwvyVZbyontyB---1" value="merge test into dev" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
+          <mxGeometry x="-1460" y="800" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="G-_Q12_VsOHMJ3sOKmo3-1" value="REname IWorkflow to Navigationable" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
+          <mxGeometry x="-1460" y="630" width="250" height="80" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

@@ -9,7 +9,7 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.UserSettings;
 
-public class ManageUserSettingsWorkflow : IWorkflow
+public class ManageUserSettingsWorkflow : INavigable
 {
     private readonly UserConfigService _userConfigFacade;
     private readonly NavigationService _navigationService;
@@ -25,7 +25,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         Console.Clear();
         PrintUserConfig();
 
-        List<MenuItem> userSetttingsActions = GetUserSettingsActions();
+        List<ActionMenuItem> userSetttingsActions = GetUserSettingsActions();
 
         int? userSettingsMenuItemIndex = UserPrompts.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Choose an action");
         if (!userSettingsMenuItemIndex.HasValue)
@@ -36,20 +36,20 @@ public class ManageUserSettingsWorkflow : IWorkflow
         userSetttingsActions[userSettingsMenuItemIndex.Value].ItemAction();
     }
 
-    private List<MenuItem> GetUserSettingsActions()
+    private List<ActionMenuItem> GetUserSettingsActions()
     {
-        List<MenuItem> settingsActions = new()
+        List<ActionMenuItem> settingsActions = new()
         {
-            new MenuItem("Add Superproject", () => TryAddingNewSuperproject())
+            new ActionMenuItem("Add Superproject", () => TryAddingNewSuperproject())
         };        
 
         if(_userConfigFacade.MetaSuperprojects.Count > 0)
         {
-            settingsActions.Add(new MenuItem("Remove Superproject", () => DeleteSuperproject()));
+            settingsActions.Add(new ActionMenuItem("Remove Superproject", () => DeleteSuperproject()));
         }
 
-        settingsActions.Add(new MenuItem("Toggle \"Push to Remote\"", TogglePushingToRemote));
-        settingsActions.Add(new MenuItem("Back to Main Menu", _navigationService.NavigateTo<HomeScreenWorkflow>));
+        settingsActions.Add(new ActionMenuItem("Toggle \"Push to Remote\"", TogglePushingToRemote));
+        settingsActions.Add(new ActionMenuItem("Back to Main Menu", _navigationService.NavigateTo<HomeScreenWorkflow>));
 
         return settingsActions;
     }
@@ -107,7 +107,7 @@ public class ManageUserSettingsWorkflow : IWorkflow
         {
             List<string> superProjectsToDelete = _userConfigFacade.MetaSuperprojects.Select(x => x.WorkingDirectory).ToList();
 
-            int? indexToDeleteIndex = UserPrompts.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Ktory superprojekt chcete zmazat?", "Alebo \"\" pre ukoncenie tejto akcie");
+            int? indexToDeleteIndex = UserPrompts.GetIndexOfUserChoice(superProjectsToDelete, Environment.NewLine + "Which superproject do you want to remove?", "Enter \"\" to end this action and return.");
             // Empty input => User wants step back
             if (!indexToDeleteIndex.HasValue)
             {

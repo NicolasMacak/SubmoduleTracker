@@ -1,14 +1,12 @@
 ﻿namespace SubmoduleTracker.Core.CommonTypes.SuperProjects;
 /// <summary>
-/// Creating them is expensive. Dont use unless you needs index and head commits obtained through <br></br> 
-/// - <see cref="MetaSuperProject.GetSubmoduleHeadCommitRefs(List{string}, List{string})"/> <br></br>
-/// - <see cref="MetaSuperProject.GetSubmoduleHeadCommitRefs(List{string}, List{string})"/>
+/// <see cref="MetaSuperProject"/> enriched by <see cref="IndexCommitRefs" and <see cref="HeadCommitRefs"/>
 /// </summary>
 public sealed class RobustSuperProject
 {
     public readonly string Name;
     public readonly string WorkingDirectory;
-    public List<string> SubmodulesNames; // exactly as it sounds
+    public List<string> SubmodulesNames; 
 
     /// <summary>
     /// Holds information where which commits submodules of this superprojects points to on relevant branches <br></br>
@@ -40,19 +38,5 @@ public sealed class RobustSuperProject
         SubmodulesNames = submodulesNames;
         IndexCommitRefs = indexCommitRefs;
         HeadCommitRefs = headCommitRefs;
-    }
-
-    /// <summary>
-    /// Extract branches from the result collection <see cref="IndexCommitRefs"/>
-    /// </summary>
-    /// <remarks>
-    /// We can use <see cref="IndexCommitRefs"/> and <see cref="HeadCommitRefs"/> interchangably.
-    /// Collections has identical structure. [same, [same, different]]
-    /// </remarks>
-    public IList<string> GetAvailableBranches()
-    {
-        return IndexCommitRefs
-            .Keys
-            .ToList(); // Keys of this dictionary is List of branches
     }
 }

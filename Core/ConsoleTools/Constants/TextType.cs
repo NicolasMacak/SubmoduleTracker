@@ -1,4 +1,7 @@
 ﻿namespace SubmoduleTracker.Core.ConsoleTools.Constants;
+/// <summary>
+/// Preddefined colors for UI
+/// </summary>
 public static class TextType
 {
     public const ConsoleColor ImporantText = ConsoleColor.DarkCyan;

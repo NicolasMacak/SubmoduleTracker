@@ -3,9 +3,6 @@
 /// <summary>
 /// Used to create columns with flexible width.
 /// </summary>
-/// <remarks>
-/// 
-/// </remarks>
 public sealed class DynamicTableColumn
 {
     public int Width { get; }

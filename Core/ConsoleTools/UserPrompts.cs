@@ -1,8 +1,13 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools.Constants;
 
 namespace SubmoduleTracker.Core.ConsoleTools;
+/// <summary>
+/// Defines user interactions with the application
+/// </summary>
 public sealed class UserPrompts
 {
+
+    public static string ReturnToMainMenuPrompt = "Enter \"\" for returning to the main menu";
 
     /// <summary>
     /// Prints <paramref name="question"/>. Promps user for typing "yes" to confirm
@@ -27,6 +32,7 @@ public sealed class UserPrompts
     /// <summary>
     /// Displays a numbered list of choices and reads the user's selection.
     /// Supports an empty input when <paramref name="emptyStringPrompt"/> is provided.
+    /// Repeat itself until valid input is provided.
     /// </summary>
     /// <param name="choices">
     /// The list of selectable options. Displayed to the user as items 1..n.

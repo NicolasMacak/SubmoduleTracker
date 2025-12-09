@@ -10,7 +10,7 @@ using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentExecution;
-public class AlignmentExecutionWorkflow : IWorkflow
+public class AlignmentExecutionWorkflow : INavigable
 {
     private readonly UserConfigService _userConfigFacade;
     private readonly NavigationService _navigationService;
@@ -64,7 +64,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
 
         foreach (AligningSuperproject superproject in successfullyAlignedSuperprojects)
         {
-            GitFacade.Push(superproject.Workdir);
+            GitCommandExecutor.Push(superproject.Workdir);
         }
     }
 
@@ -104,15 +104,15 @@ public class AlignmentExecutionWorkflow : IWorkflow
                 foreach (string branchToAlign in superproject.BranchesToAlign)
                 {
                     // checkout branch in superproject
-                    GitFacade.Switch(superproject.Workdir, branchToAlign);
-                    GitFacade.FetchAndFastForwardPull(superproject.Workdir);
+                    GitCommandExecutor.Switch(superproject.Workdir, branchToAlign);
+                    GitCommandExecutor.FetchAndFastForwardPull(superproject.Workdir);
 
                     // checkout and pull submodule branch
-                    GitFacade.Switch(submoduleWorkdir, branchToAlign); // checkout
-                    GitFacade.FetchAndFastForwardPull(submoduleWorkdir); // fetch and pull
+                    GitCommandExecutor.Switch(submoduleWorkdir, branchToAlign); // checkout
+                    GitCommandExecutor.FetchAndFastForwardPull(submoduleWorkdir); // fetch and pull
 
                     // Forward submodule in superproject
-                    GitFacade.CreateForwardCommit(superproject.Workdir, submoduleToForward);
+                    GitCommandExecutor.CreateForwardCommit(superproject.Workdir, submoduleToForward);
                     CustomConsole.WriteLineColored($"{superproject.Title}: {branchToAlign}. Forward commit vytvoreny.", TextType.Success);
                     successfullyAlignedSuperprojects.Add(superproject);
                 }
@@ -146,7 +146,7 @@ public class AlignmentExecutionWorkflow : IWorkflow
             .Distinct() // Made unique
             .ToList();
 
-        int? selectedSubmoduleIndex = UserPrompts.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", "Zadajte \"\" ak sa chcete vratit do hlavneho menu");
+        int? selectedSubmoduleIndex = UserPrompts.GetIndexOfUserChoice(allSubmodules, "Vyberte submodule na zarovnanie", UserPrompts.ReturnToMainMenuPrompt);
         // User entered empty string
         if (!selectedSubmoduleIndex.HasValue)
         {

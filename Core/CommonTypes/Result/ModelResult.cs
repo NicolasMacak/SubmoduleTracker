@@ -1,10 +1,21 @@
 ﻿namespace SubmoduleTracker.Core.CommonTypes.Result;
+/// <summary>
+/// Container that holds information about execution of the operation
+/// </summary>
+/// <typeparam name="T">Type of data that operation may return</typeparam>
 public sealed class ModelResult<T>
 {
+    /// <summary>
+    /// Final state of the executed operation
+    /// </summary>
     public ResultCode ResultCode { get; set; }
-
+    /// <summary>
+    /// Data returned by operation
+    /// </summary>
     public T? Model { get; set; }
-
+    /// <summary>
+    /// Information about error when execution fails
+    /// </summary>
     public string? ErrorMessage { get; set; }
 
     public ModelResult() { }

@@ -2,14 +2,17 @@
 using SubmoduleTracker.Domain.AlignmentExecution.Exceptions;
 
 namespace SubmoduleTracker.Core.GitInteraction.CLI;
-public static class GitFacade
+/// <summary>
+/// Utility git commands
+/// </summary>
+public static class GitCommandExecutor
 { 
     public static void FetchAndFastForwardPull(string path)
     {
-        GitProcessExecutor.ExecuteVoidCommand(path, "fetch");
+        ProcessExecutor.ExecuteVoidCommand(path, "fetch");
         try
         {
-            GitProcessExecutor.ExecuteVoidCommand(path, "pull --ff-only");
+            ProcessExecutor.ExecuteVoidCommand(path, "pull --ff-only");
         }
         catch (CommandExecutionException)
         {
@@ -23,16 +26,16 @@ public static class GitFacade
 
     public static void FetchAllInMainAndSubmodules(string path)
     {
-        GitProcessExecutor.ExecuteVoidCommand(path, "fetch --all --recurse-submodules");
-        GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
+        ProcessExecutor.ExecuteVoidCommand(path, "fetch --all --recurse-submodules");
+        ProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
     }
 
     public static void CreateForwardCommit(string path, string submoduleName)
     {
-        GitProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
+        ProcessExecutor.ExecuteVoidCommand(path, $"add {submoduleName}");
         try
         {
-            GitProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward\"");
+            ProcessExecutor.ExecuteVoidCommand(path, $"commit -m \"{submoduleName}: Automatic forward\"");
         }
         catch (CommandExecutionException)
         {
@@ -46,7 +49,7 @@ public static class GitFacade
 
     public static void Push(string path)
     {
-        GitProcessExecutor.ExecuteVoidCommand(path, "push");
+        ProcessExecutor.ExecuteVoidCommand(path, "push");
     }
 
     public static void Switch(string path, string branch)
@@ -59,13 +62,13 @@ public static class GitFacade
             return;
         }
 
-        GitProcessExecutor.ExecuteVoidCommand(path, $"switch {branch}");
-        GitProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
+        ProcessExecutor.ExecuteVoidCommand(path, $"switch {branch}");
+        ProcessExecutor.ExecuteVoidCommand(path, "submodule update --init --recursive");
     }
 
     public static string GetCurrentBranch(string path)
     {
         // --show-current branch name is returned
-        return GitProcessExecutor.ExecuteResponseCommand(path, "branch --show-current");
+        return ProcessExecutor.ExecuteResponseCommand(path, "branch --show-current");
     }
 }

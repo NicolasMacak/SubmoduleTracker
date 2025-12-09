@@ -15,8 +15,7 @@ namespace SubmoduleTracker.Core.CommonTypes.SuperProjects;
 /// <see cref="ToRobustSuperproject"/> will create with object with relevant data when they are needed
 /// </remarks>
 
-// MetaSuperProject - + Submodules
-// RobustSuperProject - + Commit pointings
+// RobustSuperProject - MetaSuperProject + Commit Indexes
 
 public sealed class MetaSuperProject
 {
@@ -113,7 +112,7 @@ public sealed class MetaSuperProject
     public RobustSuperProject ToRobustSuperproject(List<GitBranch> relevantBranches, List<string>? relevantSubmodules = null)
     {
         CustomConsole.WriteLineColored($"Superproject: {Name}: Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);
-        GitFacade.FetchAllInMainAndSubmodules(WorkingDirectory);
+        GitCommandExecutor.FetchAllInMainAndSubmodules(WorkingDirectory);
 
         return new RobustSuperProject(
             name: Name,

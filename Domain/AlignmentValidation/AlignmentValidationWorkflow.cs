@@ -7,7 +7,7 @@ using SubmoduleTracker.Domain.HomeScreen;
 using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.AlignmentValidation;
-public sealed class AlignmentValidationWorkflow : IWorkflow
+public sealed class AlignmentValidationWorkflow : INavigable
 {
     private const string AllSuperprojects = "All Superprojects";
 
@@ -48,9 +48,6 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
         SubmoduleAlignmentTablePrinter.PrintTableForSuperProjects(superprojectToValidate.Select(x => x.ToRobustSuperproject(relevantBranches)).ToList(), relevantBranches);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     /// <returns>
     /// Superprojects that will be validated. Or null, if user enters empty string
     /// </returns>
@@ -58,7 +55,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         List<MetaSuperProject> metaSuperProjectsToReturn = new();
 
-        int? indexOfSuperprojectOptions = UserPrompts.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Zvolte superprojekt ktory chcete zvalidovat.", "Zadajte \"\" pre navrat do hlavneho menu");
+        int? indexOfSuperprojectOptions = UserPrompts.GetIndexOfUserChoice(_allSelectSuperprojectOptions, "Choose superproject to validate.", UserPrompts.ReturnToMainMenuPrompt);
         if (!indexOfSuperprojectOptions.HasValue)
         {
             return null;
@@ -82,7 +79,7 @@ public sealed class AlignmentValidationWorkflow : IWorkflow
     {
         List<string> relevantBranchesOptions = _relevantBranchesOptions.Select(x => string.Join(", ", x.Select(x => x.RemoteName))).ToList();
 
-        int? indexOfRelevantBranchOption = UserPrompts.GetIndexOfUserChoice(relevantBranchesOptions, "Zvolte sadu branchov pre validaciu zarovnania.");
+        int? indexOfRelevantBranchOption = UserPrompts.GetIndexOfUserChoice(relevantBranchesOptions, "Choose the set of branches to validate.");
 
         // If we wont use emptyStringPrompt UserPrompts.GetIndexOfUserChoice is not supposed to return null
         if (!indexOfRelevantBranchOption.HasValue)

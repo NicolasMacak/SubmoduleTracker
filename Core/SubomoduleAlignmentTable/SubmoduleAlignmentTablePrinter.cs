@@ -23,7 +23,6 @@ public static class SubmoduleAlignmentTablePrinter
 
         Dictionary<string, DynamicTableColumn> dynamicColumnsConfigurations = GetColumnsConfig(allSuperprojects!, relevantBranches!);
 
-        Console.WriteLine();
         PrintTableHeader(dynamicColumnsConfigurations);
 
         foreach (RobustSuperProject superProject in allSuperprojects!)
@@ -44,6 +43,7 @@ public static class SubmoduleAlignmentTablePrinter
 
     public static void PrintTableHeader(Dictionary<string, DynamicTableColumn> columns)
     {
+        Console.WriteLine();
         Console.WriteLine(
             columns[Column.SuperProject].GetAdjustedTextation(Column.SuperProject, 0) + Delimiter +
             columns[Column.Branch].GetAdjustedTextation(Column.Branch, 0) + Delimiter +
@@ -57,7 +57,6 @@ public static class SubmoduleAlignmentTablePrinter
     {
         // Superproject row
         CustomConsole.WriteLineColored(columns[Column.SuperProject].GetAdjustedTextation(relevantSuperProject.Name, 0), TextType.ImporantText);
-        //Console.WriteLine(columns[Column.SuperProject].GetAdjustedTextation(relevantSuperProject.Name, 0));
 
         foreach (string branch in relevantBranches.GetRemotes())
         {

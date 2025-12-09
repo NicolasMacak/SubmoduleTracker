@@ -1,6 +1,9 @@
 ﻿using SubmoduleTracker.Core.ConsoleTools.Constants;
 
 namespace SubmoduleTracker.Core.ConsoleTools;
+/// <summary>
+/// CustomConsole for writing colored text
+/// </summary>
 public static class CustomConsole
 {
     public static void ClearAndWriteLine(string? text)

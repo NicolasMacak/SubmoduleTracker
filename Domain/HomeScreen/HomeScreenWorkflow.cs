@@ -10,7 +10,7 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.HomeScreen;
 
-public class HomeScreenWorkflow : IWorkflow
+public class HomeScreenWorkflow : INavigable
 {
     private readonly NavigationService _navigationService;
     private readonly UserConfigService _userConfigFacade;
@@ -25,7 +25,7 @@ public class HomeScreenWorkflow : IWorkflow
     {
         CustomConsole.WriteLineColored("Main Menu", TextType.ImporantText);
 
-        List<MenuItem> homeScreenOptions = GetHomeScreenActions();
+        List<ActionMenuItem> homeScreenOptions = GetHomeScreenActions();
 
         if (_userConfigFacade.MetaSuperprojects.Count == 0)
         {
@@ -41,17 +41,17 @@ public class HomeScreenWorkflow : IWorkflow
         homeScreenOptions[choiceIndex.Value].ItemAction();
     }
 
-    private List<MenuItem> GetHomeScreenActions()
+    private List<ActionMenuItem> GetHomeScreenActions()
     {
-        List<MenuItem> homeScreenActionsToReturn = new();
+        List<ActionMenuItem> homeScreenActionsToReturn = new();
 
         if (_userConfigFacade.MetaSuperprojects.Count > 0)
         {
-            homeScreenActionsToReturn.Add(new MenuItem("Submodule Commit Index Validation (Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
-            homeScreenActionsToReturn.Add(new MenuItem("Submodule Alignment Across Superprojects (Well. not Read-only)", _navigationService.NavigateTo<AlignmentExecutionWorkflow>));
+            homeScreenActionsToReturn.Add(new ActionMenuItem("Submodule Index Validation (Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
+            homeScreenActionsToReturn.Add(new ActionMenuItem("Submodule Index Alignment Across Superprojects (Creates Commits)", _navigationService.NavigateTo<AlignmentExecutionWorkflow>));
         }
 
-        homeScreenActionsToReturn.Add(new MenuItem("Settings", _navigationService.NavigateTo<ManageUserSettingsWorkflow>));
+        homeScreenActionsToReturn.Add(new ActionMenuItem("Settings", _navigationService.NavigateTo<ManageUserSettingsWorkflow>));
 
         return homeScreenActionsToReturn;
     }

@@ -1,53 +1,63 @@
-## Functions
+# Overview
+This tool streamlines work with Git submodules inside multiple related repositories (“superprojects”).
 
-### Kontrola zarovnania submodulov(Idempotentná)
-Kontrola či submoduly ukazujú správne. 
+## Terminology
+- **Superproject** — Main repository that includes one or more submodules.  
+- **Submodule** — Git repository referenced by a superproject.
 
-Správna ak 
-Superprojekt DEV Reference commit = Subomdule DEV HEAD
+The tool provides two core operations:
+1. **Submodule Index Validation** — Checks whether superprojects reference the correct commit of a given submodule.
+2. **Submodule Index Alignment Across Superprojects** — Updates all superprojects to reference the same (new) submodule commit.
 
-V uvahu sa beru iba remote branches.
+# User Settings / Initial Configuration
+To use the tool, absolute paths to all relevant superprojects must be configured in the **User Settings** screen.
 
-### Zarovnanie submodulu napriec superprojektami(Idempotentná?)
+- **Superprojects** — List of superprojects on which operations may be executed.  
+- **PushToRemote** — If `true`, the Alignment operation may push aligned states to the remote (user confirmation required).
 
-Príklad použitia:
-Pushol som commit do biosignCore. V rámci storky som forwardol Biosign.
-Táto funkcionalita ho forwardne aj v DES.
+# Operations
 
-Algoritmus
+## Submodule Index Validation (Idempotent)
+Checks whether the commit index recorded in a superproject matches the expected commit index in the submodule.
 
-1. chcem byt na dev v superprojekte
-2. checkout dev v submodule
-3. Fetch and merge
-4. Forward commit v superprojekte
+The operation can run:
+- On a single superproject  
+- On all configured superprojects  
 
-Chcem vzdy remote branches?
-Branch.TIP
-- Remote ma co chcem
-- Local.TIP = Remote.TIP?
+Parameters:
+- **SubmoduleX** — The submodule to validate  
+- **BranchY** — The branch whose expected submodule state will be compared  
 
-Chcem remote branchces
-Ak lokalne neexistuje, nemam sa kam pozriet.
+Validation rule:
+Superproject.BranchX.HEAD.SubmoduleXCommit == SubmoduleX.BranchY.HEAD.Commit
 
-Fast forward strategy is used. Histories diverged. It needs to handled mannualy
+Only **remote state** is evaluated. Local unpushed changes are ignored.
 
-## Testing cases
+---
 
-### Aligning superproject
-Umoznuje zarovnat 1 superprojekt alebo vsetky superprojekty.
+## Submodule Alignment Across Superprojects
+Aligns the selected submodule to a specific commit across all superprojects where validation fails.
 
-Conflict
-- exception je vyhodne
+**Algorithm (only the `test` branch is considered):**
+For each superproject:
+1. Switch superproject to `test`
+2. Fetch + fast-forward pull
+3. Switch submodule to `test`
+4. Fetch + fast-forward pull
+5. Create a forward commit in the superproject with the updated submodule reference
 
-Superprojekt nema branchu na ktorej je treba zarovnat submodule.
-- git switch ju vytvori
+This operation is intended **after a feature is completed and merged**, since merged features are expected to be present on `test`.
 
-Submodul nema branchu na ktorej head sa treba referencovat
-- git switch ju vytvory
+### Handled cases
+- Target branch does not exist locally (superproject or submodule)  
+  → Created automatically via `git switch`
+- Fast-forward pull fails (conflict or diverged history)  
+  → `FastForwardMergeFailureException`
 
-Histories diverged on the remote.
-NOT YET TESTED
+### Known Issue: Local alignment vs remote misalignment
+Occurs when:
+- A developer aligns the state locally (manually or using this tool),  
+- The remote remains outdated,  
+- And the alignment operation is executed again.
 
-Pozor: Ak ma aplikacia zakazane pushovat a lokalne branchce smeruju spravne, user dostane exception.
-Pretoze applikacia kontroluje sa pozera na remote branchce.
-Dovod: Origin stav nesedi. Ale taktiez nema co comitnut pretoze na lokal to ukazuje dobre.
+The tool detects remote misalignment and attempts local alignment, but the local state is already correct → `ForwardCommitCreationException`.
