@@ -45,39 +45,39 @@ public static class SubmoduleAlignmentTablePrinter
     {
         Console.WriteLine();
         Console.WriteLine(
-            columns[Column.SuperProject].GetAdjustedTextation(Column.SuperProject, 0) + Delimiter +
-            columns[Column.Branch].GetAdjustedTextation(Column.Branch, 0) + Delimiter +
-            columns[Column.Submodule].GetAdjustedTextation(Column.Submodule, 0) + Delimiter +
-            columns[Column.IndexCommit].GetAdjustedTextation(Column.IndexCommit, 0) + Delimiter +
-            columns[Column.HeadCommit].GetAdjustedTextation(Column.HeadCommit, 0) + Delimiter
+            columns[Column.SuperProject].GetValueWithoutOffset(Column.SuperProject) + Delimiter +
+            columns[Column.Branch].GetValueWithoutOffset(Column.Branch) + Delimiter +
+            columns[Column.Submodule].GetValueWithoutOffset(Column.Submodule) + Delimiter +
+            columns[Column.IndexCommit].GetValueWithoutOffset(Column.IndexCommit) + Delimiter +
+            columns[Column.HeadCommit].GetValueWithoutOffset(Column.HeadCommit) + Delimiter
         );
     }
 
     private static void PrintTableBody(RobustSuperProject relevantSuperProject, List<GitBranch> relevantBranches, List<string> relevantSubmodules, Dictionary<string, DynamicTableColumn> columns)
     {
         // Superproject row
-        CustomConsole.WriteLineColored(columns[Column.SuperProject].GetAdjustedTextation(relevantSuperProject.Name, 0), TextType.ImporantText);
+        CustomConsole.WriteLineColored(columns[Column.SuperProject].GetValueWithoutOffset(relevantSuperProject.Name), TextType.ImporantText);
 
         foreach (string branch in relevantBranches.GetRemotes())
         {
             // Outputs bellow are in one row. We put offset only into the first
-            int offsetForBranchColumn = columns[Column.SuperProject].Width;
-            Console.WriteLine(columns[Column.Branch].GetAdjustedTextation(branch, offsetForBranchColumn + Delimiter.Length) + Delimiter);
+            //int offsetForBranchColumn = columns[Column.SuperProject]._width;
+            Console.WriteLine(columns[Column.Branch].GetValueWithOffset(branch) + Delimiter);
 
             // Index comparison row
             foreach (string submoduleName in relevantSubmodules)
             {
-                Console.Write(columns[Column.Submodule].GetAdjustedTextation(submoduleName, columns[Column.SuperProject].Width + columns[Column.Branch].Width + Delimiter.Length * 2) + Delimiter);
+                Console.Write(columns[Column.Submodule].GetValueWithOffset(submoduleName) + Delimiter);
 
                 string indexCommit = relevantSuperProject.IndexCommitRefs[branch][submoduleName]; // where submodule points on in this branch. .First() because 
                 string headCommit = relevantSuperProject.HeadCommitRefs[branch][submoduleName]; // HEAD commit on this branch
 
                 ConsoleColor color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
-                string indexCommitFormatted = columns[Column.IndexCommit].GetAdjustedTextation(indexCommit, 0); // formatted value
+                string indexCommitFormatted = columns[Column.IndexCommit].GetValueWithOffset(indexCommit); // formatted value
                 CustomConsole.WriteColored(indexCommitFormatted, color);
                 Console.Write(Delimiter); // appending delimeter in normal color
 
-                Console.Write(columns[Column.HeadCommit].GetAdjustedTextation(headCommit, 0) + Delimiter + Environment.NewLine);
+                Console.Write(columns[Column.HeadCommit].GetValueWithOffset(headCommit) + Delimiter + Environment.NewLine);
             }
         }
 
@@ -86,16 +86,31 @@ public static class SubmoduleAlignmentTablePrinter
 
     private static Dictionary<string, DynamicTableColumn> GetColumnsConfig(List<RobustSuperProject> superProjects, List<GitBranch> relevantBranches)
     {
+        int superProjectColumnWidth = CalculateColumnWidth(
+                headerLength: Column.SuperProject.Length,
+                longestValueLength: superProjects.MaxBy(x => x.Name)!.Name.Length
+            );
+
+        int branchColumnWidth = CalculateColumnWidth(
+                headerLength: Column.SuperProject.Length,
+                longestValueLength: superProjects.MaxBy(x => x.Name)!.Name.Length
+            );
+        int branchColumnOffset = superProjectColumnWidth + Delimiter.Length;
+
+        int submoduleColumnWidth = CalculateColumnWidth(
+                headerLength: Column.Submodule.Length,
+                longestValueLength: superProjects.SelectMany(x => x.SubmodulesNames).MaxBy(x => x.Length)!.Length
+            );
+        int submoduleColumnOffest = superProjectColumnWidth + Delimiter.Length + branchColumnWidth + Delimiter.Length;
+
         return new Dictionary<string, DynamicTableColumn>()
         {
             // Superproject
             {
                 Column.SuperProject,
                 new DynamicTableColumn(
-                    width: CalculateColumnWidth(
-                                headerLength: Column.SuperProject.Length,
-                                longestValueLength: superProjects.MaxBy(x => x.Name)!.Name.Length
-                        )
+                    width: superProjectColumnWidth,
+                    leftOffset: 0
                     )
             },
 
@@ -103,34 +118,30 @@ public static class SubmoduleAlignmentTablePrinter
             {
                 Column.Branch,
                 new DynamicTableColumn(
-                        width: CalculateColumnWidth(
-                                headerLength: Column.Branch.Length,
-                                longestValueLength: relevantBranches.MaxBy(x => x.RemoteName.Length)!.RemoteName.Length
+                        width: branchColumnWidth,
+                        leftOffset: branchColumnOffset
                         )
-                )
             },
 
             // Subomdule
             {
                 Column.Submodule,
                 new DynamicTableColumn(
-                    width: CalculateColumnWidth(
-                        headerLength: Column.Submodule.Length,
-                        longestValueLength: superProjects.SelectMany(x => x.SubmodulesNames).MaxBy(x => x.Length)!.Length
+                    width: superProjectColumnWidth,
+                    leftOffset: submoduleColumnOffest
                     )
-                )
             },
 
             // Index commit
             {
                 Column.IndexCommit,
-                new DynamicTableColumn(MaxColumnWidth)
+                new DynamicTableColumn(MaxColumnWidth, 0)
             },
 
             // Head commit
             {
                 Column.HeadCommit,
-                new DynamicTableColumn(MaxColumnWidth)
+                new DynamicTableColumn(MaxColumnWidth, 0)
             }
         };
     }

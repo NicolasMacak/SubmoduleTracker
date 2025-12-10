@@ -1,22 +1,28 @@
 ﻿namespace SubmoduleTracker.Core.SubmoduleAlignmentTable;
 
 /// <summary>
-/// Used to create columns with flexible width.
+/// Represents a text-based table column with fixed width and optional left offset.
+/// Provides formatting helpers for consistent column alignment.
 /// </summary>
 public sealed class DynamicTableColumn
 {
-    public int Width { get; }
+    private readonly int _width;
+    private readonly int _leftOffset;
 
-    public DynamicTableColumn(int width)
+    /// <param name="width">Total width of the column in characters.</param>
+    /// <param name="leftOffset">Number of spaces added before the value.</param>
+    public DynamicTableColumn(int width, int  leftOffset)
     {
-        Width = width;
+        _width = width;
+        _leftOffset = leftOffset;
     }
 
     /// <summary>
-    /// Returns minimal length for every value of the row to fit int
+    /// Calculates the optimal column width based on header length, longest value, and the maximum allowed width.
     /// </summary>
-    /// <param name="columnHeader"></param>
-    /// <param name="longestValueLength">Column needs to be as long, as it's longest(string length wise) value</param>
+    /// <param name="headerLength">Length of the column header text.</param>
+    /// <param name="longestValueLength">Length of the longest value in the column.</param>
+    /// <returns>The computed column width.</returns>
     public static int CalculateColumnWidth(int headerLength, int longestValueLength)
     {
         int min = Math.Min(longestValueLength, TableConstants.MaxColumnWidth); // as thin as possible. Not more than maximum column of the width
@@ -25,20 +31,32 @@ public sealed class DynamicTableColumn
     }
 
     /// <summary>
-    /// Returns value + " " up to the end of the column width. Offset is possibility
+    /// Pads the provided value to the column width with trailing spaces.
     /// </summary>
-    /// <param name="value">Value to print</param>
-    /// <param name="leftOffest"></param>
-    /// <remarks>
-    /// Formula: " " * offset + value + " " * (Width - value.length)
-    /// </remarks>
-    public string GetAdjustedTextation(string value, int leftOffest)
+    /// <param name="value">Value to format.</param>
+    /// <returns>The padded value.</returns>
+    public string GetValueWithoutOffset(string value)
     {
-        if (value.Length > Width)
+        return value.PadRight(_width);
+    }
+
+    /// <summary>
+    /// Pads the value to the column width and prefixes it with the configured left offset.
+    /// Values exceeding the column width are truncated and suffixed with "..".
+    /// </summary>
+    /// <param name="value">Value to format.</param>
+    /// <returns>The padded and offset-adjusted value.</returns>
+    /// <remarks>
+    /// Output format: (spaces * offset) + value + (spaces to fill column width)
+    /// </remarks>
+    public string GetValueWithOffset(string value)
+    {
+        if (value.Length > _width)
         {
-            value = value[..(Width - 2)] + "..";
+            value = value[..(_width - 2)] + "..";
         }
 
-        return $"{new string(' ', leftOffest)}{value.PadRight(Width)}";
+        return $"{new string(' ', _leftOffset)}{value.PadRight(_width)}";
     }
+
 }
