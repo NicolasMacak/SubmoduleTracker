@@ -36,7 +36,7 @@ public sealed class MetaSuperProject
     }
 
     /// <summary>
-    /// Get commit ids to which submodules points to for provided branches (DEV, TEST)
+    /// Get commit ids to which submodules points to for provided branches
     /// </summary>
     /// <param name="relevantBranches">branches to get results for</param>
     /// <remarks>

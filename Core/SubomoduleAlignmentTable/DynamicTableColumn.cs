@@ -35,7 +35,7 @@ public sealed class DynamicTableColumn
     /// </summary>
     /// <param name="value">Value to format.</param>
     /// <returns>The padded value.</returns>
-    public string GetValueWithoutOffset(string value)
+    public string GetHeaderValue(string value)
     {
         return value.PadRight(_width);
     }
@@ -49,7 +49,7 @@ public sealed class DynamicTableColumn
     /// <remarks>
     /// Output format: (spaces * offset) + value + (spaces to fill column width)
     /// </remarks>
-    public string GetValueWithOffset(string value)
+    public string GetBodyValue(string value)
     {
         if (value.Length > _width)
         {

@@ -9,6 +9,15 @@ using static SubmoduleTracker.Core.SubmoduleAlignmentTable.TableConstants;
 namespace SubmoduleTracker.Core.SubmoduleAlignmentTable;
 public static class SubmoduleAlignmentTablePrinter
 {
+    private const string MissingBranchFillerString = "---";
+
+    /// <summary>
+    /// Prints alignment submodule validation table
+    /// </summary>
+    /// <param name="allSuperprojects"></param>
+    /// <param name="relevantBranches"></param>
+    /// <param name="relevantSubmodules"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public static void PrintTableForSuperProjects(List<RobustSuperProject> allSuperprojects, List<GitBranch> relevantBranches, List<string>? relevantSubmodules = null)
     {
         if (allSuperprojects != null && allSuperprojects.Count == 0)
@@ -21,7 +30,7 @@ public static class SubmoduleAlignmentTablePrinter
             throw new ArgumentNullException($"{nameof(relevantBranches)} is not supposed to be empty!");
         }
 
-        Dictionary<string, DynamicTableColumn> dynamicColumnsConfigurations = GetColumnsConfig(allSuperprojects!, relevantBranches!);
+        Dictionary<string, DynamicTableColumn> dynamicColumnsConfigurations = GetColumnsConfiguration(allSuperprojects!, relevantBranches!);
 
         PrintTableHeader(dynamicColumnsConfigurations);
 
@@ -41,50 +50,78 @@ public static class SubmoduleAlignmentTablePrinter
         }
     }
 
+    /// <summary>
+    /// Prints table header for the superproject
+    /// </summary>
+    /// <param name="columns"></param>
     public static void PrintTableHeader(Dictionary<string, DynamicTableColumn> columns)
     {
         Console.WriteLine();
         Console.WriteLine(
-            columns[Column.SuperProject].GetValueWithoutOffset(Column.SuperProject) + Delimiter +
-            columns[Column.Branch].GetValueWithoutOffset(Column.Branch) + Delimiter +
-            columns[Column.Submodule].GetValueWithoutOffset(Column.Submodule) + Delimiter +
-            columns[Column.IndexCommit].GetValueWithoutOffset(Column.IndexCommit) + Delimiter +
-            columns[Column.HeadCommit].GetValueWithoutOffset(Column.HeadCommit) + Delimiter
+            columns[Column.SuperProject].GetHeaderValue(Column.SuperProject) + Delimiter +
+            columns[Column.Branch].GetHeaderValue(Column.Branch) + Delimiter +
+            columns[Column.Submodule].GetHeaderValue(Column.Submodule) + Delimiter +
+            columns[Column.IndexCommit].GetHeaderValue(Column.IndexCommit) + Delimiter +
+            columns[Column.HeadCommit].GetHeaderValue(Column.HeadCommit) + Delimiter
         );
     }
 
+    /// <summary>
+    /// Prints table body for the superproject
+    /// </summary>
+    /// <param name="relevantSuperProject"></param>
+    /// <param name="relevantBranches"></param>
+    /// <param name="relevantSubmodules"></param>
+    /// <param name="columns"></param>
     private static void PrintTableBody(RobustSuperProject relevantSuperProject, List<GitBranch> relevantBranches, List<string> relevantSubmodules, Dictionary<string, DynamicTableColumn> columns)
     {
         // Superproject row
-        CustomConsole.WriteLineColored(columns[Column.SuperProject].GetValueWithoutOffset(relevantSuperProject.Name), TextType.ImporantText);
+        CustomConsole.WriteLineColored(columns[Column.SuperProject].GetHeaderValue(relevantSuperProject.Name), TextType.ImporantText);
 
         foreach (string branch in relevantBranches.GetRemotes())
         {
             // Outputs bellow are in one row. We put offset only into the first
             //int offsetForBranchColumn = columns[Column.SuperProject]._width;
-            Console.WriteLine(columns[Column.Branch].GetValueWithOffset(branch) + Delimiter);
+            Console.WriteLine(columns[Column.Branch].GetBodyValue(branch) + Delimiter);
 
             // Index comparison row
             foreach (string submoduleName in relevantSubmodules)
             {
-                Console.Write(columns[Column.Submodule].GetValueWithOffset(submoduleName) + Delimiter);
+                Console.Write(columns[Column.Submodule].GetBodyValue(submoduleName) + Delimiter);
 
-                string indexCommit = relevantSuperProject.IndexCommitRefs[branch][submoduleName]; // where submodule points on in this branch. .First() because 
-                string headCommit = relevantSuperProject.HeadCommitRefs[branch][submoduleName]; // HEAD commit on this branch
+                // where submodule points on in this branch. .First() because 
+                string indexCommit = relevantSuperProject.IndexCommitRefs[branch].ContainsKey(submoduleName) // Submodule might not always contain branch. PrintDomain
+                    ? relevantSuperProject.IndexCommitRefs[branch][submoduleName]
+                    : MissingBranchFillerString;
 
-                ConsoleColor color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
-                string indexCommitFormatted = columns[Column.IndexCommit].GetValueWithOffset(indexCommit); // formatted value
+                // HEAD commit on this branch
+                string headCommit = relevantSuperProject.HeadCommitRefs[branch].ContainsKey(submoduleName) // Submodule might not always contain branch. PrintDomain
+                    ? relevantSuperProject.HeadCommitRefs[branch][submoduleName]
+                    : MissingBranchFillerString;
+
+                ConsoleColor color = ConsoleColor.White;
+                if(indexCommit != MissingBranchFillerString)
+                {
+                    color = indexCommit == headCommit ? ConsoleColor.Green : ConsoleColor.Red; // aligned on branch? green : red
+                }
+                string indexCommitFormatted = columns[Column.IndexCommit].GetBodyValue(indexCommit); // formatted value
                 CustomConsole.WriteColored(indexCommitFormatted, color);
                 Console.Write(Delimiter); // appending delimeter in normal color
 
-                Console.Write(columns[Column.HeadCommit].GetValueWithOffset(headCommit) + Delimiter + Environment.NewLine);
+                Console.Write(columns[Column.HeadCommit].GetBodyValue(headCommit) + Delimiter + Environment.NewLine);
             }
         }
 
         Console.WriteLine();
     }
 
-    private static Dictionary<string, DynamicTableColumn> GetColumnsConfig(List<RobustSuperProject> superProjects, List<GitBranch> relevantBranches)
+    /// <summary>
+    /// Configures dynamic columns 
+    /// </summary>
+    /// <param name="superProjects"></param>
+    /// <param name="relevantBranches"></param>
+    /// <returns></returns>
+    private static Dictionary<string, DynamicTableColumn> GetColumnsConfiguration(List<RobustSuperProject> superProjects, List<GitBranch> relevantBranches)
     {
         int superProjectColumnWidth = CalculateColumnWidth(
                 headerLength: Column.SuperProject.Length,
