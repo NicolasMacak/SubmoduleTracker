@@ -42,4 +42,10 @@ public static class CustomConsole
         Console.WriteLine(text);
         Console.ForegroundColor = ConsoleColor.White;
     }
+
+    public static string? ReadLine()
+    {
+        WriteColored("$ ", TextType.MundaneText);
+        return Console.ReadLine();
+    }
 }

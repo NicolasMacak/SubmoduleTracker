@@ -9,16 +9,10 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.UserSettings;
 
-public class ManageUserSettingsWorkflow : INavigable
+public class ManageUserSettingsWorkflow(UserConfigService userConfigFacade, NavigationService navigationService) : INavigable
 {
-    private readonly UserConfigService _userConfigFacade;
-    private readonly NavigationService _navigationService;
-
-    public ManageUserSettingsWorkflow(UserConfigService userConfigFacade, NavigationService navigationService)
-    {
-        _userConfigFacade = userConfigFacade;
-        _navigationService = navigationService;
-    }
+    private readonly UserConfigService _userConfigFacade = userConfigFacade;
+    private readonly NavigationService _navigationService = navigationService;
 
     public void Run()
     {
@@ -70,7 +64,7 @@ public class ManageUserSettingsWorkflow : INavigable
             CustomConsole.WriteLineColored("Zadajte absolutnu cestu ku git repozitaru", TextType.Question);
             Console.WriteLine("Pre krok spat zadajte empty string" + Environment.NewLine);
 
-            string? superprojectWorkdir = Console.ReadLine();
+            string? superprojectWorkdir = CustomConsole.ReadLine();
 
             // "" input. Back to user settings
             if (string.IsNullOrEmpty(superprojectWorkdir))
@@ -146,7 +140,7 @@ public class ManageUserSettingsWorkflow : INavigable
 
     private void PrintUserConfig()
     {
-        CustomConsole.WriteLineColored("Configuration settigns", TextType.ImporantText);
+        CustomConsole.WriteLineColored("User Settings", TextType.ImporantText);
         CustomConsole.WriteLineColored("Superprojects: " + Environment.NewLine + "[", TextType.MundaneText);
 
         foreach(MetaSuperProject superproject in _userConfigFacade.MetaSuperprojects)
@@ -166,10 +160,17 @@ public class ManageUserSettingsWorkflow : INavigable
         }
         CustomConsole.WriteLineColored("]", TextType.MundaneText);
 
-
         CustomConsole.WriteColored("Push to remote: ", TextType.MundaneText);
-        CustomConsole.WriteColored(_userConfigFacade.PushingToRemote.ToString(), _userConfigFacade.PushingToRemote ? ConsoleColor.DarkGreen : ConsoleColor.DarkGray);
-        CustomConsole.WriteColored(" // Ak False, aplikacia ma zakazane pushovat na remote", TextType.MundaneText);
+        if (_userConfigFacade.PushingToRemote)
+        {
+            CustomConsole.WriteColored(_userConfigFacade.PushingToRemote.ToString(), ConsoleColor.DarkGreen);
+            CustomConsole.WriteColored(" // Application is allowed to execute `git push`, but will ask for permission", TextType.MundaneText);
+        }
+        else
+        {
+            CustomConsole.WriteColored(_userConfigFacade.PushingToRemote.ToString(), ConsoleColor.DarkGray);
+            CustomConsole.WriteColored(" // `git push` is prohibited for the application", TextType.MundaneText);
+        }
 
         CustomConsole.WriteLineColored(Environment.NewLine + Environment.NewLine + "Data saved at: C:\\Users\\{user}\\AppData\\Roaming", TextType.MundaneText);
         Console.WriteLine();

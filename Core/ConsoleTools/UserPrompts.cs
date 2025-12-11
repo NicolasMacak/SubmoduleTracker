@@ -1,4 +1,5 @@
-﻿using SubmoduleTracker.Core.ConsoleTools.Constants;
+﻿using SubmoduleTracker.Core.CommonTypes.Menu;
+using SubmoduleTracker.Core.ConsoleTools.Constants;
 
 namespace SubmoduleTracker.Core.ConsoleTools;
 /// <summary>
@@ -7,7 +8,7 @@ namespace SubmoduleTracker.Core.ConsoleTools;
 public sealed class UserPrompts
 {
 
-    public static string ReturnToMainMenuPrompt = "Enter \"\" for returning to the main menu";
+    public const string ReturnToMainMenuPrompt = "Enter \"\" for returning to the main menu";
 
     /// <summary>
     /// Prints <paramref name="question"/>. Promps user for typing "yes" to confirm
@@ -17,9 +18,9 @@ public sealed class UserPrompts
     public static bool AskYesOrNoQuestion(string question)
     {
         CustomConsole.WriteLineColored(question, TextType.Question);
-        Console.WriteLine("Napiste \"yes\" pre pokracovanie");
+        Console.WriteLine("Type \"yes\" for continuation");
 
-        string? read = Console.ReadLine();
+        string? read = CustomConsole.ReadLine();
 
         if (!string.IsNullOrEmpty(read) && read == "yes")
         {
@@ -59,7 +60,7 @@ public sealed class UserPrompts
             throw new ArgumentNullException("Choices must contain at least one item. What is wrong with you");
         }
 
-        string incorrectRangeErrorMessage = $"Zadajte cislo medzi 1 a {choices.Count}";
+        string incorrectRangeErrorMessage = $"Choose an number between 1 and {choices.Count}";
 
         while (true)
         {
@@ -68,8 +69,7 @@ public sealed class UserPrompts
             int index = 1; // increased for more intuitive user experience
             foreach (string choice in choices)
             {
-                CustomConsole.WriteLineColored($"{index}. {choice}", TextType.MundaneText);
-                index++;
+                CustomConsole.WriteLineColored($"{index++}. {choice}", TextType.MundaneText);
             }
 
             if (!string.IsNullOrEmpty(emptyStringPrompt))
@@ -77,9 +77,9 @@ public sealed class UserPrompts
                 CustomConsole.WriteLineColored(emptyStringPrompt, TextType.Question);
             }
 
-            string? stringNumberOption = Console.ReadLine();
+            string? oneBasedChoiceIndexString = CustomConsole.ReadLine();
 
-            if (string.IsNullOrEmpty(stringNumberOption))
+            if (string.IsNullOrEmpty(oneBasedChoiceIndexString))
             {
                 if (!string.IsNullOrEmpty(emptyStringPrompt))
                 {
@@ -90,21 +90,21 @@ public sealed class UserPrompts
                 continue;
             }
 
-            if (!int.TryParse(stringNumberOption, out int choiceIndex))
+            if (!int.TryParse(oneBasedChoiceIndexString, out int oneBasedChoiceIndex))
+            {
+                CustomConsole.ClearAndWriteErrorLine(incorrectRangeErrorMessage);
+                continue;
+            }
+            int zeroBasedChoiceIndex = --oneBasedChoiceIndex; // conversion from one-based to zero-based
+
+            // cant be lower than zero OR cant be greater than number of choices
+            if (zeroBasedChoiceIndex  < 0 || zeroBasedChoiceIndex  > choices.Count - 1)
             {
                 CustomConsole.ClearAndWriteErrorLine(incorrectRangeErrorMessage);
                 continue;
             }
 
-            // cant be lower than lowBoundary && cant be greater than number of choices
-            if (choiceIndex < 0 && choiceIndex > choices.Count - 1)
-            {
-                CustomConsole.ClearAndWriteErrorLine(incorrectRangeErrorMessage);
-                continue;
-            }
-
-            return --choiceIndex; // We increased at int index = 1. now we need to decrease because indexes are from 0
-        }
-
+            return zeroBasedChoiceIndex;
         }
     }
+}

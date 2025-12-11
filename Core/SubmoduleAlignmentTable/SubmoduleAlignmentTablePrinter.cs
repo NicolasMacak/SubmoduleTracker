@@ -9,7 +9,7 @@ using static SubmoduleTracker.Core.SubmoduleAlignmentTable.TableConstants;
 namespace SubmoduleTracker.Core.SubmoduleAlignmentTable;
 public static class SubmoduleAlignmentTablePrinter
 {
-    private const string MissingBranchFillerString = "---";
+    private const string MissingBranchFillerString = "No Data";
 
     /// <summary>
     /// Prints alignment submodule validation table
@@ -90,13 +90,13 @@ public static class SubmoduleAlignmentTablePrinter
                 Console.Write(columns[Column.Submodule].GetBodyValue(submoduleName) + Delimiter);
 
                 // where submodule points on in this branch. .First() because 
-                string indexCommit = relevantSuperProject.IndexCommitRefs[branch].ContainsKey(submoduleName) // Submodule might not always contain branch. PrintDomain
-                    ? relevantSuperProject.IndexCommitRefs[branch][submoduleName]
+                string indexCommit = relevantSuperProject.IndexCommitRefs[branch].TryGetValue(submoduleName, out string? indexCommitValue) // Submodule might not always contain branch. PrintDomain
+                    ? indexCommitValue 
                     : MissingBranchFillerString;
 
                 // HEAD commit on this branch
-                string headCommit = relevantSuperProject.HeadCommitRefs[branch].ContainsKey(submoduleName) // Submodule might not always contain branch. PrintDomain
-                    ? relevantSuperProject.HeadCommitRefs[branch][submoduleName]
+                string headCommit = relevantSuperProject.HeadCommitRefs[branch].TryGetValue(submoduleName, out string? headCommitValue) // Submodule might not always contain branch. PrintDomain
+                    ? headCommitValue 
                     : MissingBranchFillerString;
 
                 ConsoleColor color = ConsoleColor.White;
@@ -111,8 +111,6 @@ public static class SubmoduleAlignmentTablePrinter
                 Console.Write(columns[Column.HeadCommit].GetBodyValue(headCommit) + Delimiter + Environment.NewLine);
             }
         }
-
-        Console.WriteLine();
     }
 
     /// <summary>
@@ -130,7 +128,7 @@ public static class SubmoduleAlignmentTablePrinter
 
         int branchColumnWidth = CalculateColumnWidth(
                 headerLength: Column.SuperProject.Length,
-                longestValueLength: superProjects.MaxBy(x => x.Name)!.Name.Length
+                longestValueLength: relevantBranches.MaxBy(x => x.RemoteName.Length)!.RemoteName.Length
             );
         int branchColumnOffset = superProjectColumnWidth + Delimiter.Length;
 

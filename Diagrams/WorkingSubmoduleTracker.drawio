@@ -204,9 +204,6 @@
         <mxCell id="EOY68dGk1cK8fynP5NS2-12" value="Iterovat moznosti od 1&lt;br&gt;od 0" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-370" y="690" width="270" height="65" as="geometry" />
         </mxCell>
-        <mxCell id="EOY68dGk1cK8fynP5NS2-13" value="Repeat validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
-          <mxGeometry x="-1230" y="1450" width="250" height="80" as="geometry" />
-        </mxCell>
         <mxCell id="EOY68dGk1cK8fynP5NS2-14" value="Exit options&lt;br&gt;1. End&lt;br&gt;2. Submodule validation" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
           <mxGeometry x="-2520" y="2170" width="360" height="110" as="geometry" />
         </mxCell>
@@ -248,14 +245,8 @@
         <mxCell id="JkNhsvKiFdOxrLN-IJZV-2" value="Readme" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=20;" parent="1" vertex="1">
           <mxGeometry x="-760" y="1450" width="250" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="FvdbKczLh_gC1pmZafr_-1" value="Alignment, Validation: if no submodules, fail" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
-          <mxGeometry x="-1460" y="940" width="250" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="5diLwRwvyVZbyontyB---1" value="merge test into dev" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" parent="1" vertex="1">
-          <mxGeometry x="-1460" y="800" width="250" height="80" as="geometry" />
-        </mxCell>
-        <mxCell id="G-_Q12_VsOHMJ3sOKmo3-1" value="REname IWorkflow to Navigationable" style="whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=25;" vertex="1" parent="1">
-          <mxGeometry x="-1460" y="630" width="250" height="80" as="geometry" />
+        <mxCell id="5diLwRwvyVZbyontyB---1" value="merge test into dev" style="whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=25;" parent="1" vertex="1">
+          <mxGeometry x="-1450" y="980" width="250" height="80" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

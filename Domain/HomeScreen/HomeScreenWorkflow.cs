@@ -10,16 +10,10 @@ using SubmoduleTracker.Domain.UserSettings.Services;
 
 namespace SubmoduleTracker.Domain.HomeScreen;
 
-public class HomeScreenWorkflow : INavigable
+public class HomeScreenWorkflow(NavigationService navigationService, UserConfigService userConfigFacade) : INavigable
 {
-    private readonly NavigationService _navigationService;
-    private readonly UserConfigService _userConfigFacade;
-
-    public HomeScreenWorkflow(NavigationService navigationService, UserConfigService userConfigFacade)
-    {
-        _navigationService = navigationService;
-        _userConfigFacade = userConfigFacade;
-    }
+    private readonly NavigationService _navigationService = navigationService;
+    private readonly UserConfigService _userConfigFacade = userConfigFacade;
 
     public void Run()
     {
@@ -29,7 +23,7 @@ public class HomeScreenWorkflow : INavigable
 
         if (_userConfigFacade.MetaSuperprojects.Count == 0)
         {
-            CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the Settings", TextType.Error);
+            CustomConsole.WriteLineColored("No superprojects added. In order to perform an action, add superprojects in the User Settings", TextType.Error);
         }
 
         int? choiceIndex = UserPrompts.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
@@ -43,15 +37,15 @@ public class HomeScreenWorkflow : INavigable
 
     private List<ActionMenuItem> GetHomeScreenActions()
     {
-        List<ActionMenuItem> homeScreenActionsToReturn = new();
+        List<ActionMenuItem> homeScreenActionsToReturn = [];
 
         if (_userConfigFacade.MetaSuperprojects.Count > 0)
         {
             homeScreenActionsToReturn.Add(new ActionMenuItem("Submodule Index Validation (Read-only)", _navigationService.NavigateTo<AlignmentValidationWorkflow>));
-            homeScreenActionsToReturn.Add(new ActionMenuItem("Submodule Index Alignment Across Superprojects (Creates Commits)", _navigationService.NavigateTo<AlignmentExecutionWorkflow>));
+            homeScreenActionsToReturn.Add(new ActionMenuItem("Submodule Index Alignment Across Superprojects (Creates Commits, Switches branches)", _navigationService.NavigateTo<AlignmentExecutionWorkflow>));
         }
 
-        homeScreenActionsToReturn.Add(new ActionMenuItem("Settings", _navigationService.NavigateTo<ManageUserSettingsWorkflow>));
+        homeScreenActionsToReturn.Add(new ActionMenuItem("User Settings", _navigationService.NavigateTo<ManageUserSettingsWorkflow>));
 
         return homeScreenActionsToReturn;
     }

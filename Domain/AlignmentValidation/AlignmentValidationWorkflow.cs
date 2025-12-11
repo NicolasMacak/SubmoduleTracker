@@ -46,6 +46,8 @@ public sealed class AlignmentValidationWorkflow : INavigable
         List<GitBranch> relevantBranches = LetUserChooseRelevantBranches();
 
         SubmoduleAlignmentTablePrinter.PrintTableForSuperProjects(superprojectToValidate.Select(x => x.ToRobustSuperproject(relevantBranches)).ToList(), relevantBranches);
+
+        _navigationService.PromptReturnToMainMenu();
     }
 
     /// <returns>

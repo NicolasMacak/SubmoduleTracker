@@ -14,14 +14,14 @@ namespace SubmoduleTracker.Core.CommonTypes.SuperProjects;
 /// We would need to load data for all relevant branches and all submodules. <br></br>
 /// <see cref="ToRobustSuperproject"/> will create with object with relevant data when they are needed
 /// </remarks>
-
-// RobustSuperProject - MetaSuperProject + Commit Indexes
-
 public sealed class MetaSuperProject
 {
     public readonly string Name;
+    /// <summary>
+    /// Absolute path to the Git repository in file system
+    /// </summary>
     public readonly string WorkingDirectory;
-    public List<string> SubmodulesNames { get; } = new();
+    public List<string> SubmodulesNames { get; } = [];
 
     public MetaSuperProject(string repoPath)
     {
@@ -48,7 +48,7 @@ public sealed class MetaSuperProject
     
     private Dictionary<string, Dictionary<string, string>> GetSubmoduleCommitRefs(List<GitBranch> relevantBranches)
     {
-        Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = new();
+        Dictionary<string, Dictionary<string, string>> pointingsOfSubmodulesForBranches = [];
         Repository mainRepo = new(WorkingDirectory);
 
         foreach (Branch branch in mainRepo.Branches.Where(x => relevantBranches.GetRemotes().Contains(x.FriendlyName)))
@@ -81,7 +81,7 @@ public sealed class MetaSuperProject
     /// </returns>
     private Dictionary<string, Dictionary<string, string>> GetSubmoduleHeadCommitRefs(List<GitBranch> relevantBranches, List<string> relevantSubmodules)
     {
-        Dictionary<string, Dictionary<string, string>> submoduleHeadCommitsForBranches = new();
+        Dictionary<string, Dictionary<string, string>> submoduleHeadCommitsForBranches = [];
 
         foreach (string submoduleName in relevantSubmodules)
         {
@@ -109,6 +109,9 @@ public sealed class MetaSuperProject
         return submoduleHeadCommitsForBranches;
     }        
 
+    /// <summary>
+    /// Converts into <see cref="RobustSuperProject"/>. Into consideration are taken only relevantBranches and relevantSubmodules.
+    /// </summary>
     public RobustSuperProject ToRobustSuperproject(List<GitBranch> relevantBranches, List<string>? relevantSubmodules = null)
     {
         CustomConsole.WriteLineColored($"Superproject: {Name}: Fetching Index Commits and Head Commits", ConsoleColor.DarkCyan);

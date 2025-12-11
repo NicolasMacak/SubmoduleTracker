@@ -2,11 +2,20 @@
 /// <summary>
 /// <see cref="MetaSuperProject"/> enriched by <see cref="IndexCommitRefs" and <see cref="HeadCommitRefs"/>
 /// </summary>
-public sealed class RobustSuperProject
+public sealed class RobustSuperProject(
+    string name,
+    string workingDirectory,
+    List<string> submodulesNames,
+    Dictionary<string, Dictionary<string, string>> indexCommitRefs,
+    Dictionary<string, Dictionary<string, string>> headCommitRefs
+    )
 {
-    public readonly string Name;
-    public readonly string WorkingDirectory;
-    public List<string> SubmodulesNames; 
+    public readonly string Name = name;
+    /// <summary>
+    /// Absolute path to the Git repository in file system
+    /// </summary>
+    public readonly string WorkingDirectory = workingDirectory;
+    public List<string> SubmodulesNames = submodulesNames; 
 
     /// <summary>
     /// Holds information where which commits submodules of this superprojects points to on relevant branches <br></br>
@@ -14,7 +23,7 @@ public sealed class RobustSuperProject
     /// <remarks>
     /// Dictionary[branch, Dictionary[submodule, indexCommitId]]
     /// </remarks>
-    public Dictionary<string, Dictionary<string, string>> IndexCommitRefs;
+    public Dictionary<string, Dictionary<string, string>> IndexCommitRefs = indexCommitRefs;
 
 
     /// <summary>
@@ -23,20 +32,5 @@ public sealed class RobustSuperProject
     /// <remarks>
     /// Dictionary[branch, Dictionary[submodule, headCommitId]]
     /// </remarks>
-    public Dictionary<string, Dictionary<string, string>> HeadCommitRefs;
-
-    public RobustSuperProject(
-        string name,
-        string workingDirectory,
-        List<string> submodulesNames,
-        Dictionary<string, Dictionary<string, string>> indexCommitRefs,
-        Dictionary<string, Dictionary<string, string>> headCommitRefs
-        )
-    {
-        Name = name;
-        WorkingDirectory = workingDirectory;
-        SubmodulesNames = submodulesNames;
-        IndexCommitRefs = indexCommitRefs;
-        HeadCommitRefs = headCommitRefs;
-    }
+    public Dictionary<string, Dictionary<string, string>> HeadCommitRefs = headCommitRefs;
 }
