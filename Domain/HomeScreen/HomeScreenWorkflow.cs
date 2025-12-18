@@ -29,7 +29,7 @@ public class HomeScreenWorkflow(NavigationService navigationService, UserConfigS
         int? choiceIndex = UserPrompts.GetIndexOfUserChoice(homeScreenOptions.Select(x => x.Title).ToList(), "Choose an action");
         if (!choiceIndex.HasValue)
         {
-            throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
+            throw new InvalidOperationException($"Choice index can not be null in this scenario.");
         }
 
         homeScreenOptions[choiceIndex.Value].ItemAction();

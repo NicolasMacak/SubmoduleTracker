@@ -46,8 +46,8 @@ public sealed class UserPrompts
     /// When set, an empty input returns <c>null</c>.
     /// </param>
     /// <returns>
-    /// <see cref="ResultCode.Success"/> When picks between proposed options, <br></br>
-    /// <see cref="ResultCode.EmptyInput"/> When <paramref name="emptyStringPrompt"/> is not null and user enters empty string
+    /// <see cref="int"/> zero-based index of user choice, <br></br>
+    /// null when <paramref name="emptyStringPrompt"/> is not null and user enters empty string
     /// </returns>
     /// <remarks>
     /// The user sees options numbered from 1 to <c>choices.Count</c>. Internally,

@@ -24,7 +24,7 @@ public class ManageUserSettingsWorkflow(UserConfigService userConfigFacade, Navi
         int? userSettingsMenuItemIndex = UserPrompts.GetIndexOfUserChoice(userSetttingsActions.Select(x => x.Title).ToList(), "Choose an action");
         if (!userSettingsMenuItemIndex.HasValue)
         {
-            throw new InvalidOperationException($"{nameof(ResultCode.EmptyInput)} is not valid in this scenario.");
+            throw new InvalidOperationException($"Choice index can not be null in this scenario.");
         }
 
         userSetttingsActions[userSettingsMenuItemIndex.Value].ItemAction();
