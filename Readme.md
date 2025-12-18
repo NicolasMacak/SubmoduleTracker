@@ -17,26 +17,32 @@ To use the tool, absolute paths to all relevant superprojects must be configured
 
 # Operations
 
-## Submodule Index Validation (Idempotent)
+## Submodule Index Validation (Read-Only)
 Validates, whether submodule commit index references the head commit index on given branch.
+
+### Validation Rule
+**Where:**
+- **SubmoduleX** — The submodule to validate  
+- **BranchY** — The branch whose expected submodule state will be compared  
+
+**Then submodule index is valid when:** \
+Superproject.BranchX.HEAD.SubmoduleXCommit == SubmoduleX.BranchY.HEAD.Commit
+
+### Notes
+Only **remote state** is evaluated. Local unpushed changes are ignored. Implemented like this, becase remote state is shared with everyone.
+
+Potentional Usages:
+- Pre-release validation of all references across all superprojects
+- Validation of the correct references after the implementation
 
 The operation can run:
 - On a single superproject  
 - On all configured superprojects  
 
-Parameters:
-- **SubmoduleX** — The submodule to validate  
-- **BranchY** — The branch whose expected submodule state will be compared  
-
-Validation rule:
-Superproject.BranchX.HEAD.SubmoduleXCommit == SubmoduleX.BranchY.HEAD.Commit
-
-Only **remote state** is evaluated. Local unpushed changes are ignored.
-
 ---
 
 ## Submodule Alignment Across Superprojects
-Forwards reference to the `new version` of the `submodule` in all relevant `Superprojects`.
+All superprojects that contain reference to selected submodule have their references for this submodule updated to the latest version.
 
 ### Algorithm
 **I. Finding Misalignments**\
@@ -52,8 +58,6 @@ For each misaligned superproject:
 6. Switch superproject to `dev`
 7. Merge `test` into `dev`
 
-This operation is intended **after a feature is completed and merged**, since merged features are expected to be present in the `test` branch.
-
 ### Handled cases
 - Target branch does not exist locally (superproject or submodule)  
   → Created automatically via `git switch`
@@ -67,3 +71,9 @@ Occurs when:
 - And the alignment operation is executed again.
 
 The tool detects remote misalignment and attempts local alignment, but the local state is already correct → `ForwardCommitCreationException`.
+
+### Notes
+This operation is intended **after a feature is completed and merged**, since merged features are expected to be present in the `test` branch.
+
+Potentional Usages:
+- Pre-release alignment. All superproject reference latest version of the submodules
